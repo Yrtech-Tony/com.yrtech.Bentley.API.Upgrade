@@ -1,0 +1,689 @@
+﻿using com.yrtech.InventoryAPI.DTO;
+using System;
+using com.yrtech.bentley.DAL;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+
+namespace com.yrtech.InventoryAPI.Service
+{
+    public class MarketActionService
+    {
+        Bentley db = new Bentley();
+        #region Common
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public List<MarketActionDto> MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk)
+        {
+            if (actionName == null) actionName = "";
+            if (year == null) year = "";
+            if (month == null) month = "";
+            if (marketActionStatusCode == null) marketActionStatusCode = "";
+            if (shopId == null) shopId = "";
+            if (eventTypeId == null) eventTypeId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ActionName", actionName),
+                                                        new SqlParameter("@Year", year),
+                                                        new SqlParameter("@Month", month),
+                                                        new SqlParameter("@MarketActionStatusCode", marketActionStatusCode),
+                                                        new SqlParameter("@ShopId", shopId),
+                                                        new SqlParameter("@EventTypeId", eventTypeId)};
+            Type t = typeof(MarketActionDto);
+            string sql = "";
+            sql += @"SELECT A.MarketActionId,A.ShopId,B.ShopCode,B.ShopName,B.ShopNameEn,A.ActionCode,A.ActionName
+		                    ,A.EventTypeId,C.EventTypeName,C.EventTypeNameEn
+		                    ,(SELECT EventMode FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
+		                    ,(SELECT HiddenCodeName FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode' AND X.EventMode = Y.HiddenCodeId 
+											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeName
+						   ,(SELECT HiddenCodeNameEn FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode'  AND X.EventMode = Y.HiddenCodeId 
+											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeNameEn
+		                    ,A.ActivityBudget,A.ExpectLeadsCount,A.StartDate,A.EndDate,A.ActionPlace
+                            ,A.ExpenseAccount,A.InUserId,A.InDateTime,A.ModifyUserId,A.ModifyDateTime
+		                    ,A.MarketActionStatusCode,D.HiddenCodeName AS MarketActionStatusName,D.HiddenCodeNameEn AS MarketActionStatusNameEn
+		                    ,A.MarketActionTargetModelCode,E.HiddenCodeName AS MarketActionTargetModelName,E.HiddenCodeNameEn AS MarketActionTargetModelNameEn
+		                    ,CASE 
+                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=2) 
+			                      THEN 'Approved'
+                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=3) 
+			                      THEN 'WaitForChange'
+                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=1) 
+			                      THEN 'Commited'
+			                      WHEN  DATEDIFF(DAY,GETDATE(),A.StartDate)<28
+			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId) 
+			                      ELSE 'UnCommit'
+	                        END AS 	Before4Weeks
+	                       
+	                        ,CASE WHEN EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId) 
+			                      THEN 'Commited'
+			                      WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId) 
+				                       AND DATEDIFF(DAY,A.StartDate,GETDATE())>2
+			                      THEN 'UnCommitTime'
+			                      ELSE 'UnCommit'
+	                        END AS 	After2Days
+	                         ,CASE WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=2) 
+			                      THEN 'Approved'
+                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=3) 
+			                      THEN 'WaitForChange'
+                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=1) 
+			                      THEN 'Commited'
+			                      WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7
+			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId) 
+			                      ELSE 'UnCommit'
+	                        END AS 	After7Days	
+	                       
+                    FROM MarketAction A LEFT JOIN Shop B ON A.ShopId = B.ShopId
+					                    LEFT JOIN EventType C ON A.EventTypeId = C.EventTypeId
+					                    LEFT JOIN HiddenCode D ON A.MarketActionStatusCode = D.HiddenCodeId AND D.HiddenCodeGroup = 'MarketActionStatus'
+					                    LEFT JOIN HiddenCode E ON A.MarketActionTargetModelCode  = E.HiddenCodeId AND E.HiddenCodeGroup = 'TargetModels'
+                    WHERE 1=1 ";
+            if (!string.IsNullOrEmpty(actionName))
+            {
+                sql += " AND A.ActionName LIKE '%'+@ActionName+'%'";
+            }
+            if (!string.IsNullOrEmpty(year))
+            {
+                sql += " AND Year(A.StartDate)= @Year";
+            }
+            if (!string.IsNullOrEmpty(month))
+            {
+                sql += " AND Month(A.StartDate)= @Month";
+            }
+            if (!string.IsNullOrEmpty(marketActionStatusCode))
+            {
+                sql += " AND A.MarketActionStatusCode =@MarketActionStatusCode";
+            }
+            if (!string.IsNullOrEmpty(shopId))
+            {
+                sql += " AND A.ShopId =@ShopId";
+            }
+            if (!string.IsNullOrEmpty(eventTypeId))
+            {
+                sql += " AND A.EventTypeId =@EventTypeId";
+            }
+            if (expenseAccountChk.HasValue)
+            {
+                para = para.Concat(new SqlParameter[] { new SqlParameter("@ExpenseAccountChk", expenseAccountChk) }).ToArray();
+                sql += " AND A.ExpenseAccount = @ExpenseAccountChk";
+            }
+            sql += " ORDER BY A.StartDate DESC";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionDto>().ToList();
+        }
+        public List<MarketActionPlanDto> MarketActionPlanSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId)
+        {
+            if (actionName == null) actionName = "";
+            if (year == null) year = "";
+            if (month == null) month = "";
+            if (marketActionStatusCode == null) marketActionStatusCode = "";
+            if (shopId == null) shopId = "";
+            if (eventTypeId == null) eventTypeId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ActionName", actionName),
+                                                        new SqlParameter("@Year", year),
+                                                        new SqlParameter("@Month", month),
+                                                        new SqlParameter("@MarketActionStatusCode", marketActionStatusCode),
+                                                        new SqlParameter("@ShopId", shopId),
+                                                        new SqlParameter("@EventTypeId", eventTypeId)};
+            Type t = typeof(MarketActionPlanDto);
+            string sql = "";
+            sql += @"SELECT A.MarketActionId,A.ShopId,B.ShopCode,B.ShopName,
+                            ISNULL((SELECT TOP 1 AreaName FROM Area WHERE AreaId = B.AreaId),'') AS AreaName,
+                            A.ActionCode,A.ActionName
+		                    ,A.EventTypeId,C.EventTypeName,
+                            ISNULL((SELECT TOP 1 HiddenCodeName FROM HiddenCode WHERE HiddenCodeGroup = 'EventMode' AND HiddenCodeId = C.EventMode),'') AS EventModeName
+                            ,A.ActivityBudget,A.ExpectLeadsCount,A.StartDate,A.EndDate
+                            ,CASE WHEN Month(A.StartDate) IN (1,2,3) THEN 'Q1'
+                                  WHEN Month(A.StartDate) IN (4,5,6) THEN 'Q2'
+                                  WHEN Month(A.StartDate) IN (7,8,9) THEN 'Q3'
+                                  WHEN Month(A.StartDate) IN (10,11,12) THEN 'Q4'
+                             ELSE ''
+                             END AS Quarter
+                            ,CASE WHEN A.ExpenseAccount=1 THEN 'Y' ELSE '' END AS ExpenseAccount
+		                    ,A.MarketActionStatusCode,D.HiddenCodeName AS MarketActionStatusName,D.HiddenCodeNameEn AS MarketActionStatusNameEn
+		                    ,A.MarketActionTargetModelCode,E.HiddenCodeName AS MarketActionTargetModelName,E.HiddenCodeNameEn AS MarketActionTargetModelNameEn
+                    FROM MarketAction A LEFT JOIN Shop B ON A.ShopId = B.ShopId
+					                    LEFT JOIN EventType C ON A.EventTypeId = C.EventTypeId
+					                    LEFT JOIN HiddenCode D ON A.MarketActionStatusCode = D.HiddenCodeId AND D.HiddenCodeGroup = 'MarketActionStatus'
+					                    LEFT JOIN HiddenCode E ON A.MarketActionTargetModelCode  = E.HiddenCodeId AND E.HiddenCodeGroup = 'TargetModels'
+                    WHERE 1=1";
+            if (!string.IsNullOrEmpty(actionName))
+            {
+                sql += " AND A.ActionName LIKE '%'+@ActionName+'%'";
+            }
+            if (!string.IsNullOrEmpty(year))
+            {
+                sql += " AND Year(A.StartDate)= @Year";
+            }
+            if (!string.IsNullOrEmpty(month))
+            {
+                sql += " AND Month(A.StartDate)= @Month";
+            }
+            if (!string.IsNullOrEmpty(marketActionStatusCode))
+            {
+                sql += " AND A.MarketActionStatusCode =@MarketActionStatusCode";
+            }
+            if (!string.IsNullOrEmpty(shopId))
+            {
+                sql += " AND A.ShopId =@ShopId";
+            }
+            if (!string.IsNullOrEmpty(eventTypeId))
+            {
+                sql += " AND A.EventTypeId =@EventTypeId";
+            }
+            sql += " ORDER BY A.StartDate DESC";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionPlanDto>().ToList();
+        }
+        // 查询未取消的市场活动
+        public List<MarketAction> MarketActionNotCancelSearch(string eventTypeId)
+        {
+            if (eventTypeId == null) eventTypeId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@EventTypeId", eventTypeId) };
+            Type t = typeof(MarketAction);
+            string sql = "";
+            sql += @"SELECT *
+                    FROM MarketAction A 
+                    WHERE A.MarketActionStatusCode<>2 AND  A.ExpenseAccount=1";
+
+            if (!string.IsNullOrEmpty(eventTypeId))
+            {
+                sql += " AND A.EventTypeId =@EventTypeId";
+            }
+            sql += " ORDER BY A.StartDate DESC";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketAction>().ToList();
+        }
+        public List<MarketActionDto> MarketActionSearchById(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionDto);
+            string sql = "";
+            sql += @"SELECT A.MarketActionId,A.ShopId,B.ShopCode,B.ShopName,B.ShopNameEn,A.ActionCode,A.ActionName
+		                    ,A.EventTypeId,C.EventTypeName,C.EventTypeNameEn
+		                    ,(SELECT EventMode FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
+		                    ,(SELECT HiddenCodeName FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode' AND X.EventMode = Y.HiddenCodeId 
+											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeName
+						   ,(SELECT HiddenCodeNameEn FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode'  AND X.EventMode = Y.HiddenCodeId 
+											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeNameEn
+		                    ,A.ActivityBudget,A.ExpectLeadsCount,A.StartDate,A.EndDate,A.ActionPlace
+                            ,A.ExpenseAccount,A.InUserId,A.InDateTime,A.ModifyUserId,A.ModifyDateTime
+		                    ,A.MarketActionStatusCode,D.HiddenCodeName AS MarketActionStatusName,D.HiddenCodeNameEn AS MarketActionStatusNameEn
+		                    ,A.MarketActionTargetModelCode,E.HiddenCodeName AS MarketActionTargetModelName,E.HiddenCodeNameEn AS MarketActionTargetModelNameEn
+
+                    FROM MarketAction A LEFT JOIN Shop B ON A.ShopId = B.ShopId
+					                    LEFT JOIN EventType C ON A.EventTypeId = C.EventTypeId
+					                    LEFT JOIN HiddenCode D ON A.MarketActionStatusCode = D.HiddenCodeId AND D.HiddenCodeGroup = 'MarketActionStatus'
+					                    LEFT JOIN HiddenCode E ON A.MarketActionTargetModelCode  = E.HiddenCodeId AND E.HiddenCodeGroup = 'TargetModels'
+                    WHERE 1=1 AND MarketActionId = @MarketActionId";
+
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionDto>().ToList();
+        }
+        public void MarketActionSave(MarketAction marketAction)
+        {
+            MarketAction findOne = db.MarketAction.Where(x => (x.MarketActionId == marketAction.MarketActionId)).FirstOrDefault();
+            if (findOne == null)
+            {
+                marketAction.InDateTime = DateTime.Now;
+                marketAction.ModifyDateTime = DateTime.Now;
+                db.MarketAction.Add(marketAction);
+            }
+            else
+            {
+                findOne.ActionCode = marketAction.ActionCode;
+                findOne.ActionName = marketAction.ActionName;
+                findOne.ActionPlace = marketAction.ActionPlace;
+                findOne.ActivityBudget = marketAction.ActivityBudget;
+                findOne.ExpectLeadsCount = marketAction.ExpectLeadsCount;
+                findOne.EndDate = marketAction.EndDate;
+                findOne.StartDate = marketAction.StartDate;
+                findOne.EventTypeId = marketAction.EventTypeId;
+                findOne.ExpenseAccount = marketAction.ExpenseAccount;
+                findOne.MarketActionStatusCode = marketAction.MarketActionStatusCode;
+                findOne.MarketActionTargetModelCode = marketAction.MarketActionTargetModelCode;
+                findOne.ModifyDateTime = DateTime.Now;
+                findOne.ModifyUserId = marketAction.ModifyUserId;
+                findOne.ShopId = marketAction.ShopId;
+            }
+
+            db.SaveChanges();
+        }
+        public void MarketActionDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"
+                        DELETE MarketActionBefore4Weeks WHERE MarketActionId = @MarketActionId 
+                        DELETE MarketActionBefore4WeeksActivityProcess WHERE MarketActionId = @MarketActionId 
+                        DELETE MarketActionAfter2LeadsReport WHERE MarketActionId = @MarketActionId 
+                        DELETE MarketActionAfter7 WHERE MarketActionId = @MarketActionId  
+                        DELETE MarketActionAfter7ActualExpense WHERE MarketActionId = @MarketActionId 
+                        DELETE MarketActionAfter7ActualProcess WHERE MarketActionId = @MarketActionId 
+                        DELETE MarketAction WHERE MarketActionId = @MarketActionId 
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        #region 市场活动照片
+        public List<MarketActionPic> MarketActionPicSearch(string marketActionId, string picType)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId),
+                                                        new SqlParameter("@PicType", picType)};
+            Type t = typeof(MarketActionPic);
+            string sql = "";
+            sql += @"SELECT A.* 
+                    FROM [MarketActionPic] A 
+                    WHERE  PicTypeLike '%'+@PicType AND MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionPic>().ToList();
+        }
+        public void MarketActionPicSave(MarketActionPic marketActionPic)
+        {
+            MarketActionPic findOneMax = db.MarketActionPic.Where(x => (x.MarketActionId == marketActionPic.MarketActionId && x.PicType == marketActionPic.PicType)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionPic.SeqNO = 1;
+            }
+            else
+            {
+                marketActionPic.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionPic.InDateTime = DateTime.Now;
+            db.MarketActionPic.Add(marketActionPic);
+            db.SaveChanges();
+        }
+        public void MarketActionPicDelete(string marketActionId, string picType, string seqNO)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId)
+                                                        ,new SqlParameter("@PicType", picType)
+                                                        ,new SqlParameter("@SeqNO", seqNO) };
+            string sql = @"DELETE MarketActionPic WHERE MarketActionId = @MarketActionId 
+                                                            AND PicType = @PicType
+                                                            AND SeqNO = @SeqNO
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        #endregion
+        #region Before 4 weeks
+        public List<MarketActionBefore4Weeks> MarketActionBefore4WeeksSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionBefore4Weeks);
+            string sql = "";
+            sql += @"SELECT *
+                    FROM [MarketActionBefore4Weeks] A 
+                    WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionBefore4Weeks>().ToList();
+        }
+        public void MarketActionBefore4WeeksSave(MarketActionBefore4Weeks marketActionBefore4Weeks)
+        {
+            MarketActionBefore4Weeks findOne = db.MarketActionBefore4Weeks.Where(x => (x.MarketActionId == marketActionBefore4Weeks.MarketActionId)).FirstOrDefault();
+            if (findOne == null)
+            {
+                marketActionBefore4Weeks.InDateTime = DateTime.Now;
+                marketActionBefore4Weeks.ModifyDateTime = DateTime.Now;
+                db.MarketActionBefore4Weeks.Add(marketActionBefore4Weeks);
+            }
+            else
+            {
+                findOne.ActivityBackground = marketActionBefore4Weeks.ActivityBackground;
+                findOne.ActivityDesc = marketActionBefore4Weeks.ActivityDesc;
+                findOne.ActivityObjective = marketActionBefore4Weeks.ActivityObjective;
+              
+                findOne.KeyVisionApprovalCode = marketActionBefore4Weeks.KeyVisionApprovalCode;
+                findOne.KeyVisionApprovalDesc = marketActionBefore4Weeks.KeyVisionApprovalDesc;
+                findOne.KeyVisionDesc = marketActionBefore4Weeks.KeyVisionDesc;
+                if (marketActionBefore4Weeks.KeyVisionPic!="https://yrsurvey.oss-cn-beijing.aliyuncs.com/Bentley/fail2.png")
+                    findOne.KeyVisionPic = marketActionBefore4Weeks.KeyVisionPic;
+                findOne.ModifyDateTime = DateTime.Now;
+                findOne.ModifyUserId = marketActionBefore4Weeks.ModifyUserId;
+               
+            }
+
+            db.SaveChanges();
+        }
+        public List<MarketActionBefore4WeeksActivityProcess> MarketActionBefore4WeeksActivityProcessSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionBefore4WeeksActivityProcess);
+            string sql = "";
+            sql += @"SELECT *  FROM [MarketActionBefore4WeeksActivityProcess] WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionBefore4WeeksActivityProcess>().ToList();
+        }
+        public void MarketActionBefore4WeeksActivityProcessSave(MarketActionBefore4WeeksActivityProcess marketActionBefore4WeeksActivityProcess)
+        {
+            //if (marketActionBefore4WeeksActivityProcess.SeqNO == 0)
+            //{
+            MarketActionBefore4WeeksActivityProcess findOneMax = db.MarketActionBefore4WeeksActivityProcess.Where(x => (x.MarketActionId == marketActionBefore4WeeksActivityProcess.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionBefore4WeeksActivityProcess.SeqNO = 1;
+            }
+            else
+            {
+                marketActionBefore4WeeksActivityProcess.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionBefore4WeeksActivityProcess.InDateTime = DateTime.Now;
+            marketActionBefore4WeeksActivityProcess.ModifyDateTime = DateTime.Now;
+            db.MarketActionBefore4WeeksActivityProcess.Add(marketActionBefore4WeeksActivityProcess);
+
+            //}
+            //else
+            //{
+            //MarketActionBefore4WeeksActivityProcess findOne = db.MarketActionBefore4WeeksActivityProcess.Where(x => (x.MarketActionId == marketActionBefore4WeeksActivityProcess.MarketActionId && x.SeqNO == marketActionBefore4WeeksActivityProcess.SeqNO)).FirstOrDefault();
+            //findOne.ActivityDateTime = marketActionBefore4WeeksActivityProcess.ActivityDateTime;
+            //findOne.Contents = marketActionBefore4WeeksActivityProcess.Contents;
+            //findOne.Item = marketActionBefore4WeeksActivityProcess.Item;
+            //findOne.ModifyDateTime = DateTime.Now;
+            //findOne.ModifyUserId = marketActionBefore4WeeksActivityProcess.ModifyUserId;
+            //findOne.Remark = marketActionBefore4WeeksActivityProcess.Remark;
+            //}
+            db.SaveChanges();
+        }
+        public void MarketActionBefore4WeeksActivityProcessDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionBefore4WeeksActivityProcess WHERE MarketActionId = @MarketActionId
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+       
+        #endregion
+        #region two days after
+        public List<MarketActionAfter2LeadsReportDto> MarketActionAfter2LeadsReportSearch(string marketActionId, string year)
+        {
+            if (marketActionId == null) marketActionId = "";
+            if (year == null) year = "";
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionAfter2LeadsReportDto);
+            string sql = "";
+            sql += @"SELECT A.*,B.ActionName,B.ShopId,C.ShopName,C.ShopNameEn,D.HiddenCodeName AS InterestedModelName,D.HiddenCodeNameEn AS InterestedModelNameEn
+                    ,E.HiddenCodeName AS DealModelName,E.HiddenCodeNameEn AS DealModelNameEn
+                   , CASE WHEN OwnerCheck=1 THEN '是' ELSE '否' END AS OwnerCheckName
+                    ,CASE WHEN TestDriverCheck=1 THEN '是' ELSE '否' END AS TestDriverCheckName
+                    ,CASE WHEN LeadsCheck=1 THEN '是' ELSE '否' END AS LeadsCheckName
+                    ,CASE WHEN DealCheck=1 THEN '是' ELSE '否' END AS DealCheckName
+                    FROM [MarketActionAfter2LeadsReport] A  INNER JOIN MarketAction B ON A.MarketActionId = B.MarketActionId
+                                                            INNER JOIN Shop C ON B.ShopId = C.ShopId
+                                                            LEFT JOIN HiddenCode D ON A.InterestedModel = D.HiddenCodeId AND D.HiddenCodeGroup = 'TargetModels'
+                                                            LEFT JOIN HiddenCode E ON A.DealModel = E.HiddenCodeId AND E.HiddenCodeGroup = 'TargetModels'
+                    WHERE 1=1";
+            if (!string.IsNullOrEmpty(marketActionId))
+            {
+                sql += " AND A.MarketActionId = @MarketActionId";
+
+            }
+            if (!string.IsNullOrEmpty(year))
+            {
+                sql += " AND Year(B.StartDate) = @Year";
+
+            }
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter2LeadsReportDto>().ToList();
+        }
+        public MarketActionAfter2LeadsReport MarketActionAfter2LeadsReportSave(MarketActionAfter2LeadsReport marketActionAfter2LeadsReport)
+        {
+            if (marketActionAfter2LeadsReport.SeqNO == 0)
+            {
+                MarketActionAfter2LeadsReport findOneMax = db.MarketActionAfter2LeadsReport.Where(x => (x.MarketActionId == marketActionAfter2LeadsReport.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+                if (findOneMax == null)
+                {
+                    marketActionAfter2LeadsReport.SeqNO = 1;
+                }
+                else
+                {
+                    marketActionAfter2LeadsReport.SeqNO = findOneMax.SeqNO + 1;
+                }
+                marketActionAfter2LeadsReport.InDateTime = DateTime.Now;
+                marketActionAfter2LeadsReport.ModifyDateTime = DateTime.Now;
+                db.MarketActionAfter2LeadsReport.Add(marketActionAfter2LeadsReport);
+
+            }
+            else
+            {
+                MarketActionAfter2LeadsReport findOne = db.MarketActionAfter2LeadsReport.Where(x => (x.MarketActionId == marketActionAfter2LeadsReport.MarketActionId && x.SeqNO == marketActionAfter2LeadsReport.SeqNO)).FirstOrDefault();
+                if (findOne == null)
+                {
+                    marketActionAfter2LeadsReport.InDateTime = DateTime.Now;
+                    marketActionAfter2LeadsReport.ModifyDateTime = DateTime.Now;
+                    db.MarketActionAfter2LeadsReport.Add(marketActionAfter2LeadsReport);
+                }
+                else
+                {
+                    findOne.BPNO = marketActionAfter2LeadsReport.BPNO;
+                    findOne.CustomerName = marketActionAfter2LeadsReport.CustomerName;
+                    findOne.TelNO = marketActionAfter2LeadsReport.TelNO;
+                    findOne.DealCheck = marketActionAfter2LeadsReport.DealCheck;
+                    findOne.DealModel = marketActionAfter2LeadsReport.DealModel;
+                    findOne.InterestedModel = marketActionAfter2LeadsReport.InterestedModel;
+                    findOne.LeadsCheck = marketActionAfter2LeadsReport.LeadsCheck;
+                    findOne.ModifyDateTime = DateTime.Now;
+                    findOne.ModifyUserId = marketActionAfter2LeadsReport.ModifyUserId;
+                    findOne.OwnerCheck = marketActionAfter2LeadsReport.OwnerCheck;
+                    findOne.TestDriverCheck = marketActionAfter2LeadsReport.TestDriverCheck;
+                }
+            }
+            db.SaveChanges();
+            return marketActionAfter2LeadsReport;
+        }
+        public void MarketActionAfter2LeadsReportDelete(string marketActionId, string seqNO)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId), new SqlParameter("@SeqNO", seqNO) };
+            string sql = @"DELETE MarketActionAfter2LeadsReport WHERE MarketActionId = @MarketActionId AND SeqNO = @SeqNO
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        public List<MarketActionLeadsCountDto> MarketActionLeadsCountSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionLeadsCountDto);
+            string sql = "";
+            sql += @"SELECT * FROM
+                    (SELECT
+                            ISNULL(SUM(CASE WHEN OwnerCheck= 1 AND LeadsCheck = 1 THEN 1 ELSE 0 END),0) AS LeadOwnerCount,
+                            ISNULL(SUM(CASE WHEN OwnerCheck <> 1 AND LeadsCheck = 1 THEN 1 ELSE 0 END), 0) AS LeadPCCount,
+                            ISNULL(SUM(CASE WHEN OwnerCheck = 1 AND TestDriverCheck = 1 THEN 1 ELSE 0 END), 0) AS TestDriverOwnerCount,
+                            ISNULL(SUM(CASE WHEN OwnerCheck <> 1 AND TestDriverCheck = 1 THEN 1 ELSE 0 END), 0) AS TestDriverPCCount,
+                            ISNULL(SUM(CASE WHEN OwnerCheck = 1 AND DealCheck = 1 THEN 1 ELSE 0 END), 0) AS ActualOrderOwnerCount,
+                            ISNULL(SUM(CASE WHEN OwnerCheck <> 1 AND DealCheck = 1 THEN 1 ELSE 0 END), 0) AS ActualOrderPCCount
+                    FROM MarketActionAfter2LeadsReport A 
+                    WHERE   A.MarketActionId = @MarketActionId) X INNER JOIN 
+                    (SELECT ISNULL(SUM(ISNULL(UnitPrice,0)*ISNULL(Counts,0)),0) AS ExpenseTotalAmt 
+                    FROM MarketActionAfter7ActualExpense A WHERE A.MarketActionId = @MarketActionId) Y ON 1=1";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionLeadsCountDto>().ToList();
+        }
+
+        #endregion
+        #region Seven days after
+        public List<MarketActionAfter7> MarketActionAfter7Search(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionAfter7);
+            string sql = "";
+            sql += @"SELECT A.* 
+                    FROM [MarketActionAfter7] A 
+                    WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter7>().ToList();
+        }
+        public void MarketActionAfter7Save(MarketActionAfter7 marketActionAfter7)
+        {
+            MarketActionAfter7 findOne = db.MarketActionAfter7.Where(x => (x.MarketActionId == marketActionAfter7.MarketActionId)).FirstOrDefault();
+            if (findOne == null)
+            {
+                marketActionAfter7.InDateTime = DateTime.Now;
+                marketActionAfter7.ModifyDateTime = DateTime.Now;
+                db.MarketActionAfter7.Add(marketActionAfter7);
+            }
+            else
+            {
+               
+
+            }
+
+            db.SaveChanges();
+        }
+        public List<MarketActionAfter7ActualExpenseDto> MarketActionAfter7ActualExpenseSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionAfter7ActualExpenseDto);
+            string sql = "";
+            sql += @"SELECT A.*,ISNULL(A.UnitPrice,0)*ISNULL(Counts,0) AS Total  FROM [MarketActionAfter7ActualExpense] A WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter7ActualExpenseDto>().ToList();
+        }
+        //public void MarketActionAfter7ActualExpenseSave(MarketActionAfter7ActualExpense marketActionAfter7ActualExpense)
+        //{
+        //    //if (marketActionAfter7ActualExpense.SeqNO == 0)
+        //    //{
+        //    MarketActionAfter7ActualExpense findOneMax = db.MarketActionAfter7ActualExpense.Where(x => (x.MarketActionId == marketActionAfter7ActualExpense.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+        //    if (findOneMax == null)
+        //    {
+        //        marketActionAfter7ActualExpense.SeqNO = 1;
+        //    }
+        //    else
+        //    {
+        //        marketActionAfter7ActualExpense.SeqNO = findOneMax.SeqNO + 1;
+        //    }
+        //    marketActionAfter7ActualExpense.InDateTime = DateTime.Now;
+        //    marketActionAfter7ActualExpense.ModifyDateTime = DateTime.Now;
+        //    db.MarketActionAfter7ActualExpense.Add(marketActionAfter7ActualExpense);
+        //    db.SaveChanges();
+        //}
+        public void MarketActionAfter7ActualExpenseDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionAfter7ActualExpense WHERE MarketActionId = @MarketActionId 
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+
+        public List<MarketActionAfter7ActualProcess> MarketActionAfter7ActualProcessSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionAfter7ActualProcess);
+            string sql = "";
+            sql += @"SELECT *  FROM [MarketActionAfter7ActualProcess] WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter7ActualProcess>().ToList();
+        }
+        public void MarketActionAfter7ActualProcessSave(MarketActionAfter7ActualProcess marketActionAfter7ActualProcess)
+        {
+            //if (marketActionAfter7ActualProcess.SeqNO == 0)
+            //{
+            MarketActionAfter7ActualProcess findOneMax = db.MarketActionAfter7ActualProcess.Where(x => (x.MarketActionId == marketActionAfter7ActualProcess.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionAfter7ActualProcess.SeqNO = 1;
+            }
+            else
+            {
+                marketActionAfter7ActualProcess.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionAfter7ActualProcess.InDateTime = DateTime.Now;
+            marketActionAfter7ActualProcess.ModifyDateTime = DateTime.Now;
+            db.MarketActionAfter7ActualProcess.Add(marketActionAfter7ActualProcess);
+
+            //}
+            //else
+            //{
+            //    MarketActionAfter7ActualProcess findOne = db.MarketActionAfter7ActualProcess.Where(x => (x.MarketActionId == marketActionAfter7ActualProcess.MarketActionId && x.SeqNO == marketActionAfter7ActualProcess.SeqNO)).FirstOrDefault();
+            //    findOne.ActivityDateTime = marketActionAfter7ActualProcess.ActivityDateTime;
+            //    findOne.Contents = marketActionAfter7ActualProcess.Contents;
+            //    findOne.Item = marketActionAfter7ActualProcess.Item;
+            //    findOne.ModifyDateTime = DateTime.Now;
+            //    findOne.ModifyUserId = marketActionAfter7ActualProcess.ModifyUserId;
+            //    findOne.Remark = marketActionAfter7ActualProcess.Remark;
+
+            //}
+            db.SaveChanges();
+        }
+        public void MarketActionAfter7ActualProcessDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionAfter7ActualProcess WHERE MarketActionId = @MarketActionId 
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        #endregion
+       
+        #region 总览
+        public List<MarketActionStatusCountDto> MarketActionStatusCountSearch(string year, List<Shop> roleTypeShop)
+        {
+            if (year == null) year = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year) };
+            Type t = typeof(MarketActionStatusCountDto);
+            string sql = "";
+            sql += @"SELECT ISNULL(SUM(Before4WeeksCount),0) AS Before4WeeksCount 
+	                       ,ISNULL(SUM(Before3Count),0) AS Before3Count
+	                       ,ISNULL(SUM(After2Count),0) AS After2Count
+	                       ,ISNULL(SUM(After7Count),0) AS After7Count
+	                       ,ISNULL(SUM(After30Count),0) AS After30Count
+                    FROM (
+                            SELECT 
+                            CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
+		                            AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksActivityProcess WHERE MarketActionId = A.MarketActionId)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS Before4WeeksCount
+                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore3BugetDetail WHERE MarketActionId = A.MarketActionId)
+		                            AND NOT EXISTS(SELECT 1 FROM MarketActionBefore3DisplayModel WHERE MarketActionId = A.MarketActionId)
+		                            AND NOT EXISTS(SELECT 1 FROM MarketActionBefore3TestDriver WHERE MarketActionId = A.MarketActionId)
+                                    AND EXISTS (SELECT TOP 1 EventTypeName FROM EventType WHERE EventTypeId = A.EventTypeId AND EventTypeName NOT IN ('数字营销','广告及宣传','线上平台线索获取'))
+				                            THEN 1
+				                            ELSE 0
+			                            END AS Before3Count
+                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS After2Count
+                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
+		                            AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7ActualExpense WHERE MarketActionId = A.MarketActionId)
+		                            AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7ActualProcess WHERE MarketActionId = A.MarketActionId)
+				                            THEN 1
+				                            ELSE 0
+			                            END  AS After7Count
+                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter30LeadsReportUpdate WHERE MarketActionId = A.MarketActionId)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS After30Count
+                            FROM MarketAction A WHERE 1=1 AND A.MarketActionStatusCode<>2 ";
+            if (!string.IsNullOrEmpty(year))
+            {
+                sql += " AND Year(A.StartDate) = @Year";
+
+            }
+            if (roleTypeShop != null && roleTypeShop.Count > 0)
+            {
+                sql += " AND A.ShopId IN( ";
+                foreach (Shop shop in roleTypeShop)
+                {
+                    if (roleTypeShop.IndexOf(shop) == roleTypeShop.Count - 1)
+                    {
+                        sql += shop.ShopId;
+                    }
+                    else
+                    {
+                        sql += shop.ShopId + ",";
+                    }
+                }
+                sql += ")";
+            }
+            sql += " ) B";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionStatusCountDto>().ToList();
+        }
+        #endregion
+    }
+}
