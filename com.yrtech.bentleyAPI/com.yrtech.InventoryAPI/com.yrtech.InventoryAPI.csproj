@@ -195,6 +195,7 @@
     <Compile Include="DTO\Answer\AnswerDto.cs" />
     <Compile Include="DTO\Answer\AnswerPhotoDto.cs" />
     <Compile Include="DTO\Answer\AnswerShopInfoDto.cs" />
+    <Compile Include="DTO\Approve\DTTApproveDto.cs" />
     <Compile Include="DTO\DMF\DMFQuarterMainDto.cs" />
     <Compile Include="DTO\DMF\DMFDto.cs" />
     <Compile Include="DTO\DMF\ExpenseAccountDto.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Service\ExcelDataService.cs" />
     <Compile Include="Service\MarketActionService.cs" />
     <Compile Include="Service\DMFService.cs" />
+    <Compile Include="Service\ApproveService.cs" />
     <Compile Include="Service\MasterService.cs" />
     <Compile Include="Service\CommitFileService.cs" />
     <Compile Include="Service\AccountService.cs" />

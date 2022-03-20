@@ -21,6 +21,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         AccountService accountService = new AccountService();
         DMFService dmfService = new DMFService();
         ExcelDataService excelDataService = new ExcelDataService();
+        ApproveService approveService = new ApproveService();
 
         #region CommitFile
         [HttpGet]
@@ -423,6 +424,32 @@ namespace com.yrtech.SurveyAPI.Controllers
                 return new APIResult() { Status = false, Body = ex.Message.ToString() };
             }
         }
+        [HttpGet]
+        [Route("MarketAction/DMFApplyEmail")]
+        public APIResult DMFApplyEmail(string marketActionId)
+        {
+            try
+            {
+                string marketactionName = "";
+                List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
+                List<ShopDto> shop = new List<ShopDto>();
+                List<UserInfoDto> userinfo = new List<UserInfoDto>();
+                if (marketAction != null && marketAction.Count > 0)
+                {
+                    marketactionName = marketAction[0].ActionName;
+                    shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
+                    userinfo = masterService.UserInfoSearch("", "", shop[0].ShopName.ToString(), "", "", "");
+                }
+                // 发送给经销商时抄送给自己，以备查看
+                SendEmail("71443365@qq.com", "keyvisionApproval@163.com", "市场基金申请邮件", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的市场基金申请邮件", "", "");
+                return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                //CommonHelper.log(ex.Message.ToString());
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+        }
         #endregion
         #region After2
         [HttpGet]
@@ -743,6 +770,37 @@ namespace com.yrtech.SurveyAPI.Controllers
             {
                 return new APIResult() { Status = false, Body = ex.Message.ToString() };
             }
+        }
+        #endregion
+        #region DTTApprove
+        [HttpGet]
+        [Route("MarketAction/DTTApproveSearch")]
+        public APIResult DTTApproveSearch(string dttApproveId, string marketActionId,string dttType, string dttApproveCode)
+        {
+            try
+            {
+                List<DTTApproveDto> dttApproveList = approveService.DTTApproveSearch(dttApproveId,marketActionId,dttType,dttApproveCode);
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(dttApproveList) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+        }
+        [HttpPost]
+        [Route("MarketAction/DTTApproveSave")]
+        public APIResult DTTApproveSave(DTTApprove dttApprove)
+        {
+            try
+            {
+                approveService.DTTApproveSave(dttApprove);
+                return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+
         }
         #endregion
         #endregion
