@@ -211,7 +211,7 @@
     <Compile Include="DTO\MarketAction\MarketActionAfter2LeadsReportDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionAfter7MainDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionBefore3MainDto.cs" />
-    <Compile Include="DTO\MarketAction\MarketActionBefore21MainDto.cs" />
+    <Compile Include="DTO\MarketAction\MarketActionBefore4WeeksMainDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionDto.cs" />
     <Compile Include="DTO\Master\UserInfoDto.cs" />
     <Compile Include="DTO\Master\EventTypeDto.cs" />

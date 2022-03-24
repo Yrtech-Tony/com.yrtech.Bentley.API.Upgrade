@@ -364,6 +364,69 @@ namespace com.yrtech.InventoryAPI.Service
             db.Database.ExecuteSqlCommand(sql, para);
         }
         #endregion
+        #region CoopFundType
+        public List<CoopFundType> CoopFundTypeSearch(string coopFundTypeId, string coopFundTypeName, string coopFundTypeNameEn, bool? showChk)
+        {
+            if (coopFundTypeId == null) coopFundTypeId = "";
+            if (coopFundTypeName == null) coopFundTypeName = "";
+            if (coopFundTypeNameEn == null) coopFundTypeNameEn = "";
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@CoopFundTypeId", coopFundTypeId),
+                                                    new SqlParameter("@CoopFundTypeName", coopFundTypeName),
+                                                    new SqlParameter("@CoopFundTypeNameEn", coopFundTypeNameEn)};
+            Type t = typeof(EventTypeDto);
+            string sql = "";
+            sql = @"SELECT *
+                    FROM CoopFundType 
+                    WHERE 1=1";
+            if (!string.IsNullOrEmpty(coopFundTypeId))
+            {
+                sql += " AND CoopFundTypeId = @CoopFundTypeId";
+            }
+            if (!string.IsNullOrEmpty(coopFundTypeName))
+            {
+                sql += " AND CoopFundTypeName = @CoopFundTypeName";
+            }
+            if (!string.IsNullOrEmpty(coopFundTypeNameEn))
+            {
+                sql += " AND CoopFundTypeNameEn = @CoopFundTypeNameEn";
+            }
+            if (showChk.HasValue)
+            {
+                para = para.Concat(new SqlParameter[] { new SqlParameter("@ShowChk", showChk) }).ToArray();
+                sql += " AND ShowChk = @ShowChk";
+            }
+            return db.Database.SqlQuery(t, sql, para).Cast<CoopFundType>().ToList();
+        }
+        public CoopFundType CoopFundTypeSave(CoopFundType coopFundType)
+        {
+
+            CoopFundType findOne = db.CoopFundType.Where(x => (x.CoopFundTypeId == coopFundType.CoopFundTypeId)).FirstOrDefault();
+            if (findOne == null)
+            {
+                coopFundType.InDateTime = DateTime.Now;
+                coopFundType.ModifyDateTime = DateTime.Now;
+                db.CoopFundType.Add(coopFundType);
+            }
+            else
+            {
+                findOne.CoopFundTypeName = coopFundType.CoopFundTypeName;
+                findOne.CoopFundTypeNameEn = coopFundType.CoopFundTypeNameEn;
+                findOne.ModifyDateTime = DateTime.Now;
+                findOne.ModifyUserId = coopFundType.ModifyUserId;
+                findOne.ShowChk = coopFundType.ShowChk;
+                coopFundType = findOne;
+            }
+            db.SaveChanges();
+            return coopFundType;
+        }
+        public void CoopFundTypeDelete(string coopFundTypeId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@CoopFundTypeId", coopFundTypeId) };
+            string sql = @"DELETE CoopFundType WHERE CoopFundTypeId = @CoopFundTypeId
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        #endregion 
 
     }
 }

@@ -200,7 +200,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("MarketAction/MarketActionPlanExport")]
-        public APIResult MarketActionExportPlanSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId,string userId, string roleTypeCode)
+        public APIResult MarketActionExportPlanSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, string userId, string roleTypeCode)
         {
             try
             {
@@ -272,7 +272,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 List<MarketActionPic> list = CommonHelper.DecodeString<List<MarketActionPic>>(upload.ListJson);
                 foreach (MarketActionPic marketActionPic in list)
                 {
-                    marketActionService.MarketActionPicDelete(marketActionPic.MarketActionId.ToString(), marketActionPic.PicType,marketActionPic.SeqNO.ToString());
+                    marketActionService.MarketActionPicDelete(marketActionPic.MarketActionId.ToString(), marketActionPic.PicType, marketActionPic.SeqNO.ToString());
                 }
                 return new APIResult() { Status = true, Body = "" };
             }
@@ -290,28 +290,18 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 MarketActionBefore4WeeksMainDto marketActionBefore4WeeksMainDto = new MarketActionBefore4WeeksMainDto();
+                // 需要绑定的输入信息
                 List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
-                List<MarketActionDto> marketActionList = marketActionService.MarketActionSearchById(marketActionId); // 查询当前活动的活动模式
-                // 如果活动模式为线下活动
-                if (marketActionList != null && marketActionList[0].EventModeId == 2&& marketActionBefore4WeeksList!=null)
-                {
-                    marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionBefore4WeeksList[0].CoopFund_Catering_DrinksAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_Catering_FoodAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_HospitalityAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_MCAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_OtherAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_PerformanceAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_PhotographyAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_SetupsAmt +
-                                                                     marketActionBefore4WeeksList[0].CoopFund_VenueRetalAmt;
-                   
-                }
-                marketActionBefore4WeeksMainDto.ActivityProcess = marketActionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
+                List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
                 if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
                 {
+                    // 如果活动模式为线下活动，预算的总金额=市场基金的合计
+                    marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, marketActionBefore4WeeksList[0].TotalBudgetAmt);
                     marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks = marketActionBefore4WeeksList[0];
                 }
-                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId,"MPF");
+                marketActionBefore4WeeksMainDto.ActivityProcess = marketActionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
+                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund = marketActionBefore4WeeksCoopFundList;
+                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId, "MPF");
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine = marketActionService.MarketActionPicSearch(marketActionId, "MPN");
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionBefore4WeeksMainDto) };
             }
@@ -347,13 +337,19 @@ namespace com.yrtech.SurveyAPI.Controllers
                     market.StartDate = marketDto.StartDate;
                     marketActionService.MarketActionSave(market);
                 }
-               // marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic = UploadBase64Pic("", marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic);
+                // marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic = UploadBase64Pic("", marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic);
                 marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks);
-                // 先全部删除活动流程，然后统一再保存一边
+                // 先全部删除活动流程，然后统一再保存
                 marketActionService.MarketActionBefore4WeeksActivityProcessDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
                 foreach (MarketActionBefore4WeeksActivityProcess process in marketActionBefore4WeeksMainDto.ActivityProcess)
                 {
                     marketActionService.MarketActionBefore4WeeksActivityProcessSave(process);
+                }
+                // 先全部删除市场基金申请，然后统一再保存
+                marketActionService.MarketActionBefore4WeeksCoopFundDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
+                foreach (MarketActionBefore4WeeksCoopFund coopFund in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund)
+                {
+                    marketActionService.MarketActionBefore4WeeksCoopFundSave(coopFund);
                 }
                 //保存线上的照片
                 foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine)
@@ -387,14 +383,14 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
             try
             {
-                CommonHelper.log("开始调用"+marketActionId + "-" + shop[0].ShopName+"-"+ marketactionName);
+                CommonHelper.log("开始调用" + marketActionId + "-" + shop[0].ShopName + "-" + marketactionName);
                 SendEmail(WebConfigurationManager.AppSettings["KeyVisionEmail_To"], WebConfigurationManager.AppSettings["KeyVisionEmail_CC"]
                         , "主视觉画面审批", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的画面审核已提交，请审核", "", "");
                 return new APIResult() { Status = true, Body = "" };
             }
             catch (Exception ex)
             {
-                CommonHelper.log("邮件异常"+marketActionId+"-"+shop[0].ShopName+"-"+marketactionName+"-" + ex.Message.ToString());
+                CommonHelper.log("邮件异常" + marketActionId + "-" + shop[0].ShopName + "-" + marketactionName + "-" + ex.Message.ToString());
                 return new APIResult() { Status = false, Body = ex.Message.ToString() };
             }
         }
@@ -427,6 +423,32 @@ namespace com.yrtech.SurveyAPI.Controllers
         [HttpGet]
         [Route("MarketAction/DMFApplyEmail")]
         public APIResult DMFApplyEmail(string marketActionId)
+        {
+            try
+            {
+                string marketactionName = "";
+                List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
+                List<ShopDto> shop = new List<ShopDto>();
+                List<UserInfoDto> userinfo = new List<UserInfoDto>();
+                if (marketAction != null && marketAction.Count > 0)
+                {
+                    marketactionName = marketAction[0].ActionName;
+                    shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
+                    userinfo = masterService.UserInfoSearch("", "", shop[0].ShopName.ToString(), "", "", "");
+                }
+                // 发送给经销商时抄送给自己，以备查看
+                SendEmail("71443365@qq.com", "keyvisionApproval@163.com", "市场基金申请邮件", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的市场基金申请邮件", "", "");
+                return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                //CommonHelper.log(ex.Message.ToString());
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+        }
+        [HttpGet]
+        [Route("MarketAction/DTTApproveEmail")]
+        public APIResult DTTApproveEmail(string marketActionId)
         {
             try
             {
@@ -663,12 +685,21 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 MarketActionAfter7MainDto marketActionAfter7MainDto = new MarketActionAfter7MainDto();
+                // 活动报告填写信息
                 List<MarketActionAfter7> marketActionAfter7List = marketActionService.MarketActionAfter7Search(marketActionId);
+                // 活动计划查询信息，用于显示从活动计划关联过来的信息
+                List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
+                if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
+                {
+                    marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, marketActionBefore4WeeksList[0].TotalBudgetAmt);
+                    marketActionAfter7MainDto.MarketActionBefore4Weeks = marketActionBefore4WeeksList[0];
+                }
                 if (marketActionAfter7List != null && marketActionAfter7List.Count > 0)
                 {
                     marketActionAfter7MainDto.MarketActionAfter7 = marketActionAfter7List[0];
                 }
                 marketActionAfter7MainDto.ActualProcess = marketActionService.MarketActionAfter7ActualProcessSearch(marketActionId);
+                marketActionAfter7MainDto.MarketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSearch(marketActionId);
                 //List<MarketActionLeadsCountDto> marketActionLeadsCountList = marketActionService.MarketActionLeadsCountSearch(marketActionId);
                 //if (marketActionLeadsCountList != null && marketActionLeadsCountList.Count > 0)
                 //{
@@ -697,6 +728,12 @@ namespace com.yrtech.SurveyAPI.Controllers
                 foreach (MarketActionAfter7ActualProcess process in marketActionAfter7MainDto.ActualProcess)
                 {
                     marketActionService.MarketActionAfter7ActualProcessSave(process);
+                }
+                // 先删除再全部保存
+                marketActionService.MarketActionAfter7CoopFundDelete(marketActionAfter7MainDto.MarketActionId.ToString());
+                foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7MainDto.MarketActionAfter7CoopFund)
+                {
+                    marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
                 }
                 //保存线上的照片
                 foreach (MarketActionPic marketActionPic in marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine)
@@ -758,12 +795,11 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region 总览
         [HttpGet]
         [Route("MarketAction/MarketActionStatusCountSearch")]
-        public APIResult MarketActionStatusCountSearch(string year, string userId, string roleTypeCode)
+        public APIResult MarketActionStatusCountSearch(string year, string eventTypeId, string userId, string roleTypeCode)
         {
             try
             {
-
-                List<MarketActionStatusCountDto> marketActionStatusCountListDto = marketActionService.MarketActionStatusCountSearch(year, accountService.GetShopByRole(userId, roleTypeCode));
+                List<MarketActionStatusCountDto> marketActionStatusCountListDto = marketActionService.MarketActionStatusCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionStatusCountListDto) };
             }
             catch (Exception ex)
@@ -775,11 +811,11 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region DTTApprove
         [HttpGet]
         [Route("MarketAction/DTTApproveSearch")]
-        public APIResult DTTApproveSearch(string dttApproveId, string marketActionId,string dttType, string dttApproveCode)
+        public APIResult DTTApproveSearch(string dttApproveId, string marketActionId, string dttType, string dttApproveCode)
         {
             try
             {
-                List<DTTApproveDto> dttApproveList = approveService.DTTApproveSearch(dttApproveId,marketActionId,dttType,dttApproveCode);
+                List<DTTApproveDto> dttApproveList = approveService.DTTApproveSearch(dttApproveId, marketActionId, dttType, dttApproveCode);
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(dttApproveList) };
             }
             catch (Exception ex)
@@ -1016,7 +1052,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         dmfDetail.DMFItemId = dmfItemList[0].DMFItemId;
                     }
                     List<DMFDetailDto> detailList = dmfService.DMFDetailSearch("", dmfDetail.ShopId.ToString(), dmfDetail.DMFItemId.ToString(), "");
-                    
+
                     dmfDetail.AcutalAmt = dmfDetailDto.AcutalAmt;
                     dmfDetail.Budget = dmfDetailDto.Budget;
                     dmfDetail.InUserId = dmfDetailDto.InUserId;
@@ -1078,7 +1114,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     {
                         dmfDetailDto.DMFItemId = dmfItemList[0].DMFItemId;
                     }
-                    List<DMFDetailDto> dmfDetailList = dmfService.DMFDetailSearch("",dmfDetailDto.ShopId.ToString(),dmfDetailDto.DMFItemId.ToString(),"");
+                    List<DMFDetailDto> dmfDetailList = dmfService.DMFDetailSearch("", dmfDetailDto.ShopId.ToString(), dmfDetailDto.DMFItemId.ToString(), "");
                     if (dmfDetailList != null && dmfDetailList.Count != 0 && dmfDetailDto.DMFDetailId != dmfDetailList[0].DMFDetailId)
                     {
                         return new APIResult() { Status = false, Body = "导入失败,文件中存在和系统重复的数据(经销商和市场基金项目同时重复)，请检查文件" };
@@ -1151,7 +1187,66 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
+                // 把活动报告的市场基金金额自动赋值到费用报销
+                expenseAccount.ExpenseAmt = TokenHelper.EncryptDES(marketActionService.MarketActionAfter7Search(expenseAccount.MarketActionId.ToString())[0].CoopFundSumAmt.ToString());
+                //保存费用报销
                 expenseAccount = dmfService.ExpenseAccountSave(expenseAccount);
+                /*活动报告的报价单，合同，发票，报价单自动赋值到费用报销,查询该活动是否已经有报销的附件.
+                 * 如果已经有报销的附件，说明已经关联过，不再进行管理.
+                 * 如果不存在附件，说明还没有关联，自动把活动计划和活动报告的附件关联过来*/
+                List<ExpenseAccountFile> expenseAccountFileList= dmfService.ExpenseAccountFileSearch(expenseAccount.ExpenseAccountId.ToString(), "", "");
+                if (expenseAccountFileList == null || expenseAccountFileList.Count == 0)
+                {
+                    List<MarketActionPic>marketActionPicList = new List<MarketActionPic>();
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF01"));//活动计划报价单
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF13"));//活动计划PPT
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF01"));//活动报告报价单
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF02")); //活动报告合同
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF03")); //活动报告发票
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF04")); //活动报告邮件截图
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF15")); //活动报告PPT
+                    foreach (MarketActionPic marketActionPic in marketActionPicList)
+                    {
+                        ExpenseAccountFile expenseAccountFile = new ExpenseAccountFile();
+                        expenseAccountFile.ExpenseAccountId = expenseAccount.ExpenseAccountId;
+                        expenseAccountFile.SeqNO = 0;
+                        expenseAccountFile.FileName = marketActionPic.PicName;
+                        if (marketActionPic.PicType == "MPF01")
+                        {
+                            expenseAccountFile.FileTypeCode = "1";
+                        }
+                        else if (marketActionPic.PicType == "MPF13")
+                        {
+                            expenseAccountFile.FileTypeCode = "7";
+                        }
+                        else if (marketActionPic.PicType == "MRF01") {
+                            expenseAccountFile.FileTypeCode = "3";
+                        }
+                        else if (marketActionPic.PicType == "MRF02")
+                        {
+                            expenseAccountFile.FileTypeCode = "4";
+                        }
+                        else if (marketActionPic.PicType == "MRF03")
+                        {
+                            expenseAccountFile.FileTypeCode = "5";
+                        }
+                        else if (marketActionPic.PicType == "MRF04")
+                        {
+                            expenseAccountFile.FileTypeCode = "9";
+                        }
+                        else if (marketActionPic.PicType == "MRF15")
+                        {
+                            expenseAccountFile.FileTypeCode = "8";
+                        }
+                        expenseAccountFile.FileUrl = marketActionPic.PicPath;
+                        expenseAccountFile.InUserId = expenseAccount.InUserId;
+                        expenseAccountFile.InDateTime = expenseAccount.InDateTime;
+                        expenseAccountFile.ModifyUserId = expenseAccount.ModifyUserId;
+                        expenseAccountFile.ModifyDateTime = expenseAccount.ModifyDateTime;
+                        dmfService.ExpenseAccountFileSave(expenseAccountFile);
+                    }
+                }
+                
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(expenseAccount) };
             }
             catch (Exception ex)
@@ -1344,7 +1439,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("DMF/MonthSaleImportServer")]
-        public APIResult MonthSaleImportServer(string userId,string ossPath)
+        public APIResult MonthSaleImportServer(string userId, string ossPath)
         {
             try
             {
@@ -1359,7 +1454,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         }
                     }
                 }
-              // 验证数据库和excel里面是否有重复数据
+                // 验证数据库和excel里面是否有重复数据
                 foreach (MonthSaleDto monthSaleDto in list)
                 {
                     List<ShopDto> shopList = masterService.ShopSearch("", "", monthSaleDto.ShopName.Trim(), "");

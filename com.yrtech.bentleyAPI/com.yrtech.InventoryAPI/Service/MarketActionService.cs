@@ -37,7 +37,7 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = "";
             sql += @"SELECT A.MarketActionId,A.ShopId,B.ShopCode,B.ShopName,B.ShopNameEn,A.ActionCode,A.ActionName
 		                    ,A.EventTypeId,C.EventTypeName,C.EventTypeNameEn
-		                    ,(SELECT EventMode FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
+		                    ,(SELECT CAST(EventMode AS INT) FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
 		                    ,(SELECT HiddenCodeName FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode' AND X.EventMode = Y.HiddenCodeId 
 											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeName
 						   ,(SELECT HiddenCodeNameEn FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode'  AND X.EventMode = Y.HiddenCodeId 
@@ -53,8 +53,10 @@ namespace com.yrtech.InventoryAPI.Service
 			                      THEN 'WaitForChange'
                                   WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=1) 
 			                      THEN 'Commited'
-			                      WHEN  DATEDIFF(DAY,GETDATE(),A.StartDate)<28
+			                      WHEN  DATEDIFF(DAY,GETDATE(),A.StartDate)<28 AND EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId) 
+                                  WHEN DATEDIFF(DAY,GETDATE(),A.StartDate)<28 AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
+                                  THEN '0.00'
 			                      ELSE 'UnCommit'
 	                        END AS 	Before4Weeks
 	                       
@@ -71,8 +73,10 @@ namespace com.yrtech.InventoryAPI.Service
 			                      THEN 'WaitForChange'
                                   WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=1) 
 			                      THEN 'Commited'
-			                      WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7
+			                      WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7 AND EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId) 
+                                  WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7 AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
+                                  THEN '0.00'
 			                      ELSE 'UnCommit'
 	                        END AS 	After7Days	
 	                       
@@ -334,7 +338,19 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.ActivityBackground = marketActionBefore4Weeks.ActivityBackground;
                 findOne.ActivityDesc = marketActionBefore4Weeks.ActivityDesc;
                 findOne.ActivityObjective = marketActionBefore4Weeks.ActivityObjective;
-              
+                findOne.CoopFundSumAmt = marketActionBefore4Weeks.CoopFundSumAmt;
+                findOne.People_DCPIDCount = marketActionBefore4Weeks.People_DCPIDCount;
+                findOne.People_InvitationCarOwnerCount = marketActionBefore4Weeks.People_InvitationCarOwnerCount;
+                findOne.People_InvitationDepositorCount = marketActionBefore4Weeks.People_InvitationDepositorCount;
+                findOne.People_InvitationOtherCount = marketActionBefore4Weeks.People_InvitationOtherCount;
+                findOne.People_InvitationPotentialCount = marketActionBefore4Weeks.People_InvitationPotentialCount;
+                findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationTotalCount;
+                findOne.People_NewLeadsThisYearCount = marketActionBefore4Weeks.People_NewLeadsThisYearCount;
+                findOne.People_ParticipantsCount = marketActionBefore4Weeks.People_ParticipantsCount;
+                findOne.ProcessPercent = marketActionBefore4Weeks.ProcessPercent;
+                findOne.Vehide_Model = marketActionBefore4Weeks.Vehide_Model;
+                findOne.Vehide_Qty = marketActionBefore4Weeks.Vehide_Qty;
+                findOne.Vehide_Usage = marketActionBefore4Weeks.Vehide_Usage;
                 findOne.KeyVisionApprovalCode = marketActionBefore4Weeks.KeyVisionApprovalCode;
                 findOne.KeyVisionApprovalDesc = marketActionBefore4Weeks.KeyVisionApprovalDesc;
                 findOne.KeyVisionDesc = marketActionBefore4Weeks.KeyVisionDesc;
@@ -342,7 +358,6 @@ namespace com.yrtech.InventoryAPI.Service
                     findOne.KeyVisionPic = marketActionBefore4Weeks.KeyVisionPic;
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = marketActionBefore4Weeks.ModifyUserId;
-               
             }
 
             db.SaveChanges();
@@ -394,7 +409,56 @@ namespace com.yrtech.InventoryAPI.Service
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
-       
+        public List<MarketActionBefore4WeeksCoopFund> MarketActionBefore4WeeksCoopFundSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionBefore4WeeksCoopFund);
+            string sql = "";
+            sql += @"SELECT *  FROM [MarketActionBefore4WeeksCoopFund] WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionBefore4WeeksCoopFund>().ToList();
+        }
+        public void MarketActionBefore4WeeksCoopFundSave(MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund)
+        {
+            MarketActionBefore4WeeksCoopFund findOneMax = db.MarketActionBefore4WeeksCoopFund.Where(x => (x.MarketActionId == marketActionBefore4WeeksCoopFund.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionBefore4WeeksCoopFund.SeqNO = 1;
+            }
+            else
+            {
+                marketActionBefore4WeeksCoopFund.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionBefore4WeeksCoopFund.InDateTime = DateTime.Now;
+            marketActionBefore4WeeksCoopFund.ModifyDateTime = DateTime.Now;
+            db.MarketActionBefore4WeeksCoopFund.Add(marketActionBefore4WeeksCoopFund);
+
+            db.SaveChanges();
+        }
+        public void MarketActionBefore4WeeksCoopFundDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionBefore4WeeksCoopFund WHERE MarketActionId = @MarketActionId
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        // 线下模式时活动预算合计的计算
+        public decimal? MarketActionBefore4WeeksTotalBudgetAmt(string marketActionId,decimal? totalBudgetAmt)
+        {
+            List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            // 查询当前活动的活动模式
+            List<MarketActionDto> marketActionList = MarketActionSearchById(marketActionId);
+            // 如果活动模式为线下活动，预算的总金额=市场基金的合计
+            if (marketActionList != null && marketActionList[0].EventModeId == 2 )
+            {
+                foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
+                {
+                    totalBudgetAmt += marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0: marketActionBefore4WeeksCoopFund.CoopFundAmt;
+                }
+            }
+            return totalBudgetAmt;
+        }
         #endregion
         #region two days after
         public List<MarketActionAfter2LeadsReportDto> MarketActionAfter2LeadsReportSearch(string marketActionId, string year)
@@ -526,8 +590,22 @@ namespace com.yrtech.InventoryAPI.Service
             }
             else
             {
-               
-
+                findOne.CoopFundSumAmt = marketActionAfter7.CoopFundSumAmt;
+                findOne.CustomerFeedback = marketActionAfter7.CustomerFeedback;
+                findOne.HightLights = marketActionAfter7.HightLights;
+                findOne.ImproveArea = marketActionAfter7.ImproveArea;
+                findOne.MarketSaleTeamAdvice = marketActionAfter7.MarketSaleTeamAdvice;
+                findOne.ModifyDateTime = DateTime.Now;
+                findOne.ModifyUserId = marketActionAfter7.ModifyUserId;
+                findOne.People_ActualArrivalCount = marketActionAfter7.People_ActualArrivalCount;
+                findOne.People_ActualCarOwnerCount = marketActionAfter7.People_ActualCarOwnerCount;
+                findOne.People_ActualDepositorCount = marketActionAfter7.People_ActualDepositorCount;
+                findOne.People_ActualPotentialCount = marketActionAfter7.People_ActualPotentialCount;
+                findOne.People_DCPIDCount = marketActionAfter7.People_DCPIDCount;
+                findOne.People_NewLeadsThsYearCount = marketActionAfter7.People_NewLeadsThsYearCount;
+                findOne.People_OthersCount = marketActionAfter7.People_OthersCount;
+                findOne.People_ParticipantsCount = marketActionAfter7.People_ParticipantsCount;
+                findOne.ProcessPercent = marketActionAfter7.ProcessPercent;
             }
 
             db.SaveChanges();
@@ -616,54 +694,86 @@ namespace com.yrtech.InventoryAPI.Service
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
+        public List<MarketActionAfter7CoopFund> MarketActionAfter7CoopFundSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionAfter7CoopFund);
+            string sql = "";
+            sql += @"SELECT *  FROM [MarketActionAfter7CoopFund] WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter7CoopFund>().ToList();
+        }
+        public void MarketActionAfter7CoopFundSave(MarketActionAfter7CoopFund marketActionAfter7CoopFund)
+        {
+            MarketActionAfter7CoopFund findOneMax = db.MarketActionAfter7CoopFund.Where(x => (x.MarketActionId == marketActionAfter7CoopFund.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionAfter7CoopFund.SeqNO = 1;
+            }
+            else
+            {
+                marketActionAfter7CoopFund.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionAfter7CoopFund.InDateTime = DateTime.Now;
+            marketActionAfter7CoopFund.ModifyDateTime = DateTime.Now;
+            db.MarketActionAfter7CoopFund.Add(marketActionAfter7CoopFund);
+
+            db.SaveChanges();
+        }
+        public void MarketActionAfter7CoopFundDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionAfter7CoopFund WHERE MarketActionId = @MarketActionId
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
         #endregion
-       
+
         #region 总览
-        public List<MarketActionStatusCountDto> MarketActionStatusCountSearch(string year, List<Shop> roleTypeShop)
+        // 市场活动和交车仪式统计
+        public List<MarketActionStatusCountDto> MarketActionStatusCountSearch(string year, string eventTypeId, List<Shop> roleTypeShop)
         {
             if (year == null) year = "";
+            if (eventTypeId == null) eventTypeId = "";
 
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year) };
             Type t = typeof(MarketActionStatusCountDto);
             string sql = "";
-            sql += @"SELECT ISNULL(SUM(Before4WeeksCount),0) AS Before4WeeksCount 
-	                       ,ISNULL(SUM(Before3Count),0) AS Before3Count
-	                       ,ISNULL(SUM(After2Count),0) AS After2Count
-	                       ,ISNULL(SUM(After7Count),0) AS After7Count
-	                       ,ISNULL(SUM(After30Count),0) AS After30Count
+            sql += @"SELECT ISNULL(SUM(Before4WeeksNotCommit),0) AS Before4WeeksNotCommit 
+	                       ,ISNULL(SUM(Before4WeeksWaitForChange),0) AS Before4WeeksWaitForChange
+	                       ,ISNULL(SUM(After7NotCommit),0) AS After7NotCommit
+	                       ,ISNULL(SUM(After7WaitForChange),0) AS After7WaitForChange
                     FROM (
                             SELECT 
-                            CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
-		                            AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksActivityProcess WHERE MarketActionId = A.MarketActionId)
+                            CASE WHEN NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
 				                            THEN 1
 				                            ELSE 0
-			                            END AS Before4WeeksCount
-                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore3BugetDetail WHERE MarketActionId = A.MarketActionId)
-		                            AND NOT EXISTS(SELECT 1 FROM MarketActionBefore3DisplayModel WHERE MarketActionId = A.MarketActionId)
-		                            AND NOT EXISTS(SELECT 1 FROM MarketActionBefore3TestDriver WHERE MarketActionId = A.MarketActionId)
-                                    AND EXISTS (SELECT TOP 1 EventTypeName FROM EventType WHERE EventTypeId = A.EventTypeId AND EventTypeName NOT IN ('数字营销','广告及宣传','线上平台线索获取'))
+			                            END AS Before4WeeksNotCommit
+                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =1 AND DTTApproveCode='3')
 				                            THEN 1
 				                            ELSE 0
-			                            END AS Before3Count
-                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId)
+			                            END AS Before4WeeksWaitForChange
+                            , CASE WHEN NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
 				                            THEN 1
 				                            ELSE 0
-			                            END AS After2Count
-                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
-		                            AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7ActualExpense WHERE MarketActionId = A.MarketActionId)
-		                            AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7ActualProcess WHERE MarketActionId = A.MarketActionId)
+			                            END AS After7NotCommit
+                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =2 AND DTTApproveCode='3')
 				                            THEN 1
 				                            ELSE 0
-			                            END  AS After7Count
-                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter30LeadsReportUpdate WHERE MarketActionId = A.MarketActionId)
-				                            THEN 1
-				                            ELSE 0
-			                            END AS After30Count
+			                            END AS After7WaitForChange
+                            
                             FROM MarketAction A WHERE 1=1 AND A.MarketActionStatusCode<>2 ";
             if (!string.IsNullOrEmpty(year))
             {
                 sql += " AND Year(A.StartDate) = @Year";
-
+            }
+            if (eventTypeId == "99")
+            {
+                sql += " AND A.EventTypeId = 99 ";
+            }
+            else {
+                sql += " AND A.EventTypeId <> 99 ";
             }
             if (roleTypeShop != null && roleTypeShop.Count > 0)
             {
@@ -684,6 +794,7 @@ namespace com.yrtech.InventoryAPI.Service
             sql += " ) B";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionStatusCountDto>().ToList();
         }
+
         #endregion
     }
 }

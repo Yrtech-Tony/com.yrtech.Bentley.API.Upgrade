@@ -317,7 +317,62 @@ namespace com.yrtech.InventoryAPI.Controllers
 
         }
         #endregion
+        #region CoopFundType
+        [HttpGet]
+        [Route("Master/CoopFundTypeSearch")]
+        public APIResult CoopFundTypeSearch(string coopFundId, string coopFundName, string coopFundNameEn, bool? showChk)
+        {
+            try
+            {
+                List<CoopFundType> coopFundTypeList = masterService.CoopFundTypeSearch(coopFundId, coopFundName, coopFundNameEn, showChk);
 
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(coopFundTypeList) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+        }
+        [HttpPost]
+        [Route("Master/CoopFundTypeSave")]
+        public APIResult CoopFundTypeSave(CoopFundType coopFundType)
+        {
+            try
+            {
+                List<CoopFundType> coopFundTypeList = masterService.CoopFundTypeSearch("", coopFundType.CoopFundTypeName, "", null);
+                if (coopFundTypeList != null && coopFundTypeList.Count != 0 && coopFundTypeList[0].CoopFundTypeId != coopFundType.CoopFundTypeId)
+                {
+                    return new APIResult() { Status = false, Body = "保存失败,市场基金申请费用类型名称重复" };
+                }
+                coopFundType = masterService.CoopFundTypeSave(coopFundType);
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(coopFundType) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
 
+        }
+        [HttpPost]
+        [Route("Master/CoopFundTypeDelete")]
+        public APIResult CoopFundTypeDelete(UploadData upload)
+        {
+            try
+            {
+                List<CoopFundType> list = CommonHelper.DecodeString<List<CoopFundType>>(upload.ListJson);
+                // 需要添加一个已经使用不能删除的验证。后期添加
+                foreach (CoopFundType coopFundType in list)
+                {
+                    masterService.CoopFundTypeDelete(coopFundType.CoopFundTypeId.ToString());
+                }
+                return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+
+        }
+        #endregion
     }
 }
