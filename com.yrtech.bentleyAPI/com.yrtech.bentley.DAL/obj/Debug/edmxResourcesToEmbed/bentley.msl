@@ -1,0 +1,446 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BentleyModelStoreContainer" CdmEntityContainer="Bentley">
+    <EntitySetMapping Name="Area">
+      <EntityTypeMapping TypeName="BentleyModel.Area">
+        <MappingFragment StoreEntitySet="Area">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="AreaNameEn" ColumnName="AreaNameEn" />
+          <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+          <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+          <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommitFile">
+      <EntityTypeMapping TypeName="BentleyModel.CommitFile">
+        <MappingFragment StoreEntitySet="CommitFile">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="UpperFileId" ColumnName="UpperFileId" />
+          <ScalarProperty Name="FileNameEn" ColumnName="FileNameEn" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="FileId" ColumnName="FileId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DMFDetail">
+      <EntityTypeMapping TypeName="BentleyModel.DMFDetail">
+        <MappingFragment StoreEntitySet="DMFDetail">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="AcutalAmt" ColumnName="AcutalAmt" />
+          <ScalarProperty Name="Budget" ColumnName="Budget" />
+          <ScalarProperty Name="DMFItemId" ColumnName="DMFItemId" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="DMFDetailId" ColumnName="DMFDetailId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DMFItem">
+      <EntityTypeMapping TypeName="BentleyModel.DMFItem">
+        <MappingFragment StoreEntitySet="DMFItem">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="PublishChk" ColumnName="PublishChk" />
+          <ScalarProperty Name="ExpenseAccountChk" ColumnName="ExpenseAccountChk" />
+          <ScalarProperty Name="DMFItemRemark" ColumnName="DMFItemRemark" />
+          <ScalarProperty Name="DMFItemNameEn" ColumnName="DMFItemNameEn" />
+          <ScalarProperty Name="DMFItemName" ColumnName="DMFItemName" />
+          <ScalarProperty Name="DMFItemId" ColumnName="DMFItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EventType">
+      <EntityTypeMapping TypeName="BentleyModel.EventType">
+        <MappingFragment StoreEntitySet="EventType">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ShowStatus" ColumnName="ShowStatus" />
+          <ScalarProperty Name="ApprovalMaxAmt" ColumnName="ApprovalMaxAmt" />
+          <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+          <ScalarProperty Name="EventMode" ColumnName="EventMode" />
+          <ScalarProperty Name="EventTypeNameEn" ColumnName="EventTypeNameEn" />
+          <ScalarProperty Name="EventTypeName" ColumnName="EventTypeName" />
+          <ScalarProperty Name="EventTypeId" ColumnName="EventTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExpenseAccount">
+      <EntityTypeMapping TypeName="BentleyModel.ExpenseAccount">
+        <MappingFragment StoreEntitySet="ExpenseAccount">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ReplyReason" ColumnName="ReplyReason" />
+          <ScalarProperty Name="ReplyStatus" ColumnName="ReplyStatus" />
+          <ScalarProperty Name="ApprovalReason" ColumnName="ApprovalReason" />
+          <ScalarProperty Name="ApplyStatus" ColumnName="ApplyStatus" />
+          <ScalarProperty Name="ExpenseAmt" ColumnName="ExpenseAmt" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+          <ScalarProperty Name="DMFItemId" ColumnName="DMFItemId" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="ExpenseAccountId" ColumnName="ExpenseAccountId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExpenseAccountFile">
+      <EntityTypeMapping TypeName="BentleyModel.ExpenseAccountFile">
+        <MappingFragment StoreEntitySet="ExpenseAccountFile">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="FileTypeCode" ColumnName="FileTypeCode" />
+          <ScalarProperty Name="FileUrl" ColumnName="FileUrl" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="ExpenseAccountId" ColumnName="ExpenseAccountId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HiddenCode">
+      <EntityTypeMapping TypeName="BentleyModel.HiddenCode">
+        <MappingFragment StoreEntitySet="HiddenCode">
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="HiddenCodeNameEn" ColumnName="HiddenCodeNameEn" />
+          <ScalarProperty Name="HiddenCodeName" ColumnName="HiddenCodeName" />
+          <ScalarProperty Name="HiddenCodeId" ColumnName="HiddenCodeId" />
+          <ScalarProperty Name="HiddenCodeGroup" ColumnName="HiddenCodeGroup" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketAction">
+      <EntityTypeMapping TypeName="BentleyModel.MarketAction">
+        <MappingFragment StoreEntitySet="MarketAction">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ExpenseAccount" ColumnName="ExpenseAccount" />
+          <ScalarProperty Name="ActionPlace" ColumnName="ActionPlace" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="ExpectLeadsCount" ColumnName="ExpectLeadsCount" />
+          <ScalarProperty Name="ActivityBudget" ColumnName="ActivityBudget" />
+          <ScalarProperty Name="MarketActionTargetModelCode" ColumnName="MarketActionTargetModelCode" />
+          <ScalarProperty Name="MarketActionStatusCode" ColumnName="MarketActionStatusCode" />
+          <ScalarProperty Name="EventTypeId" ColumnName="EventTypeId" />
+          <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
+          <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionAfter2LeadsReport">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter2LeadsReport">
+        <MappingFragment StoreEntitySet="MarketActionAfter2LeadsReport">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="DealModel" ColumnName="DealModel" />
+          <ScalarProperty Name="DealCheck" ColumnName="DealCheck" />
+          <ScalarProperty Name="InterestedModel" ColumnName="InterestedModel" />
+          <ScalarProperty Name="LeadsCheck" ColumnName="LeadsCheck" />
+          <ScalarProperty Name="TestDriverCheck" ColumnName="TestDriverCheck" />
+          <ScalarProperty Name="OwnerCheck" ColumnName="OwnerCheck" />
+          <ScalarProperty Name="BPNO" ColumnName="BPNO" />
+          <ScalarProperty Name="TelNO" ColumnName="TelNO" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionAfter7ActualProcess">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7ActualProcess">
+        <MappingFragment StoreEntitySet="MarketActionAfter7ActualProcess">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="Process" ColumnName="Process" />
+          <ScalarProperty Name="ActivityDateTime" ColumnName="ActivityDateTime" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionBefore4WeeksActivityProcess">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4WeeksActivityProcess">
+        <MappingFragment StoreEntitySet="MarketActionBefore4WeeksActivityProcess">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="Responsible" ColumnName="Responsible" />
+          <ScalarProperty Name="Contents" ColumnName="Contents" />
+          <ScalarProperty Name="ActivityDateTime" ColumnName="ActivityDateTime" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MonthSale">
+      <EntityTypeMapping TypeName="BentleyModel.MonthSale">
+        <MappingFragment StoreEntitySet="MonthSale">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ActualSaleAmt" ColumnName="ActualSaleAmt" />
+          <ScalarProperty Name="ActualSaleCount" ColumnName="ActualSaleCount" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="YearMonth" ColumnName="YearMonth" />
+          <ScalarProperty Name="MonthSaleId" ColumnName="MonthSaleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleType">
+      <EntityTypeMapping TypeName="BentleyModel.RoleType">
+        <MappingFragment StoreEntitySet="RoleType">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="RoleTypeName" ColumnName="RoleTypeName" />
+          <ScalarProperty Name="RoleTypeCode" ColumnName="RoleTypeCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Shop">
+      <EntityTypeMapping TypeName="BentleyModel.Shop">
+        <MappingFragment StoreEntitySet="Shop">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+          <ScalarProperty Name="Budget" ColumnName="Budget" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="ShopNameEn" ColumnName="ShopNameEn" />
+          <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+          <ScalarProperty Name="ShopCode" ColumnName="ShopCode" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShopCommitFileRecord">
+      <EntityTypeMapping TypeName="BentleyModel.ShopCommitFileRecord">
+        <MappingFragment StoreEntitySet="ShopCommitFileRecord">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ShopCommitFileNameUrl" ColumnName="ShopCommitFileNameUrl" />
+          <ScalarProperty Name="ShopCommitFileName" ColumnName="ShopCommitFileName" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="FileId" ColumnName="FileId" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInfo">
+      <EntityTypeMapping TypeName="BentleyModel.UserInfo">
+        <MappingFragment StoreEntitySet="UserInfo">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="RoleTypeCode" ColumnName="RoleTypeCode" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="TelNO" ColumnName="TelNO" />
+          <ScalarProperty Name="AccountNameEn" ColumnName="AccountNameEn" />
+          <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionAfter7ActualExpense">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7ActualExpense">
+        <MappingFragment StoreEntitySet="MarketActionAfter7ActualExpense">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="Counts" ColumnName="Counts" />
+          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+          <ScalarProperty Name="Descs" ColumnName="Descs" />
+          <ScalarProperty Name="Item" ColumnName="Item" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DTTApprove">
+      <EntityTypeMapping TypeName="BentleyModel.DTTApprove">
+        <MappingFragment StoreEntitySet="DTTApprove">
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="DTTApproveDesc" ColumnName="DTTApproveDesc" />
+          <ScalarProperty Name="DTTApproveCode" ColumnName="DTTApproveCode" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+          <ScalarProperty Name="DTTType" ColumnName="DTTType" />
+          <ScalarProperty Name="DTTApproveId" ColumnName="DTTApproveId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionAfter7CoopFund">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7CoopFund">
+        <MappingFragment StoreEntitySet="MarketActionAfter7CoopFund">
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="CoopFundDesc" ColumnName="CoopFundDesc" />
+          <ScalarProperty Name="CoopFund_DMFChk" ColumnName="CoopFund_DMFChk" />
+          <ScalarProperty Name="CoopFundAmt" ColumnName="CoopFundAmt" />
+          <ScalarProperty Name="CoopFundCode" ColumnName="CoopFundCode" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionBefore4WeeksCoopFund">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4WeeksCoopFund">
+        <MappingFragment StoreEntitySet="MarketActionBefore4WeeksCoopFund">
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="CoopFundDesc" ColumnName="CoopFundDesc" />
+          <ScalarProperty Name="CoopFund_DMFChk" ColumnName="CoopFund_DMFChk" />
+          <ScalarProperty Name="CoopFundAmt" ColumnName="CoopFundAmt" />
+          <ScalarProperty Name="CoopFundCode" ColumnName="CoopFundCode" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProgressSetting">
+      <EntityTypeMapping TypeName="BentleyModel.ProgressSetting">
+        <MappingFragment StoreEntitySet="ProgressSetting">
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="RegionPercent" ColumnName="RegionPercent" />
+          <ScalarProperty Name="ProgressRegion" ColumnName="ProgressRegion" />
+          <ScalarProperty Name="EventMode" ColumnName="EventMode" />
+          <ScalarProperty Name="ProgressType" ColumnName="ProgressType" />
+          <ScalarProperty Name="ProgressId" ColumnName="ProgressId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CoopFundType">
+      <EntityTypeMapping TypeName="BentleyModel.CoopFundType">
+        <MappingFragment StoreEntitySet="CoopFundType">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ShowChk" ColumnName="ShowChk" />
+          <ScalarProperty Name="CoopFundTypeNameEn" ColumnName="CoopFundTypeNameEn" />
+          <ScalarProperty Name="CoopFundTypeName" ColumnName="CoopFundTypeName" />
+          <ScalarProperty Name="CoopFundTypeId" ColumnName="CoopFundTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionAfter7">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7">
+        <MappingFragment StoreEntitySet="MarketActionAfter7">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ProcessPercent" ColumnName="ProcessPercent" />
+          <ScalarProperty Name="CoopFundSumAmt" ColumnName="CoopFundSumAmt" />
+          <ScalarProperty Name="TotalBudgetAmt" ColumnName="TotalBudgetAmt" />
+          <ScalarProperty Name="People_OthersCount" ColumnName="People_OthersCount" />
+          <ScalarProperty Name="People_ActualPotentialCount" ColumnName="People_ActualPotentialCount" />
+          <ScalarProperty Name="People_ActualDepositorCount" ColumnName="People_ActualDepositorCount" />
+          <ScalarProperty Name="People_ActualCarOwnerCount" ColumnName="People_ActualCarOwnerCount" />
+          <ScalarProperty Name="People_ActualArrivalCount" ColumnName="People_ActualArrivalCount" />
+          <ScalarProperty Name="People_NewLeadsThsYearCount" ColumnName="People_NewLeadsThsYearCount" />
+          <ScalarProperty Name="People_DCPIDCount" ColumnName="People_DCPIDCount" />
+          <ScalarProperty Name="People_ParticipantsCount" ColumnName="People_ParticipantsCount" />
+          <ScalarProperty Name="MarketSaleTeamAdvice" ColumnName="MarketSaleTeamAdvice" />
+          <ScalarProperty Name="CustomerFeedback" ColumnName="CustomerFeedback" />
+          <ScalarProperty Name="ImproveArea" ColumnName="ImproveArea" />
+          <ScalarProperty Name="HightLights" ColumnName="HightLights" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionBefore4Weeks">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4Weeks">
+        <MappingFragment StoreEntitySet="MarketActionBefore4Weeks">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ProcessPercent" ColumnName="ProcessPercent" />
+          <ScalarProperty Name="KeyVisionApprovalDesc" ColumnName="KeyVisionApprovalDesc" />
+          <ScalarProperty Name="KeyVisionApprovalCode" ColumnName="KeyVisionApprovalCode" />
+          <ScalarProperty Name="KeyVisionDesc" ColumnName="KeyVisionDesc" />
+          <ScalarProperty Name="KeyVisionPic" ColumnName="KeyVisionPic" />
+          <ScalarProperty Name="CoopFundSumAmt" ColumnName="CoopFundSumAmt" />
+          <ScalarProperty Name="TotalBudgetAmt" ColumnName="TotalBudgetAmt" />
+          <ScalarProperty Name="Vehide_Qty" ColumnName="Vehide_Qty" />
+          <ScalarProperty Name="Vehide_Model" ColumnName="Vehide_Model" />
+          <ScalarProperty Name="Vehide_Usage" ColumnName="Vehide_Usage" />
+          <ScalarProperty Name="People_InvitationOtherCount" ColumnName="People_InvitationOtherCount" />
+          <ScalarProperty Name="People_InvitationPotentialCount" ColumnName="People_InvitationPotentialCount" />
+          <ScalarProperty Name="People_InvitationDepositorCount" ColumnName="People_InvitationDepositorCount" />
+          <ScalarProperty Name="People_InvitationCarOwnerCount" ColumnName="People_InvitationCarOwnerCount" />
+          <ScalarProperty Name="People_InvitationTotalCount" ColumnName="People_InvitationTotalCount" />
+          <ScalarProperty Name="People_NewLeadsThisYearCount" ColumnName="People_NewLeadsThisYearCount" />
+          <ScalarProperty Name="People_DCPIDCount" ColumnName="People_DCPIDCount" />
+          <ScalarProperty Name="People_ParticipantsCount" ColumnName="People_ParticipantsCount" />
+          <ScalarProperty Name="ActivityDesc" ColumnName="ActivityDesc" />
+          <ScalarProperty Name="ActivityObjective" ColumnName="ActivityObjective" />
+          <ScalarProperty Name="ActivityBackground" ColumnName="ActivityBackground" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionPic">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionPic">
+        <MappingFragment StoreEntitySet="MarketActionPic">
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="PicDesc" ColumnName="PicDesc" />
+          <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+          <ScalarProperty Name="PicName" ColumnName="PicName" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="PicType" ColumnName="PicType" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

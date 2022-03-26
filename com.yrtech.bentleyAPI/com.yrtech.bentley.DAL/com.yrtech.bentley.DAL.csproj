@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{39ABED59-1C63-4FBC-9915-92907FCFB7CB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>com.yrtech.bentley.DAL</RootNamespace>
+    <AssemblyName>com.yrtech.bentley.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Area.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bentley.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>bentley.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bentley.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bentley.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>bentley.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CommitFile.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CoopFundType.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DMFDetail.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DMFItem.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DTTApprove.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EventType.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseAccount.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseAccountFile.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HiddenCode.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketAction.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionAfter2LeadsReport.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionAfter7.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionAfter7ActualExpense.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionAfter7ActualProcess.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionAfter7CoopFund.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionBefore4Weeks.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionBefore4WeeksActivityProcess.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionBefore4WeeksCoopFund.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionPic.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MonthSale.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressSetting.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleType.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Shop.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopCommitFileRecord.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserInfo.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="bentley.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>bentley.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="bentley.edmx.diagram">
+      <DependentUpon>bentley.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bentley.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>bentley.Context.cs</LastGenOutput>
+      <DependentUpon>bentley.edmx</DependentUpon>
+    </Content>
+    <Content Include="bentley.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>bentley.edmx</DependentUpon>
+      <LastGenOutput>bentley.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

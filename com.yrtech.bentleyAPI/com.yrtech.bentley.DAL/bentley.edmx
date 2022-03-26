@@ -1,0 +1,1392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BentleyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AreaCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="200" />
+          <Property Name="AreaNameEn" Type="nvarchar" MaxLength="200" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CommitFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FileNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="UpperFileId" Type="int" />
+          <Property Name="Year" Type="nvarchar" MaxLength="50" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CoopFundType">
+          <Key>
+            <PropertyRef Name="CoopFundTypeId" />
+          </Key>
+          <Property Name="CoopFundTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CoopFundTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CoopFundTypeNameEn" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShowChk" Type="bit" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="DMFDetail">
+          <Key>
+            <PropertyRef Name="DMFDetailId" />
+          </Key>
+          <Property Name="DMFDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopId" Type="int" />
+          <Property Name="DMFItemId" Type="int" />
+          <Property Name="Budget" Type="nvarchar(max)" />
+          <Property Name="AcutalAmt" Type="nvarchar(max)" />
+          <Property Name="Remark" Type="nvarchar(max)" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="DMFItem">
+          <Key>
+            <PropertyRef Name="DMFItemId" />
+          </Key>
+          <Property Name="DMFItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DMFItemName" Type="nvarchar" MaxLength="500" />
+          <Property Name="DMFItemNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="DMFItemRemark" Type="nvarchar" MaxLength="500" />
+          <Property Name="ExpenseAccountChk" Type="bit" />
+          <Property Name="PublishChk" Type="bit" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="DTTApprove">
+          <Key>
+            <PropertyRef Name="DTTApproveId" />
+          </Key>
+          <Property Name="DTTApproveId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DTTType" Type="nvarchar" MaxLength="50" />
+          <Property Name="MarketActionId" Type="int" />
+          <Property Name="DTTApproveCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="DTTApproveDesc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="InUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="EventType">
+          <Key>
+            <PropertyRef Name="EventTypeId" />
+          </Key>
+          <Property Name="EventTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventTypeName" Type="nvarchar" MaxLength="500" />
+          <Property Name="EventTypeNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="EventMode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AreaId" Type="int" />
+          <Property Name="ApprovalMaxAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="ShowStatus" Type="bit" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ExpenseAccount">
+          <Key>
+            <PropertyRef Name="ExpenseAccountId" />
+          </Key>
+          <Property Name="ExpenseAccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopId" Type="int" />
+          <Property Name="DMFItemId" Type="int" />
+          <Property Name="MarketActionId" Type="int" />
+          <Property Name="ExpenseAmt" Type="nvarchar(max)" />
+          <Property Name="ApplyStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovalReason" Type="nvarchar(max)" />
+          <Property Name="ReplyStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReplyReason" Type="nvarchar(max)" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ExpenseAccountFile">
+          <Key>
+            <PropertyRef Name="ExpenseAccountId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="ExpenseAccountId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="500" />
+          <Property Name="FileUrl" Type="nvarchar(max)" />
+          <Property Name="FileTypeCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="HiddenCode">
+          <Key>
+            <PropertyRef Name="HiddenCodeGroup" />
+            <PropertyRef Name="HiddenCodeId" />
+          </Key>
+          <Property Name="HiddenCodeGroup" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="HiddenCodeId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="HiddenCodeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="HiddenCodeNameEn" Type="nvarchar" MaxLength="100" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketAction">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopId" Type="int" />
+          <Property Name="ActionName" Type="nvarchar(max)" />
+          <Property Name="ActionCode" Type="nvarchar(max)" />
+          <Property Name="EventTypeId" Type="int" />
+          <Property Name="MarketActionStatusCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="MarketActionTargetModelCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActivityBudget" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="ExpectLeadsCount" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="ActionPlace" Type="nvarchar" MaxLength="500" />
+          <Property Name="ExpenseAccount" Type="bit" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter2LeadsReport">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TelNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="BPNO" Type="nvarchar" MaxLength="500" />
+          <Property Name="OwnerCheck" Type="bit" />
+          <Property Name="TestDriverCheck" Type="bit" />
+          <Property Name="LeadsCheck" Type="bit" />
+          <Property Name="InterestedModel" Type="nvarchar" MaxLength="200" />
+          <Property Name="DealCheck" Type="bit" />
+          <Property Name="DealModel" Type="nvarchar" MaxLength="200" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="HightLights" Type="nvarchar(max)" />
+          <Property Name="ImproveArea" Type="nvarchar(max)" />
+          <Property Name="CustomerFeedback" Type="nvarchar(max)" />
+          <Property Name="MarketSaleTeamAdvice" Type="nvarchar(max)" />
+          <Property Name="People_ParticipantsCount" Type="int" />
+          <Property Name="People_DCPIDCount" Type="int" />
+          <Property Name="People_NewLeadsThsYearCount" Type="int" />
+          <Property Name="People_ActualArrivalCount" Type="int" />
+          <Property Name="People_ActualCarOwnerCount" Type="int" />
+          <Property Name="People_ActualDepositorCount" Type="int" />
+          <Property Name="People_ActualPotentialCount" Type="int" />
+          <Property Name="People_OthersCount" Type="int" />
+          <Property Name="TotalBudgetAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFundSumAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="ProcessPercent" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7ActualExpense">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="Item" Type="nvarchar" MaxLength="200" />
+          <Property Name="Descs" Type="nchar" MaxLength="200" />
+          <Property Name="UnitPrice" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="Counts" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7ActualProcess">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="ActivityDateTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="Process" Type="nvarchar" MaxLength="1000" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7CoopFund">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="CoopFundCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CoopFundAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFund_DMFChk" Type="bit" />
+          <Property Name="CoopFundDesc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="MarketActionBefore4Weeks">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="ActivityBackground" Type="nvarchar(max)" />
+          <Property Name="ActivityObjective" Type="nvarchar(max)" />
+          <Property Name="ActivityDesc" Type="nvarchar(max)" />
+          <Property Name="People_ParticipantsCount" Type="int" />
+          <Property Name="People_DCPIDCount" Type="int" />
+          <Property Name="People_NewLeadsThisYearCount" Type="int" />
+          <Property Name="People_InvitationTotalCount" Type="int" />
+          <Property Name="People_InvitationCarOwnerCount" Type="int" />
+          <Property Name="People_InvitationDepositorCount" Type="int" />
+          <Property Name="People_InvitationPotentialCount" Type="int" />
+          <Property Name="People_InvitationOtherCount" Type="int" />
+          <Property Name="Vehide_Usage" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Vehide_Model" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Vehide_Qty" Type="int" />
+          <Property Name="TotalBudgetAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFundSumAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="KeyVisionPic" Type="nvarchar(max)" />
+          <Property Name="KeyVisionDesc" Type="nvarchar(max)" />
+          <Property Name="KeyVisionApprovalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="KeyVisionApprovalDesc" Type="nvarchar(max)" />
+          <Property Name="ProcessPercent" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionBefore4WeeksActivityProcess">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="ActivityDateTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="Contents" Type="nvarchar" MaxLength="500" />
+          <Property Name="Responsible" Type="nvarchar" MaxLength="500" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MarketActionBefore4WeeksCoopFund">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="CoopFundCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CoopFundAmt" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFund_DMFChk" Type="bit" />
+          <Property Name="CoopFundDesc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="MarketActionPic">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="PicType" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="int" Nullable="false" />
+          <Property Name="PicType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="PicName" Type="nvarchar" MaxLength="100" />
+          <Property Name="PicPath" Type="nvarchar" MaxLength="1000" />
+          <Property Name="PicDesc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="InUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="MonthSale">
+          <Key>
+            <PropertyRef Name="MonthSaleId" />
+          </Key>
+          <Property Name="MonthSaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="YearMonth" Type="nvarchar" MaxLength="500" />
+          <Property Name="ShopId" Type="int" />
+          <Property Name="ActualSaleCount" Type="nvarchar(max)" />
+          <Property Name="ActualSaleAmt" Type="nvarchar(max)" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProgressSetting">
+          <Key>
+            <PropertyRef Name="ProgressId" />
+          </Key>
+          <Property Name="ProgressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgressType" Type="nvarchar" MaxLength="50" />
+          <Property Name="EventMode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProgressRegion" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegionPercent" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="100" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="InUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="RoleType">
+          <Key>
+            <PropertyRef Name="RoleTypeCode" />
+          </Key>
+          <Property Name="RoleTypeCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoleTypeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="ShopId" />
+          </Key>
+          <Property Name="ShopId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShopName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ShopNameEn" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Budget" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="Balance" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="AreaId" Type="int" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ShopCommitFileRecord">
+          <Key>
+            <PropertyRef Name="ShopId" />
+            <PropertyRef Name="FileId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="FileId" Type="int" Nullable="false" />
+          <Property Name="SeqNO" Type="int" Nullable="false" />
+          <Property Name="ShopCommitFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ShopCommitFileNameUrl" Type="nvarchar" MaxLength="2000" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="nvarchar" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountNameEn" Type="nvarchar" MaxLength="100" />
+          <Property Name="TelNO" Type="nvarchar" MaxLength="100" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoleTypeCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShopId" Type="int" />
+          <Property Name="AreaId" Type="int" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="datetime" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDateTime" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="BentleyModelStoreContainer">
+          <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommitFile" EntityType="Self.CommitFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CoopFundType" EntityType="Self.CoopFundType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DMFDetail" EntityType="Self.DMFDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DMFItem" EntityType="Self.DMFItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DTTApprove" EntityType="Self.DTTApprove" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventType" EntityType="Self.EventType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseAccount" EntityType="Self.ExpenseAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseAccountFile" EntityType="Self.ExpenseAccountFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HiddenCode" EntityType="Self.HiddenCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketAction" EntityType="Self.MarketAction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionAfter2LeadsReport" EntityType="Self.MarketActionAfter2LeadsReport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionAfter7" EntityType="Self.MarketActionAfter7" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionAfter7ActualExpense" EntityType="Self.MarketActionAfter7ActualExpense" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionAfter7ActualProcess" EntityType="Self.MarketActionAfter7ActualProcess" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionAfter7CoopFund" EntityType="Self.MarketActionAfter7CoopFund" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionBefore4Weeks" EntityType="Self.MarketActionBefore4Weeks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionBefore4WeeksActivityProcess" EntityType="Self.MarketActionBefore4WeeksActivityProcess" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionBefore4WeeksCoopFund" EntityType="Self.MarketActionBefore4WeeksCoopFund" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketActionPic" EntityType="Self.MarketActionPic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthSale" EntityType="Self.MonthSale" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProgressSetting" EntityType="Self.ProgressSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleType" EntityType="Self.RoleType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shop" EntityType="Self.Shop" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShopCommitFileRecord" EntityType="Self.ShopCommitFileRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BentleyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Bentley" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Area" EntityType="BentleyModel.Area" />
+          <EntitySet Name="CommitFile" EntityType="BentleyModel.CommitFile" />
+          <EntitySet Name="DMFDetail" EntityType="BentleyModel.DMFDetail" />
+          <EntitySet Name="DMFItem" EntityType="BentleyModel.DMFItem" />
+          <EntitySet Name="EventType" EntityType="BentleyModel.EventType" />
+          <EntitySet Name="ExpenseAccount" EntityType="BentleyModel.ExpenseAccount" />
+          <EntitySet Name="ExpenseAccountFile" EntityType="BentleyModel.ExpenseAccountFile" />
+          <EntitySet Name="HiddenCode" EntityType="BentleyModel.HiddenCode" />
+          <EntitySet Name="MarketAction" EntityType="BentleyModel.MarketAction" />
+          <EntitySet Name="MarketActionAfter2LeadsReport" EntityType="BentleyModel.MarketActionAfter2LeadsReport" />
+          <EntitySet Name="MarketActionAfter7ActualProcess" EntityType="BentleyModel.MarketActionAfter7ActualProcess" />
+          <EntitySet Name="MarketActionBefore4WeeksActivityProcess" EntityType="BentleyModel.MarketActionBefore4WeeksActivityProcess" />
+          <EntitySet Name="MonthSale" EntityType="BentleyModel.MonthSale" />
+          <EntitySet Name="RoleType" EntityType="BentleyModel.RoleType" />
+          <EntitySet Name="Shop" EntityType="BentleyModel.Shop" />
+          <EntitySet Name="ShopCommitFileRecord" EntityType="BentleyModel.ShopCommitFileRecord" />
+          <EntitySet Name="UserInfo" EntityType="BentleyModel.UserInfo" />
+          <EntitySet Name="MarketActionAfter7ActualExpense" EntityType="BentleyModel.MarketActionAfter7ActualExpense" />
+          <EntitySet Name="DTTApprove" EntityType="BentleyModel.DTTApprove" />
+          <EntitySet Name="MarketActionAfter7CoopFund" EntityType="BentleyModel.MarketActionAfter7CoopFund" />
+          <EntitySet Name="MarketActionBefore4WeeksCoopFund" EntityType="BentleyModel.MarketActionBefore4WeeksCoopFund" />
+          <EntitySet Name="ProgressSetting" EntityType="BentleyModel.ProgressSetting" />
+          <EntitySet Name="CoopFundType" EntityType="BentleyModel.CoopFundType" />
+          <EntitySet Name="MarketActionAfter7" EntityType="BentleyModel.MarketActionAfter7" />
+          <EntitySet Name="MarketActionBefore4Weeks" EntityType="BentleyModel.MarketActionBefore4Weeks" />
+          <EntitySet Name="MarketActionPic" EntityType="BentleyModel.MarketActionPic" />
+        </EntityContainer>
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AreaCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AreaName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AreaNameEn" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CommitFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UpperFileId" Type="Int32" />
+          <Property Name="Year" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DMFDetail">
+          <Key>
+            <PropertyRef Name="DMFDetailId" />
+          </Key>
+          <Property Name="DMFDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" />
+          <Property Name="DMFItemId" Type="Int32" />
+          <Property Name="Budget" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AcutalAmt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DMFItem">
+          <Key>
+            <PropertyRef Name="DMFItemId" />
+          </Key>
+          <Property Name="DMFItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DMFItemName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DMFItemNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DMFItemRemark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseAccountChk" Type="Boolean" />
+          <Property Name="PublishChk" Type="Boolean" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="EventType">
+          <Key>
+            <PropertyRef Name="EventTypeId" />
+          </Key>
+          <Property Name="EventTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventTypeName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EventTypeNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EventMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AreaId" Type="Int32" />
+          <Property Name="ApprovalMaxAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ShowStatus" Type="Boolean" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ExpenseAccount">
+          <Key>
+            <PropertyRef Name="ExpenseAccountId" />
+          </Key>
+          <Property Name="ExpenseAccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" />
+          <Property Name="DMFItemId" Type="Int32" />
+          <Property Name="MarketActionId" Type="Int32" />
+          <Property Name="ExpenseAmt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ApplyStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReplyStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReplyReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ExpenseAccountFile">
+          <Key>
+            <PropertyRef Name="ExpenseAccountId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="ExpenseAccountId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FileUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="HiddenCode">
+          <Key>
+            <PropertyRef Name="HiddenCodeGroup" />
+            <PropertyRef Name="HiddenCodeId" />
+          </Key>
+          <Property Name="HiddenCodeGroup" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HiddenCodeId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HiddenCodeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HiddenCodeNameEn" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketAction">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" />
+          <Property Name="ActionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActionCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EventTypeId" Type="Int32" />
+          <Property Name="MarketActionStatusCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MarketActionTargetModelCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActivityBudget" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ExpectLeadsCount" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="ActionPlace" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseAccount" Type="Boolean" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter2LeadsReport">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TelNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BPNO" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerCheck" Type="Boolean" />
+          <Property Name="TestDriverCheck" Type="Boolean" />
+          <Property Name="LeadsCheck" Type="Boolean" />
+          <Property Name="InterestedModel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DealCheck" Type="Boolean" />
+          <Property Name="DealModel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7ActualProcess">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="ActivityDateTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Process" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionBefore4WeeksActivityProcess">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="ActivityDateTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Contents" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Responsible" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MonthSale">
+          <Key>
+            <PropertyRef Name="MonthSaleId" />
+          </Key>
+          <Property Name="MonthSaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="YearMonth" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="Int32" />
+          <Property Name="ActualSaleCount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActualSaleAmt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="RoleType">
+          <Key>
+            <PropertyRef Name="RoleTypeCode" />
+          </Key>
+          <Property Name="RoleTypeCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleTypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="ShopId" />
+          </Key>
+          <Property Name="ShopId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShopName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShopNameEn" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Budget" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="Balance" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="AreaId" Type="Int32" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ShopCommitFileRecord">
+          <Key>
+            <PropertyRef Name="ShopId" />
+            <PropertyRef Name="FileId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="FileId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="ShopCommitFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ShopCommitFileNameUrl" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNameEn" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TelNO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoleTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="Int32" />
+          <Property Name="AreaId" Type="Int32" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7ActualExpense">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="Item" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Descs" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="Counts" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DTTApprove">
+          <Key>
+            <PropertyRef Name="DTTApproveId" />
+          </Key>
+          <Property Name="DTTApproveId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DTTType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MarketActionId" Type="Int32" />
+          <Property Name="DTTApproveCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DTTApproveDesc" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="InUserId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7CoopFund">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="CoopFundCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CoopFundAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFund_DMFChk" Type="Boolean" />
+          <Property Name="CoopFundDesc" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="MarketActionBefore4WeeksCoopFund">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="CoopFundCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CoopFundAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFund_DMFChk" Type="Boolean" />
+          <Property Name="CoopFundDesc" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ProgressSetting">
+          <Key>
+            <PropertyRef Name="ProgressId" />
+          </Key>
+          <Property Name="ProgressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgressType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EventMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProgressRegion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RegionPercent" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="InUserId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="CoopFundType">
+          <Key>
+            <PropertyRef Name="CoopFundTypeId" />
+          </Key>
+          <Property Name="CoopFundTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CoopFundTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CoopFundTypeNameEn" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShowChk" Type="Boolean" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter7">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="HightLights" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImproveArea" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerFeedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MarketSaleTeamAdvice" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="People_ParticipantsCount" Type="Int32" />
+          <Property Name="People_DCPIDCount" Type="Int32" />
+          <Property Name="People_NewLeadsThsYearCount" Type="Int32" />
+          <Property Name="People_ActualArrivalCount" Type="Int32" />
+          <Property Name="People_ActualCarOwnerCount" Type="Int32" />
+          <Property Name="People_ActualDepositorCount" Type="Int32" />
+          <Property Name="People_ActualPotentialCount" Type="Int32" />
+          <Property Name="People_OthersCount" Type="Int32" />
+          <Property Name="TotalBudgetAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFundSumAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ProcessPercent" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionBefore4Weeks">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="ActivityBackground" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActivityObjective" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActivityDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="People_ParticipantsCount" Type="Int32" />
+          <Property Name="People_DCPIDCount" Type="Int32" />
+          <Property Name="People_NewLeadsThisYearCount" Type="Int32" />
+          <Property Name="People_InvitationTotalCount" Type="Int32" />
+          <Property Name="People_InvitationCarOwnerCount" Type="Int32" />
+          <Property Name="People_InvitationDepositorCount" Type="Int32" />
+          <Property Name="People_InvitationPotentialCount" Type="Int32" />
+          <Property Name="People_InvitationOtherCount" Type="Int32" />
+          <Property Name="Vehide_Usage" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Vehide_Model" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Vehide_Qty" Type="Int32" />
+          <Property Name="TotalBudgetAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="CoopFundSumAmt" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="KeyVisionPic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KeyVisionDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KeyVisionApprovalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KeyVisionApprovalDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessPercent" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionPic">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="PicType" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="PicType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="PicName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PicPath" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="PicDesc" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="InUserId" Type="Int32" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BentleyModelStoreContainer" CdmEntityContainer="Bentley">
+          <EntitySetMapping Name="Area">
+            <EntityTypeMapping TypeName="BentleyModel.Area">
+              <MappingFragment StoreEntitySet="Area">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="AreaNameEn" ColumnName="AreaNameEn" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommitFile">
+            <EntityTypeMapping TypeName="BentleyModel.CommitFile">
+              <MappingFragment StoreEntitySet="CommitFile">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="UpperFileId" ColumnName="UpperFileId" />
+                <ScalarProperty Name="FileNameEn" ColumnName="FileNameEn" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DMFDetail">
+            <EntityTypeMapping TypeName="BentleyModel.DMFDetail">
+              <MappingFragment StoreEntitySet="DMFDetail">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="AcutalAmt" ColumnName="AcutalAmt" />
+                <ScalarProperty Name="Budget" ColumnName="Budget" />
+                <ScalarProperty Name="DMFItemId" ColumnName="DMFItemId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="DMFDetailId" ColumnName="DMFDetailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DMFItem">
+            <EntityTypeMapping TypeName="BentleyModel.DMFItem">
+              <MappingFragment StoreEntitySet="DMFItem">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="PublishChk" ColumnName="PublishChk" />
+                <ScalarProperty Name="ExpenseAccountChk" ColumnName="ExpenseAccountChk" />
+                <ScalarProperty Name="DMFItemRemark" ColumnName="DMFItemRemark" />
+                <ScalarProperty Name="DMFItemNameEn" ColumnName="DMFItemNameEn" />
+                <ScalarProperty Name="DMFItemName" ColumnName="DMFItemName" />
+                <ScalarProperty Name="DMFItemId" ColumnName="DMFItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventType">
+            <EntityTypeMapping TypeName="BentleyModel.EventType">
+              <MappingFragment StoreEntitySet="EventType">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ShowStatus" ColumnName="ShowStatus" />
+                <ScalarProperty Name="ApprovalMaxAmt" ColumnName="ApprovalMaxAmt" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+                <ScalarProperty Name="EventMode" ColumnName="EventMode" />
+                <ScalarProperty Name="EventTypeNameEn" ColumnName="EventTypeNameEn" />
+                <ScalarProperty Name="EventTypeName" ColumnName="EventTypeName" />
+                <ScalarProperty Name="EventTypeId" ColumnName="EventTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseAccount">
+            <EntityTypeMapping TypeName="BentleyModel.ExpenseAccount">
+              <MappingFragment StoreEntitySet="ExpenseAccount">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ReplyReason" ColumnName="ReplyReason" />
+                <ScalarProperty Name="ReplyStatus" ColumnName="ReplyStatus" />
+                <ScalarProperty Name="ApprovalReason" ColumnName="ApprovalReason" />
+                <ScalarProperty Name="ApplyStatus" ColumnName="ApplyStatus" />
+                <ScalarProperty Name="ExpenseAmt" ColumnName="ExpenseAmt" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+                <ScalarProperty Name="DMFItemId" ColumnName="DMFItemId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ExpenseAccountId" ColumnName="ExpenseAccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseAccountFile">
+            <EntityTypeMapping TypeName="BentleyModel.ExpenseAccountFile">
+              <MappingFragment StoreEntitySet="ExpenseAccountFile">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="FileTypeCode" ColumnName="FileTypeCode" />
+                <ScalarProperty Name="FileUrl" ColumnName="FileUrl" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="ExpenseAccountId" ColumnName="ExpenseAccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HiddenCode">
+            <EntityTypeMapping TypeName="BentleyModel.HiddenCode">
+              <MappingFragment StoreEntitySet="HiddenCode">
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="HiddenCodeNameEn" ColumnName="HiddenCodeNameEn" />
+                <ScalarProperty Name="HiddenCodeName" ColumnName="HiddenCodeName" />
+                <ScalarProperty Name="HiddenCodeId" ColumnName="HiddenCodeId" />
+                <ScalarProperty Name="HiddenCodeGroup" ColumnName="HiddenCodeGroup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketAction">
+            <EntityTypeMapping TypeName="BentleyModel.MarketAction">
+              <MappingFragment StoreEntitySet="MarketAction">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ExpenseAccount" ColumnName="ExpenseAccount" />
+                <ScalarProperty Name="ActionPlace" ColumnName="ActionPlace" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ExpectLeadsCount" ColumnName="ExpectLeadsCount" />
+                <ScalarProperty Name="ActivityBudget" ColumnName="ActivityBudget" />
+                <ScalarProperty Name="MarketActionTargetModelCode" ColumnName="MarketActionTargetModelCode" />
+                <ScalarProperty Name="MarketActionStatusCode" ColumnName="MarketActionStatusCode" />
+                <ScalarProperty Name="EventTypeId" ColumnName="EventTypeId" />
+                <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionAfter2LeadsReport">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter2LeadsReport">
+              <MappingFragment StoreEntitySet="MarketActionAfter2LeadsReport">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="DealModel" ColumnName="DealModel" />
+                <ScalarProperty Name="DealCheck" ColumnName="DealCheck" />
+                <ScalarProperty Name="InterestedModel" ColumnName="InterestedModel" />
+                <ScalarProperty Name="LeadsCheck" ColumnName="LeadsCheck" />
+                <ScalarProperty Name="TestDriverCheck" ColumnName="TestDriverCheck" />
+                <ScalarProperty Name="OwnerCheck" ColumnName="OwnerCheck" />
+                <ScalarProperty Name="BPNO" ColumnName="BPNO" />
+                <ScalarProperty Name="TelNO" ColumnName="TelNO" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionAfter7ActualProcess">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7ActualProcess">
+              <MappingFragment StoreEntitySet="MarketActionAfter7ActualProcess">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="Process" ColumnName="Process" />
+                <ScalarProperty Name="ActivityDateTime" ColumnName="ActivityDateTime" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionBefore4WeeksActivityProcess">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4WeeksActivityProcess">
+              <MappingFragment StoreEntitySet="MarketActionBefore4WeeksActivityProcess">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="Responsible" ColumnName="Responsible" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="ActivityDateTime" ColumnName="ActivityDateTime" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthSale">
+            <EntityTypeMapping TypeName="BentleyModel.MonthSale">
+              <MappingFragment StoreEntitySet="MonthSale">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ActualSaleAmt" ColumnName="ActualSaleAmt" />
+                <ScalarProperty Name="ActualSaleCount" ColumnName="ActualSaleCount" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="YearMonth" ColumnName="YearMonth" />
+                <ScalarProperty Name="MonthSaleId" ColumnName="MonthSaleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleType">
+            <EntityTypeMapping TypeName="BentleyModel.RoleType">
+              <MappingFragment StoreEntitySet="RoleType">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="RoleTypeName" ColumnName="RoleTypeName" />
+                <ScalarProperty Name="RoleTypeCode" ColumnName="RoleTypeCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shop">
+            <EntityTypeMapping TypeName="BentleyModel.Shop">
+              <MappingFragment StoreEntitySet="Shop">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Budget" ColumnName="Budget" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ShopNameEn" ColumnName="ShopNameEn" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopCode" ColumnName="ShopCode" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopCommitFileRecord">
+            <EntityTypeMapping TypeName="BentleyModel.ShopCommitFileRecord">
+              <MappingFragment StoreEntitySet="ShopCommitFileRecord">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ShopCommitFileNameUrl" ColumnName="ShopCommitFileNameUrl" />
+                <ScalarProperty Name="ShopCommitFileName" ColumnName="ShopCommitFileName" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInfo">
+            <EntityTypeMapping TypeName="BentleyModel.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="RoleTypeCode" ColumnName="RoleTypeCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="TelNO" ColumnName="TelNO" />
+                <ScalarProperty Name="AccountNameEn" ColumnName="AccountNameEn" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionAfter7ActualExpense">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7ActualExpense">
+              <MappingFragment StoreEntitySet="MarketActionAfter7ActualExpense">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="Counts" ColumnName="Counts" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Descs" ColumnName="Descs" />
+                <ScalarProperty Name="Item" ColumnName="Item" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DTTApprove">
+            <EntityTypeMapping TypeName="BentleyModel.DTTApprove">
+              <MappingFragment StoreEntitySet="DTTApprove">
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="DTTApproveDesc" ColumnName="DTTApproveDesc" />
+                <ScalarProperty Name="DTTApproveCode" ColumnName="DTTApproveCode" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+                <ScalarProperty Name="DTTType" ColumnName="DTTType" />
+                <ScalarProperty Name="DTTApproveId" ColumnName="DTTApproveId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionAfter7CoopFund">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7CoopFund">
+              <MappingFragment StoreEntitySet="MarketActionAfter7CoopFund">
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="CoopFundDesc" ColumnName="CoopFundDesc" />
+                <ScalarProperty Name="CoopFund_DMFChk" ColumnName="CoopFund_DMFChk" />
+                <ScalarProperty Name="CoopFundAmt" ColumnName="CoopFundAmt" />
+                <ScalarProperty Name="CoopFundCode" ColumnName="CoopFundCode" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionBefore4WeeksCoopFund">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4WeeksCoopFund">
+              <MappingFragment StoreEntitySet="MarketActionBefore4WeeksCoopFund">
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="CoopFundDesc" ColumnName="CoopFundDesc" />
+                <ScalarProperty Name="CoopFund_DMFChk" ColumnName="CoopFund_DMFChk" />
+                <ScalarProperty Name="CoopFundAmt" ColumnName="CoopFundAmt" />
+                <ScalarProperty Name="CoopFundCode" ColumnName="CoopFundCode" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgressSetting">
+            <EntityTypeMapping TypeName="BentleyModel.ProgressSetting">
+              <MappingFragment StoreEntitySet="ProgressSetting">
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="RegionPercent" ColumnName="RegionPercent" />
+                <ScalarProperty Name="ProgressRegion" ColumnName="ProgressRegion" />
+                <ScalarProperty Name="EventMode" ColumnName="EventMode" />
+                <ScalarProperty Name="ProgressType" ColumnName="ProgressType" />
+                <ScalarProperty Name="ProgressId" ColumnName="ProgressId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CoopFundType">
+            <EntityTypeMapping TypeName="BentleyModel.CoopFundType">
+              <MappingFragment StoreEntitySet="CoopFundType">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ShowChk" ColumnName="ShowChk" />
+                <ScalarProperty Name="CoopFundTypeNameEn" ColumnName="CoopFundTypeNameEn" />
+                <ScalarProperty Name="CoopFundTypeName" ColumnName="CoopFundTypeName" />
+                <ScalarProperty Name="CoopFundTypeId" ColumnName="CoopFundTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionAfter7">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7">
+              <MappingFragment StoreEntitySet="MarketActionAfter7">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ProcessPercent" ColumnName="ProcessPercent" />
+                <ScalarProperty Name="CoopFundSumAmt" ColumnName="CoopFundSumAmt" />
+                <ScalarProperty Name="TotalBudgetAmt" ColumnName="TotalBudgetAmt" />
+                <ScalarProperty Name="People_OthersCount" ColumnName="People_OthersCount" />
+                <ScalarProperty Name="People_ActualPotentialCount" ColumnName="People_ActualPotentialCount" />
+                <ScalarProperty Name="People_ActualDepositorCount" ColumnName="People_ActualDepositorCount" />
+                <ScalarProperty Name="People_ActualCarOwnerCount" ColumnName="People_ActualCarOwnerCount" />
+                <ScalarProperty Name="People_ActualArrivalCount" ColumnName="People_ActualArrivalCount" />
+                <ScalarProperty Name="People_NewLeadsThsYearCount" ColumnName="People_NewLeadsThsYearCount" />
+                <ScalarProperty Name="People_DCPIDCount" ColumnName="People_DCPIDCount" />
+                <ScalarProperty Name="People_ParticipantsCount" ColumnName="People_ParticipantsCount" />
+                <ScalarProperty Name="MarketSaleTeamAdvice" ColumnName="MarketSaleTeamAdvice" />
+                <ScalarProperty Name="CustomerFeedback" ColumnName="CustomerFeedback" />
+                <ScalarProperty Name="ImproveArea" ColumnName="ImproveArea" />
+                <ScalarProperty Name="HightLights" ColumnName="HightLights" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionBefore4Weeks">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4Weeks">
+              <MappingFragment StoreEntitySet="MarketActionBefore4Weeks">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="ProcessPercent" ColumnName="ProcessPercent" />
+                <ScalarProperty Name="KeyVisionApprovalDesc" ColumnName="KeyVisionApprovalDesc" />
+                <ScalarProperty Name="KeyVisionApprovalCode" ColumnName="KeyVisionApprovalCode" />
+                <ScalarProperty Name="KeyVisionDesc" ColumnName="KeyVisionDesc" />
+                <ScalarProperty Name="KeyVisionPic" ColumnName="KeyVisionPic" />
+                <ScalarProperty Name="CoopFundSumAmt" ColumnName="CoopFundSumAmt" />
+                <ScalarProperty Name="TotalBudgetAmt" ColumnName="TotalBudgetAmt" />
+                <ScalarProperty Name="Vehide_Qty" ColumnName="Vehide_Qty" />
+                <ScalarProperty Name="Vehide_Model" ColumnName="Vehide_Model" />
+                <ScalarProperty Name="Vehide_Usage" ColumnName="Vehide_Usage" />
+                <ScalarProperty Name="People_InvitationOtherCount" ColumnName="People_InvitationOtherCount" />
+                <ScalarProperty Name="People_InvitationPotentialCount" ColumnName="People_InvitationPotentialCount" />
+                <ScalarProperty Name="People_InvitationDepositorCount" ColumnName="People_InvitationDepositorCount" />
+                <ScalarProperty Name="People_InvitationCarOwnerCount" ColumnName="People_InvitationCarOwnerCount" />
+                <ScalarProperty Name="People_InvitationTotalCount" ColumnName="People_InvitationTotalCount" />
+                <ScalarProperty Name="People_NewLeadsThisYearCount" ColumnName="People_NewLeadsThisYearCount" />
+                <ScalarProperty Name="People_DCPIDCount" ColumnName="People_DCPIDCount" />
+                <ScalarProperty Name="People_ParticipantsCount" ColumnName="People_ParticipantsCount" />
+                <ScalarProperty Name="ActivityDesc" ColumnName="ActivityDesc" />
+                <ScalarProperty Name="ActivityObjective" ColumnName="ActivityObjective" />
+                <ScalarProperty Name="ActivityBackground" ColumnName="ActivityBackground" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionPic">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionPic">
+              <MappingFragment StoreEntitySet="MarketActionPic">
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="PicDesc" ColumnName="PicDesc" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="PicType" ColumnName="PicType" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

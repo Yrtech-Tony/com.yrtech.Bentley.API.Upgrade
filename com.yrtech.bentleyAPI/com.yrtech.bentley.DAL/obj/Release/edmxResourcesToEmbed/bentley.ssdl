@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BentleyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Area">
+    <Key>
+      <PropertyRef Name="AreaId" />
+    </Key>
+    <Property Name="AreaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AreaCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="AreaName" Type="nvarchar" MaxLength="200" />
+    <Property Name="AreaNameEn" Type="nvarchar" MaxLength="200" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CommitFile">
+    <Key>
+      <PropertyRef Name="FileId" />
+    </Key>
+    <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+    <Property Name="UpperFileId" Type="int" />
+    <Property Name="Year" Type="nvarchar" MaxLength="50" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="EventType">
+    <Key>
+      <PropertyRef Name="EventTypeId" />
+    </Key>
+    <Property Name="EventTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EventTypeName" Type="nvarchar" MaxLength="500" />
+    <Property Name="EventTypeNameEn" Type="nvarchar" MaxLength="500" />
+    <Property Name="EventMode" Type="nvarchar" MaxLength="50" />
+    <Property Name="AreaId" Type="int" />
+    <Property Name="ApprovalMaxAmt" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="ShowStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6013: 表/视图“Bentley.dbo.HiddenCode”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="HiddenCode">
+          <Property Name="HiddenCodeGroup" Type="nvarchar" MaxLength="50" />
+          <Property Name="HiddenCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="HiddenCodeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="HiddenCodeNameEn" Type="nvarchar" MaxLength="100" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="InUserId" Type="int" />
+          <Property Name="InDateTime" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <EntityType Name="MarketAction">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShopId" Type="int" />
+    <Property Name="ActionName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ActionCode" Type="nchar" MaxLength="10" />
+    <Property Name="EventTypeId" Type="int" />
+    <Property Name="MarketActionStatusCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="MarketActionTargetModelCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="StartDate" Type="datetime" />
+    <Property Name="EndDate" Type="datetime" />
+    <Property Name="ActionPlace" Type="nvarchar" MaxLength="500" />
+    <Property Name="ExpenseAccount" Type="bit" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionAfter2LeadsReport">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
+    <Property Name="BPNO" Type="nvarchar" MaxLength="500" />
+    <Property Name="OwnerCheck" Type="bit" />
+    <Property Name="TestDriverCheck" Type="bit" />
+    <Property Name="LeadsCheck" Type="bit" />
+    <Property Name="InterestedModel" Type="nvarchar" MaxLength="200" />
+    <Property Name="DealCheck" Type="bit" />
+    <Property Name="DealModel" Type="nvarchar" MaxLength="200" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionAfter7">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="HightLights" Type="nvarchar(max)" />
+    <Property Name="ImproveArea" Type="nvarchar(max)" />
+    <Property Name="CustomerFeedback" Type="nvarchar(max)" />
+    <Property Name="ActualExpense" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="AttendenceOwnerCount" Type="int" />
+    <Property Name="AttendencePCCount" Type="int" />
+    <Property Name="LeadOwnerCount" Type="int" />
+    <Property Name="LeadPCCount" Type="int" />
+    <Property Name="TestDriverOwnerCount" Type="int" />
+    <Property Name="TestDriverPCCount" Type="int" />
+    <Property Name="ActualOrderOwnerCount" Type="int" />
+    <Property Name="ActualOrderPCCount" Type="int" />
+    <Property Name="OnLineAd" Type="nvarchar(max)" />
+    <Property Name="CarDisplay" Type="nvarchar(max)" />
+    <Property Name="Place" Type="nvarchar(max)" />
+    <Property Name="RegisterLiveShow" Type="nvarchar(max)" />
+    <Property Name="CustomerStaffModel" Type="nvarchar(max)" />
+    <Property Name="Others" Type="nvarchar(max)" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionAfter7ActualExpense">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="Item" Type="nvarchar" MaxLength="200" />
+    <Property Name="Descs" Type="nchar" MaxLength="200" />
+    <Property Name="unitPrice" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="Quantity" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionAfter7ActualProcess">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="ActivityDateTime" Type="nvarchar" MaxLength="50" />
+    <Property Name="Item" Type="nvarchar" MaxLength="500" />
+    <Property Name="Contents" Type="nvarchar" MaxLength="500" />
+    <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionAfter90File">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="500" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore21">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="ActivityBackground" Type="nvarchar(max)" />
+    <Property Name="ActivityObjective" Type="nvarchar(max)" />
+    <Property Name="ActivityDesc" Type="nvarchar(max)" />
+    <Property Name="Budget" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="TargetParticipationOwnerCount" Type="int" />
+    <Property Name="TargetParticipationPCCount" Type="int" />
+    <Property Name="TargetLeadsOwnerCount" Type="int" />
+    <Property Name="TargetLeadsPCCount" Type="int" />
+    <Property Name="TargetTestDriveOwnerCount" Type="int" />
+    <Property Name="TargetTestDrivePCCount" Type="int" />
+    <Property Name="TargetOrdersOwnerCount" Type="int" />
+    <Property Name="TargetOrdersPCCount" Type="int" />
+    <Property Name="KeyVision" Type="nvarchar(max)" />
+    <Property Name="KeyvisionApproval" Type="nvarchar(max)" />
+    <Property Name="POSDesign" Type="nvarchar(max)" />
+    <Property Name="PlaceIntro" Type="nvarchar(max)" />
+    <Property Name="TestDriverRoadMap" Type="nvarchar(max)" />
+    <Property Name="Others" Type="nvarchar" MaxLength="50" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore21ActivityProcess">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="ActivityDateTime" Type="nvarchar" MaxLength="50" />
+    <Property Name="Item" Type="nvarchar" MaxLength="500" />
+    <Property Name="Contents" Type="nvarchar" MaxLength="500" />
+    <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore3BugetDetail">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="500" />
+    <Property Name="Descs" Type="nvarchar" MaxLength="500" />
+    <Property Name="UnitPrice" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="Counts" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore3DisplayModel">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="DisplayModelColor" Type="nvarchar" MaxLength="100" />
+    <Property Name="Provider" Type="nvarchar" MaxLength="100" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore3TestDriver">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="DisplayModelColor" Type="nvarchar" MaxLength="100" />
+    <Property Name="Provider" Type="nvarchar" MaxLength="100" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MarketActionTheDayFile">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="500" />
+    <Property Name="FileUrl" Type="nvarchar" MaxLength="500" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="RoleType">
+    <Key>
+      <PropertyRef Name="RoleTypeCode" />
+    </Key>
+    <Property Name="RoleTypeCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="RoleTypeName" Type="nvarchar" MaxLength="100" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Shop">
+    <Key>
+      <PropertyRef Name="ShopId" />
+    </Key>
+    <Property Name="ShopId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShopCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ShopName" Type="nvarchar" MaxLength="200" />
+    <Property Name="ShopNameEn" Type="nvarchar" MaxLength="200" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Budget" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="Balance" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="AreaId" Type="int" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ShopCommitFileRecord">
+    <Key>
+      <PropertyRef Name="ShopId" />
+      <PropertyRef Name="FileId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="ShopId" Type="int" Nullable="false" />
+    <Property Name="FileId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="ShopCommitFileName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ShopCommitFileNameUrl" Type="nvarchar" MaxLength="200" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserInfo">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountId" Type="nvarchar" MaxLength="100" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" />
+    <Property Name="AccountName" Type="nvarchar" MaxLength="100" />
+    <Property Name="TelNO" Type="nvarchar" MaxLength="100" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoleTypeCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ShopId" Type="int" />
+    <Property Name="AreaId" Type="int" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
+  <EntityContainer Name="BentleyModelStoreContainer">
+    <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommitFile" EntityType="Self.CommitFile" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EventType" EntityType="Self.EventType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketAction" EntityType="Self.MarketAction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionAfter2LeadsReport" EntityType="Self.MarketActionAfter2LeadsReport" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionAfter7" EntityType="Self.MarketActionAfter7" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionAfter7ActualExpense" EntityType="Self.MarketActionAfter7ActualExpense" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionAfter7ActualProcess" EntityType="Self.MarketActionAfter7ActualProcess" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionAfter90File" EntityType="Self.MarketActionAfter90File" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionBefore21" EntityType="Self.MarketActionBefore21" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionBefore21ActivityProcess" EntityType="Self.MarketActionBefore21ActivityProcess" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionBefore3BugetDetail" EntityType="Self.MarketActionBefore3BugetDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionBefore3DisplayModel" EntityType="Self.MarketActionBefore3DisplayModel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionBefore3TestDriver" EntityType="Self.MarketActionBefore3TestDriver" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionTheDayFile" EntityType="Self.MarketActionTheDayFile" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RoleType" EntityType="Self.RoleType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Shop" EntityType="Self.Shop" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShopCommitFileRecord" EntityType="Self.ShopCommitFileRecord" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
