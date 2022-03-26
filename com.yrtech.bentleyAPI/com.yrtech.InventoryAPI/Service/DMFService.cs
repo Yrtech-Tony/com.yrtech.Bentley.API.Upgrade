@@ -490,7 +490,9 @@ namespace com.yrtech.InventoryAPI.Service
                             THEN '待审批'
                             ELSE '未提交'  
                         END AS ReplyStatus,
-                    B.ShopName,B.ShopNameEn,C.DMFItemName,C.DMFItemNameEn,D.ActionName
+                    B.ShopName,B.ShopNameEn,C.DMFItemName,C.DMFItemNameEn,D.ActionName,D.EventTypeId,
+                    (SELECT EventTypeName FROM EventType WHERE EventTypeId = D.EventTypeId) AS EventTypeName,
+                    (SELECT EventTypeNameEn FROM EventType WHERE EventTypeId = D.EventTypeId) AS EventTypeNameEn,
                     FROM ExpenseAccount A INNER JOIN Shop B ON A.ShopId = B.ShopId
                                             LEFT JOIN DMFItem C ON A.DMFItemId = C.DMFItemId
                                             LEFT JOIN MarketAction D ON A.MarketActionId = D.MarketActionId
@@ -750,6 +752,80 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = @"DELETE MonthSale WHERE MonthSaleId = @MonthSaleId
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
+        }
+        #endregion
+        #region 总览
+        public List<ExpenseAccountStatusCountDto> ExpenseAccountStatusCountSearch(string year, string eventTypeId, List<Shop> roleTypeShop)
+        {
+            if (year == null) year = "";
+            if (eventTypeId == null) eventTypeId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year) };
+            Type t = typeof(ExpenseAccountStatusCountDto);
+            string sql = "";
+            sql += @"SELECT ISNULL(SUM(ExpenseAccount1),0) AS ExpenseAccount1 
+	                       ,ISNULL(SUM(ExpenseAccount2),0) AS ExpenseAccount2
+	                       ,ISNULL(SUM(ExpenseAccount3),0) AS ExpenseAccount3
+	                       ,ISNULL(SUM(ExpenseAccount4),0) AS ExpenseAccount4
+	                       ,ISNULL(SUM(ExpenseAccount5),0) AS ExpenseAccount5
+	                       ,ISNULL(SUM(ExpenseAccount9),0) AS ExpenseAccount9
+                    FROM (
+                            SELECT 
+                            CASE WHEN NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode=1)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS ExpenseAccount1
+                            , CASE WHEN NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode =2)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS ExpenseAccount2
+                            , CASE WHEN NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode =3)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS ExpenseAccount3
+                            , CASE WHEN  NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode =4)
+				                            THEN 1
+				                            ELSE 0
+			                            END AS ExpenseAccount4
+                             , CASE WHEN  NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode =5)
+											THEN 1
+											ELSE 0
+										END AS ExpenseAccount5
+                             , CASE WHEN  NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode =9)
+											THEN 1
+											ELSE 0
+										END AS ExpenseAccount9
+                            FROM ExpenseAccount A WHERE 1=1  ";
+            if (!string.IsNullOrEmpty(year))
+            {
+                sql += " AND Year(A.StartDate) = @Year";
+            }
+            if (eventTypeId == "99")
+            {
+                sql += " AND EXISTS(SELECT 1 FROM MarketAction WHERE MarketActionId = A.MarketActionId AND EventTypeId = 99) ";
+            }
+            else
+            {
+                sql += " AND EXISTS(SELECT 1 FROM MarketAction WHERE MarketActionId = A.MarketActionId AND A.EventTypeId <> 99 )";
+            }
+            if (roleTypeShop != null && roleTypeShop.Count > 0)
+            {
+                sql += " AND A.ShopId IN( ";
+                foreach (Shop shop in roleTypeShop)
+                {
+                    if (roleTypeShop.IndexOf(shop) == roleTypeShop.Count - 1)
+                    {
+                        sql += shop.ShopId;
+                    }
+                    else
+                    {
+                        sql += shop.ShopId + ",";
+                    }
+                }
+                sql += ")";
+            }
+            sql += " ) B";
+            return db.Database.SqlQuery(t, sql, para).Cast<ExpenseAccountStatusCountDto>().ToList();
         }
         #endregion
 

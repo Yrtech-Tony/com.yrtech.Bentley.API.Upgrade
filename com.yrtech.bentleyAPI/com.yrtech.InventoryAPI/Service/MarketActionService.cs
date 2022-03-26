@@ -729,7 +729,6 @@ namespace com.yrtech.InventoryAPI.Service
             db.Database.ExecuteSqlCommand(sql, para);
         }
         #endregion
-
         #region 总览
         // 市场活动和交车仪式统计
         public List<MarketActionStatusCountDto> MarketActionStatusCountSearch(string year, string eventTypeId, List<Shop> roleTypeShop)
