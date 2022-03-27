@@ -807,6 +807,20 @@ namespace com.yrtech.SurveyAPI.Controllers
                 return new APIResult() { Status = false, Body = ex.Message.ToString() };
             }
         }
+        [HttpGet]
+        [Route("MarketAction/ExpenseAccountStatusCountSearch")]
+        public APIResult ExpenseAccountStatusCountSearch(string year, string eventTypeId, string userId, string roleTypeCode)
+        {
+            try
+            {
+                List<ExpenseAccountStatusCountDto> expenseAccountStatusCountList = dmfService.ExpenseAccountStatusCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(expenseAccountStatusCountList) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+        }
         #endregion
         #region DTTApprove
         [HttpGet]

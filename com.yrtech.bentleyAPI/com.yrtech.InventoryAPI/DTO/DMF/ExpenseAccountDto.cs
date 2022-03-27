@@ -21,6 +21,9 @@ namespace com.yrtech.InventoryAPI.DTO
         public string ApprovalReason { get; set; }
         public string ReplyStatus { get; set; }
         public string ReplyReason { get; set; }
+        public Nullable<int> EventTypeId { get; set; }
+        public string EventTypeName { get; set; }
+        public string EventTypeNameEn { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }
         public Nullable<int> ModifyUserId { get; set; }
