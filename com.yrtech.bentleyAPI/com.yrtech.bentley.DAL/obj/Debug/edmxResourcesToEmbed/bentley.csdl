@@ -23,10 +23,12 @@
     <EntitySet Name="MarketActionAfter7CoopFund" EntityType="BentleyModel.MarketActionAfter7CoopFund" />
     <EntitySet Name="MarketActionBefore4WeeksCoopFund" EntityType="BentleyModel.MarketActionBefore4WeeksCoopFund" />
     <EntitySet Name="ProgressSetting" EntityType="BentleyModel.ProgressSetting" />
-    <EntitySet Name="CoopFundType" EntityType="BentleyModel.CoopFundType" />
     <EntitySet Name="MarketActionAfter7" EntityType="BentleyModel.MarketActionAfter7" />
     <EntitySet Name="MarketActionBefore4Weeks" EntityType="BentleyModel.MarketActionBefore4Weeks" />
     <EntitySet Name="MarketActionPic" EntityType="BentleyModel.MarketActionPic" />
+    <EntitySet Name="CoopFundType" EntityType="BentleyModel.CoopFundType" />
+    <EntitySet Name="MarketActionAfter7HandOverArrangement" EntityType="BentleyModel.MarketActionAfter7HandOverArrangement" />
+    <EntitySet Name="MarketActionBefore4WeeksHandOverArrangement" EntityType="BentleyModel.MarketActionBefore4WeeksHandOverArrangement" />
   </EntityContainer>
   <EntityType Name="Area">
     <Key>
@@ -371,19 +373,6 @@
     <Property Name="InDateTime" Type="DateTime" Precision="3" />
     <Property Name="InUserId" Type="Int32" />
   </EntityType>
-  <EntityType Name="CoopFundType">
-    <Key>
-      <PropertyRef Name="CoopFundTypeId" />
-    </Key>
-    <Property Name="CoopFundTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CoopFundTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CoopFundTypeNameEn" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ShowChk" Type="Boolean" />
-    <Property Name="InUserId" Type="Int32" />
-    <Property Name="InDateTime" Type="DateTime" Precision="3" />
-    <Property Name="ModifyUserId" Type="Int32" />
-    <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
-  </EntityType>
   <EntityType Name="MarketActionAfter7">
     <Key>
       <PropertyRef Name="MarketActionId" />
@@ -454,5 +443,49 @@
     <Property Name="PicDesc" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="InDateTime" Type="DateTime" Precision="3" />
     <Property Name="InUserId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="CoopFundType">
+    <Key>
+      <PropertyRef Name="CoopFundTypeId" />
+    </Key>
+    <Property Name="CoopFundTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CoopFundTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CoopFundTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CoopFundTypeNameEn" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ShowChk" Type="Boolean" />
+    <Property Name="InUserId" Type="Int32" />
+    <Property Name="InDateTime" Type="DateTime" Precision="3" />
+    <Property Name="ModifyUserId" Type="Int32" />
+    <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="MarketActionAfter7HandOverArrangement">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+    <Property Name="SeqNO" Type="Int32" Nullable="false" />
+    <Property Name="HandOverDate" Type="DateTime" Precision="3" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MainProcess" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="InUserId" Type="Int32" />
+    <Property Name="InDateTime" Type="DateTime" Precision="3" />
+    <Property Name="ModifyUserId" Type="Int32" />
+    <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore4WeeksHandOverArrangement">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+    <Property Name="SeqNO" Type="Int32" Nullable="false" />
+    <Property Name="HandOverDate" Type="DateTime" Precision="3" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MainProcess" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="InDateTime" Type="DateTime" Precision="3" />
+    <Property Name="InUserId" Type="Int32" />
+    <Property Name="ModifyUserId" Type="Int32" />
+    <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

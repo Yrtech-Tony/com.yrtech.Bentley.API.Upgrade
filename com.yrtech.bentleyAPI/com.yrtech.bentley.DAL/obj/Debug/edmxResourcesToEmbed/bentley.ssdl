@@ -32,6 +32,7 @@
       <PropertyRef Name="CoopFundTypeId" />
     </Key>
     <Property Name="CoopFundTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CoopFundTypeCode" Type="nvarchar" MaxLength="50" />
     <Property Name="CoopFundTypeName" Type="nvarchar" MaxLength="50" />
     <Property Name="CoopFundTypeNameEn" Type="nvarchar" MaxLength="50" />
     <Property Name="ShowChk" Type="bit" />
@@ -260,6 +261,21 @@
     <Property Name="ModifyDateTime" Type="datetime" />
     <Property Name="ModifyUserId" Type="int" />
   </EntityType>
+  <EntityType Name="MarketActionAfter7HandOverArrangement">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="HandOverDate" Type="datetime" />
+    <Property Name="Model" Type="nvarchar" MaxLength="50" />
+    <Property Name="MainProcess" Type="nvarchar(max)" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
+  </EntityType>
   <EntityType Name="MarketActionBefore4Weeks">
     <Key>
       <PropertyRef Name="MarketActionId" />
@@ -321,6 +337,21 @@
     <Property Name="InUserId" Type="int" />
     <Property Name="ModifyDateTime" Type="datetime" />
     <Property Name="ModifyUserId" Type="int" />
+  </EntityType>
+  <EntityType Name="MarketActionBefore4WeeksHandOverArrangement">
+    <Key>
+      <PropertyRef Name="MarketActionId" />
+      <PropertyRef Name="SeqNO" />
+    </Key>
+    <Property Name="MarketActionId" Type="int" Nullable="false" />
+    <Property Name="SeqNO" Type="int" Nullable="false" />
+    <Property Name="HandOverDate" Type="datetime" />
+    <Property Name="Model" Type="nvarchar" MaxLength="50" />
+    <Property Name="MainProcess" Type="nvarchar(max)" />
+    <Property Name="InDateTime" Type="datetime" />
+    <Property Name="InUserId" Type="int" />
+    <Property Name="ModifyUserId" Type="int" />
+    <Property Name="ModifyDateTime" Type="datetime" />
   </EntityType>
   <EntityType Name="MarketActionPic">
     <Key>
@@ -444,9 +475,11 @@
     <EntitySet Name="MarketActionAfter7ActualExpense" EntityType="Self.MarketActionAfter7ActualExpense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketActionAfter7ActualProcess" EntityType="Self.MarketActionAfter7ActualProcess" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketActionAfter7CoopFund" EntityType="Self.MarketActionAfter7CoopFund" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionAfter7HandOverArrangement" EntityType="Self.MarketActionAfter7HandOverArrangement" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketActionBefore4Weeks" EntityType="Self.MarketActionBefore4Weeks" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketActionBefore4WeeksActivityProcess" EntityType="Self.MarketActionBefore4WeeksActivityProcess" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketActionBefore4WeeksCoopFund" EntityType="Self.MarketActionBefore4WeeksCoopFund" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarketActionBefore4WeeksHandOverArrangement" EntityType="Self.MarketActionBefore4WeeksHandOverArrangement" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketActionPic" EntityType="Self.MarketActionPic" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MonthSale" EntityType="Self.MonthSale" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProgressSetting" EntityType="Self.ProgressSetting" Schema="dbo" store:Type="Tables" />

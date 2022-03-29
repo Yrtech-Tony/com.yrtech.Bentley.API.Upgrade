@@ -13,7 +13,9 @@ namespace com.yrtech.InventoryAPI.DTO
         public MarketActionLeadsCountDto LeadsCount { get; set; }
         public List<MarketActionPic> MarketActionAfter7PicList_OffLine { get; set; }
         public List<MarketActionPic> MarketActionAfter7PicList_OnLine { get; set; }
+        public List<MarketActionPic> MarketActionAfter7PicList_HandOver { get; set; }
         public List<MarketActionAfter7ActualProcess> ActualProcess { get; set; }
         public List<MarketActionAfter7CoopFund> MarketActionAfter7CoopFund { get; set; }
+        public List<MarketActionAfter7HandOverArrangement> MarketActionAfter7HandOverArrangement { get; set; }
     }
 }

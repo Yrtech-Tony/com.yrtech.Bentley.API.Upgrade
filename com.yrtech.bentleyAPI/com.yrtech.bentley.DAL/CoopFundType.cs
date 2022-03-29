@@ -15,6 +15,7 @@ namespace com.yrtech.bentley.DAL
     public partial class CoopFundType
     {
         public int CoopFundTypeId { get; set; }
+        public string CoopFundTypeCode { get; set; }
         public string CoopFundTypeName { get; set; }
         public string CoopFundTypeNameEn { get; set; }
         public Nullable<bool> ShowChk { get; set; }

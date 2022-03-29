@@ -209,7 +209,7 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = "";
             sql += @"SELECT A.MarketActionId,A.ShopId,B.ShopCode,B.ShopName,B.ShopNameEn,A.ActionCode,A.ActionName
 		                    ,A.EventTypeId,C.EventTypeName,C.EventTypeNameEn
-		                    ,(SELECT EventMode FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
+		                    ,(SELECT CAST(EventMode AS INT) FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
 		                    ,(SELECT HiddenCodeName FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode' AND X.EventMode = Y.HiddenCodeId 
 											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeName
 						   ,(SELECT HiddenCodeNameEn FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode'  AND X.EventMode = Y.HiddenCodeId 
@@ -281,7 +281,7 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = "";
             sql += @"SELECT A.* 
                     FROM [MarketActionPic] A 
-                    WHERE  PicTypeLike '%'+@PicType AND MarketActionId = @MarketActionId";
+                    WHERE  PicType Like @PicType+'%' AND MarketActionId = @MarketActionId";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionPic>().ToList();
         }
         public void MarketActionPicSave(MarketActionPic marketActionPic)
@@ -440,6 +440,40 @@ namespace com.yrtech.InventoryAPI.Service
         {
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
             string sql = @"DELETE MarketActionBefore4WeeksCoopFund WHERE MarketActionId = @MarketActionId
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
+        public List<MarketActionBefore4WeeksHandOverArrangement> MarketActionBefore4WeeksHandOverArrangementSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionBefore4WeeksHandOverArrangement);
+            string sql = "";
+            sql += @"SELECT *  FROM [MarketActionBefore4WeeksHandOverArrangement] WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionBefore4WeeksHandOverArrangement>().ToList();
+        }
+        public void MarketActionBefore4WeeksHandOverArrangementSave(MarketActionBefore4WeeksHandOverArrangement marketActionBefore4WeeksHandOverArrangement)
+        {
+            MarketActionBefore4WeeksHandOverArrangement findOneMax = db.MarketActionBefore4WeeksHandOverArrangement.Where(x => (x.MarketActionId == marketActionBefore4WeeksHandOverArrangement.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionBefore4WeeksHandOverArrangement.SeqNO = 1;
+            }
+            else
+            {
+                marketActionBefore4WeeksHandOverArrangement.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionBefore4WeeksHandOverArrangement.InDateTime = DateTime.Now;
+            marketActionBefore4WeeksHandOverArrangement.ModifyDateTime = DateTime.Now;
+            db.MarketActionBefore4WeeksHandOverArrangement.Add(marketActionBefore4WeeksHandOverArrangement);
+
+            db.SaveChanges();
+        }
+        public void MarketActionBefore4WeeksHandOverArrangementDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionBefore4WeeksHandOverArrangement WHERE MarketActionId = @MarketActionId
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
@@ -728,6 +762,40 @@ namespace com.yrtech.InventoryAPI.Service
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
+        public List<MarketActionAfter7HandOverArrangement> MarketActionAfter7HandOverArrangementSearch(string marketActionId)
+        {
+            if (marketActionId == null) marketActionId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            Type t = typeof(MarketActionAfter7HandOverArrangement);
+            string sql = "";
+            sql += @"SELECT *  FROM [MarketActionAfter7HandOverArrangement] WHERE MarketActionId = @MarketActionId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter7HandOverArrangement>().ToList();
+        }
+        public void MarketActionAfter7HandOverArrangementSave(MarketActionAfter7HandOverArrangement marketActionAfter7HandOverArrangement)
+        {
+            MarketActionAfter7HandOverArrangement findOneMax = db.MarketActionAfter7HandOverArrangement.Where(x => (x.MarketActionId == marketActionAfter7HandOverArrangement.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
+            if (findOneMax == null)
+            {
+                marketActionAfter7HandOverArrangement.SeqNO = 1;
+            }
+            else
+            {
+                marketActionAfter7HandOverArrangement.SeqNO = findOneMax.SeqNO + 1;
+            }
+            marketActionAfter7HandOverArrangement.InDateTime = DateTime.Now;
+            marketActionAfter7HandOverArrangement.ModifyDateTime = DateTime.Now;
+            db.MarketActionAfter7HandOverArrangement.Add(marketActionAfter7HandOverArrangement);
+
+            db.SaveChanges();
+        }
+        public void MarketActionAfter7HandOverArrangementDelete(string marketActionId)
+        {
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            string sql = @"DELETE MarketActionAfter7HandOverArrangement WHERE MarketActionId = @MarketActionId
+                        ";
+            db.Database.ExecuteSqlCommand(sql, para);
+        }
         #endregion
         #region 总览
         // 市场活动和交车仪式统计
@@ -761,7 +829,6 @@ namespace com.yrtech.InventoryAPI.Service
 				                            THEN 1
 				                            ELSE 0
 			                            END AS After7WaitForChange
-                            
                             FROM MarketAction A WHERE 1=1 AND A.MarketActionStatusCode<>2 ";
             if (!string.IsNullOrEmpty(year))
             {

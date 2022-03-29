@@ -492,7 +492,7 @@ namespace com.yrtech.InventoryAPI.Service
                         END AS ReplyStatus,
                     B.ShopName,B.ShopNameEn,C.DMFItemName,C.DMFItemNameEn,D.ActionName,D.EventTypeId,
                     (SELECT EventTypeName FROM EventType WHERE EventTypeId = D.EventTypeId) AS EventTypeName,
-                    (SELECT EventTypeNameEn FROM EventType WHERE EventTypeId = D.EventTypeId) AS EventTypeNameEn,
+                    (SELECT EventTypeNameEn FROM EventType WHERE EventTypeId = D.EventTypeId) AS EventTypeNameEn
                     FROM ExpenseAccount A INNER JOIN Shop B ON A.ShopId = B.ShopId
                                             LEFT JOIN DMFItem C ON A.DMFItemId = C.DMFItemId
                                             LEFT JOIN MarketAction D ON A.MarketActionId = D.MarketActionId

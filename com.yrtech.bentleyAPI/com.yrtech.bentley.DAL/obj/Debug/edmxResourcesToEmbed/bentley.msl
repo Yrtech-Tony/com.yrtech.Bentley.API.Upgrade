@@ -356,20 +356,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CoopFundType">
-      <EntityTypeMapping TypeName="BentleyModel.CoopFundType">
-        <MappingFragment StoreEntitySet="CoopFundType">
-          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
-          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
-          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
-          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
-          <ScalarProperty Name="ShowChk" ColumnName="ShowChk" />
-          <ScalarProperty Name="CoopFundTypeNameEn" ColumnName="CoopFundTypeNameEn" />
-          <ScalarProperty Name="CoopFundTypeName" ColumnName="CoopFundTypeName" />
-          <ScalarProperty Name="CoopFundTypeId" ColumnName="CoopFundTypeId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="MarketActionAfter7">
       <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7">
         <MappingFragment StoreEntitySet="MarketActionAfter7">
@@ -438,6 +424,51 @@
           <ScalarProperty Name="PicName" ColumnName="PicName" />
           <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
           <ScalarProperty Name="PicType" ColumnName="PicType" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CoopFundType">
+      <EntityTypeMapping TypeName="BentleyModel.CoopFundType">
+        <MappingFragment StoreEntitySet="CoopFundType">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="ShowChk" ColumnName="ShowChk" />
+          <ScalarProperty Name="CoopFundTypeNameEn" ColumnName="CoopFundTypeNameEn" />
+          <ScalarProperty Name="CoopFundTypeName" ColumnName="CoopFundTypeName" />
+          <ScalarProperty Name="CoopFundTypeCode" ColumnName="CoopFundTypeCode" />
+          <ScalarProperty Name="CoopFundTypeId" ColumnName="CoopFundTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionAfter7HandOverArrangement">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter7HandOverArrangement">
+        <MappingFragment StoreEntitySet="MarketActionAfter7HandOverArrangement">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="MainProcess" ColumnName="MainProcess" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="HandOverDate" ColumnName="HandOverDate" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+          <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MarketActionBefore4WeeksHandOverArrangement">
+      <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4WeeksHandOverArrangement">
+        <MappingFragment StoreEntitySet="MarketActionBefore4WeeksHandOverArrangement">
+          <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+          <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+          <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+          <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+          <ScalarProperty Name="MainProcess" ColumnName="MainProcess" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="HandOverDate" ColumnName="HandOverDate" />
+          <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
           <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
         </MappingFragment>
       </EntityTypeMapping>

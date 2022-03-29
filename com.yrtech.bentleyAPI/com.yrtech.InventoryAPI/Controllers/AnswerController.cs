@@ -300,9 +300,11 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks = marketActionBefore4WeeksList[0];
                 }
                 marketActionBefore4WeeksMainDto.ActivityProcess = marketActionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
+                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksHandOverArrangement = marketActionService.MarketActionBefore4WeeksHandOverArrangementSearch(marketActionId);
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund = marketActionBefore4WeeksCoopFundList;
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId, "MPF");
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine = marketActionService.MarketActionPicSearch(marketActionId, "MPN");
+                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_Handover = marketActionService.MarketActionPicSearch(marketActionId, "MPH");
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionBefore4WeeksMainDto) };
             }
             catch (Exception ex)
@@ -341,25 +343,54 @@ namespace com.yrtech.SurveyAPI.Controllers
                 marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks);
                 // 先全部删除活动流程，然后统一再保存
                 marketActionService.MarketActionBefore4WeeksActivityProcessDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
-                foreach (MarketActionBefore4WeeksActivityProcess process in marketActionBefore4WeeksMainDto.ActivityProcess)
+                if (marketActionBefore4WeeksMainDto.ActivityProcess != null && marketActionBefore4WeeksMainDto.ActivityProcess.Count > 0)
                 {
-                    marketActionService.MarketActionBefore4WeeksActivityProcessSave(process);
+                    foreach (MarketActionBefore4WeeksActivityProcess process in marketActionBefore4WeeksMainDto.ActivityProcess)
+                    {
+                        marketActionService.MarketActionBefore4WeeksActivityProcessSave(process);
+                    }
                 }
                 // 先全部删除市场基金申请，然后统一再保存
                 marketActionService.MarketActionBefore4WeeksCoopFundDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
-                foreach (MarketActionBefore4WeeksCoopFund coopFund in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund)
+                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund.Count > 0)
                 {
-                    marketActionService.MarketActionBefore4WeeksCoopFundSave(coopFund);
+                    foreach (MarketActionBefore4WeeksCoopFund coopFund in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund)
+                    {
+                        marketActionService.MarketActionBefore4WeeksCoopFundSave(coopFund);
+                    }
+                }
+                // 先全部删除交车仪式流程，然后统一再保存
+                marketActionService.MarketActionBefore4WeeksHandOverArrangementDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
+                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksHandOverArrangement != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksHandOverArrangement.Count > 0)
+                {
+                    foreach (MarketActionBefore4WeeksHandOverArrangement handOverArrangement in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksHandOverArrangement)
+                    {
+                        marketActionService.MarketActionBefore4WeeksHandOverArrangementSave(handOverArrangement);
+                    }
                 }
                 //保存线上的照片
-                foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine)
+                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine.Count > 0)
                 {
-                    marketActionService.MarketActionPicSave(marketActionPic);
+                    foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine)
+                    {
+                        marketActionService.MarketActionPicSave(marketActionPic);
+                    }
                 }
                 //保存线下的照片
-                foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine)
+                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine!=null&& marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine.Count>0)
                 {
-                    marketActionService.MarketActionPicSave(marketActionPic);
+                    foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine)
+                    {
+                        marketActionService.MarketActionPicSave(marketActionPic);
+                    }
+                }
+                //保存交车仪式的照片
+                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_Handover != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_Handover.Count > 0)
+                {
+                    foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_Handover)
+                    {
+                        marketActionService.MarketActionPicSave(marketActionPic);
+                    }
                 }
                 return new APIResult() { Status = true, Body = "" };
             }
@@ -700,6 +731,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 }
                 marketActionAfter7MainDto.ActualProcess = marketActionService.MarketActionAfter7ActualProcessSearch(marketActionId);
                 marketActionAfter7MainDto.MarketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSearch(marketActionId);
+                marketActionAfter7MainDto.MarketActionAfter7HandOverArrangement = marketActionService.MarketActionAfter7HandOverArrangementSearch(marketActionId);
                 //List<MarketActionLeadsCountDto> marketActionLeadsCountList = marketActionService.MarketActionLeadsCountSearch(marketActionId);
                 //if (marketActionLeadsCountList != null && marketActionLeadsCountList.Count > 0)
                 //{
@@ -707,6 +739,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 //}
                 marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId, "MRF");
                 marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine = marketActionService.MarketActionPicSearch(marketActionId, "MRN");
+                marketActionAfter7MainDto.MarketActionAfter7PicList_HandOver = marketActionService.MarketActionPicSearch(marketActionId, "MRH");
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionAfter7MainDto) };
             }
             catch (Exception ex)
@@ -725,25 +758,54 @@ namespace com.yrtech.SurveyAPI.Controllers
 
                 // 先删除再全部保存
                 marketActionService.MarketActionAfter7ActualProcessDelete(marketActionAfter7MainDto.MarketActionId.ToString());
-                foreach (MarketActionAfter7ActualProcess process in marketActionAfter7MainDto.ActualProcess)
+                if (marketActionAfter7MainDto.ActualProcess != null && marketActionAfter7MainDto.ActualProcess.Count > 0)
                 {
-                    marketActionService.MarketActionAfter7ActualProcessSave(process);
+                    foreach (MarketActionAfter7ActualProcess process in marketActionAfter7MainDto.ActualProcess)
+                    {
+                        marketActionService.MarketActionAfter7ActualProcessSave(process);
+                    }
                 }
                 // 先删除再全部保存
                 marketActionService.MarketActionAfter7CoopFundDelete(marketActionAfter7MainDto.MarketActionId.ToString());
-                foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7MainDto.MarketActionAfter7CoopFund)
+                if (marketActionAfter7MainDto.MarketActionAfter7CoopFund != null && marketActionAfter7MainDto.MarketActionAfter7CoopFund.Count > 0)
                 {
-                    marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
+                    foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7MainDto.MarketActionAfter7CoopFund)
+                    {
+                        marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
+                    }
+                }
+                // 先删除再全部保存
+                marketActionService.MarketActionAfter7HandOverArrangementDelete(marketActionAfter7MainDto.MarketActionId.ToString());
+                if (marketActionAfter7MainDto.MarketActionAfter7HandOverArrangement != null && marketActionAfter7MainDto.MarketActionAfter7HandOverArrangement.Count > 0)
+                {
+                    foreach (MarketActionAfter7HandOverArrangement marketActionAfter7HandOverArrangement in marketActionAfter7MainDto.MarketActionAfter7HandOverArrangement)
+                    {
+                        marketActionService.MarketActionAfter7HandOverArrangementSave(marketActionAfter7HandOverArrangement);
+                    }
                 }
                 //保存线上的照片
-                foreach (MarketActionPic marketActionPic in marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine)
+                if (marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine != null && marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine.Count > 0)
                 {
-                    marketActionService.MarketActionPicSave(marketActionPic);
+                    foreach (MarketActionPic marketActionPic in marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine)
+                    {
+                        marketActionService.MarketActionPicSave(marketActionPic);
+                    }
                 }
                 //保存线下的照片
-                foreach (MarketActionPic marketActionPic in marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine)
+                if (marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine != null && marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine.Count > 0)
                 {
-                    marketActionService.MarketActionPicSave(marketActionPic);
+                    foreach (MarketActionPic marketActionPic in marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine)
+                    {
+                        marketActionService.MarketActionPicSave(marketActionPic);
+                    }
+                }
+                //保存交车仪式照片
+                if (marketActionAfter7MainDto.MarketActionAfter7PicList_HandOver != null && marketActionAfter7MainDto.MarketActionAfter7PicList_HandOver.Count > 0)
+                {
+                    foreach (MarketActionPic marketActionPic in marketActionAfter7MainDto.MarketActionAfter7PicList_HandOver)
+                    {
+                        marketActionService.MarketActionPicSave(marketActionPic);
+                    }
                 }
                 return new APIResult() { Status = true, Body = "" };
             }
@@ -1202,7 +1264,13 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 // 把活动报告的市场基金金额自动赋值到费用报销
-                expenseAccount.ExpenseAmt = TokenHelper.EncryptDES(marketActionService.MarketActionAfter7Search(expenseAccount.MarketActionId.ToString())[0].CoopFundSumAmt.ToString());
+                List<MarketActionAfter7> marketActionAfter7List = marketActionService.MarketActionAfter7Search(expenseAccount.MarketActionId.ToString());
+                decimal? expenseAmt = 0;
+                if (marketActionAfter7List != null && marketActionAfter7List.Count > 0)
+                {
+                    expenseAmt = marketActionAfter7List[0].CoopFundSumAmt;
+                }
+                expenseAccount.ExpenseAmt = TokenHelper.EncryptDES(expenseAmt.ToString());
                 //保存费用报销
                 expenseAccount = dmfService.ExpenseAccountSave(expenseAccount);
                 /*活动报告的报价单，合同，发票，报价单自动赋值到费用报销,查询该活动是否已经有报销的附件.

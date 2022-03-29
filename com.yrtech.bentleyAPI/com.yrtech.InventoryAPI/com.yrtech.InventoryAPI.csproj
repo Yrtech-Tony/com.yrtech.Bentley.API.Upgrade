@@ -200,6 +200,7 @@
     <Compile Include="DTO\DMF\DMFDto.cs" />
     <Compile Include="DTO\DMF\ExpenseAccountDto.cs" />
     <Compile Include="DTO\DMF\DMFDetailDto.cs" />
+    <Compile Include="DTO\DMF\ExpenseAccountStatusCountDto.cs" />
     <Compile Include="DTO\DMF\MonthSaleDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionBefore3BugetDetailDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionAfter7ActualExpenseDto.cs" />

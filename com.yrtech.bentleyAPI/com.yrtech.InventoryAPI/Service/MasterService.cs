@@ -373,7 +373,7 @@ namespace com.yrtech.InventoryAPI.Service
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@CoopFundTypeId", coopFundTypeId),
                                                     new SqlParameter("@CoopFundTypeName", coopFundTypeName),
                                                     new SqlParameter("@CoopFundTypeNameEn", coopFundTypeNameEn)};
-            Type t = typeof(EventTypeDto);
+            Type t = typeof(CoopFundType);
             string sql = "";
             sql = @"SELECT *
                     FROM CoopFundType 

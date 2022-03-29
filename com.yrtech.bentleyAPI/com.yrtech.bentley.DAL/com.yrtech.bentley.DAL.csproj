@@ -114,6 +114,9 @@
     <Compile Include="MarketActionAfter7CoopFund.cs">
       <DependentUpon>bentley.tt</DependentUpon>
     </Compile>
+    <Compile Include="MarketActionAfter7HandOverArrangement.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
     <Compile Include="MarketActionBefore4Weeks.cs">
       <DependentUpon>bentley.tt</DependentUpon>
     </Compile>
@@ -121,6 +124,9 @@
       <DependentUpon>bentley.tt</DependentUpon>
     </Compile>
     <Compile Include="MarketActionBefore4WeeksCoopFund.cs">
+      <DependentUpon>bentley.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarketActionBefore4WeeksHandOverArrangement.cs">
       <DependentUpon>bentley.tt</DependentUpon>
     </Compile>
     <Compile Include="MarketActionPic.cs">
