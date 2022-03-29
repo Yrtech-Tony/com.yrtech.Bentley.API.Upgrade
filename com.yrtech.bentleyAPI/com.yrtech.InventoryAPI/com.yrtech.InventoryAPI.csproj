@@ -63,6 +63,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -183,6 +189,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Common\APIResult.cs" />
     <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="Common\PPTHelper.cs" />
     <Compile Include="Common\TokenHelper.cs" />
     <Compile Include="Common\OSSClientHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -225,6 +232,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\PPTService.cs" />
     <Compile Include="Service\ExcelDataService.cs" />
     <Compile Include="Service\MarketActionService.cs" />
     <Compile Include="Service\DMFService.cs" />
@@ -283,6 +291,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="template\2022 Dealer Coop fund event plan template-线下.pptx" />
+    <Content Include="template\2022 Dealer Coop fund event report template-线下.pptx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
