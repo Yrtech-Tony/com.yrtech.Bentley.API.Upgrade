@@ -9,4 +9,3 @@ C:\Workspace\com.yrtech.Bentley\com.yrtech.bentleyAPI\com.yrtech.bentley.DAL\bin
 C:\Workspace\com.yrtech.Bentley\com.yrtech.bentleyAPI\com.yrtech.bentley.DAL\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
 C:\Workspace\com.yrtech.Bentley\com.yrtech.bentleyAPI\com.yrtech.bentley.DAL\obj\Debug\com.yrtech.bentley.DAL.dll
 C:\Workspace\com.yrtech.Bentley\com.yrtech.bentleyAPI\com.yrtech.bentley.DAL\obj\Debug\com.yrtech.bentley.DAL.pdb
-C:\Workspace\com.yrtech.Bentley\com.yrtech.bentleyAPI\com.yrtech.bentley.DAL\obj\Debug\com.yrtech.bentley.DAL.csprojResolveAssemblyReference.cache
