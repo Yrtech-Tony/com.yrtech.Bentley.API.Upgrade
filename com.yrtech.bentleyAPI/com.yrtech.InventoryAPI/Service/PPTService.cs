@@ -12,7 +12,16 @@ namespace com.yrtech.InventoryAPI.Service
     public class PPTService
     {
         /**
-         *  VenueRetal 场地租赁Setup 搭建Catering_Food 餐饮_餐费Catering_Drink 餐饮_酒水PhotoGraphy 摄影Performance 表演MC 支持人Hospitality 礼仪Others 其他Catering 餐饮
+         *  VenueRetal 场地租赁
+Setup 搭建
+Catering_Food 餐饮_餐费
+Catering_Drink 餐饮_酒水
+PhotoGraphy 摄影
+Performance 表演
+MC 支持人
+Hospitality 礼仪
+Others 其他
+Catering 餐饮
          * */
         string[] BudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality" };
         string[] ReportBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Performance", "MC", "Hospitality", "Catering", "Others" };
