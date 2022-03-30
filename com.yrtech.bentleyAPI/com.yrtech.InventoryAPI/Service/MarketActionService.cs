@@ -480,6 +480,7 @@ namespace com.yrtech.InventoryAPI.Service
         // 线下模式时活动预算合计的计算
         public decimal? MarketActionBefore4WeeksTotalBudgetAmt(string marketActionId,decimal? totalBudgetAmt)
         {
+            totalBudgetAmt = totalBudgetAmt == null ? 0 : totalBudgetAmt;
             List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = MarketActionBefore4WeeksCoopFundSearch(marketActionId);
             // 查询当前活动的活动模式
             List<MarketActionDto> marketActionList = MarketActionSearchById(marketActionId);

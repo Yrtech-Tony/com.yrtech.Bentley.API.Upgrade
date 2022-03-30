@@ -339,7 +339,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     market.StartDate = marketDto.StartDate;
                     marketActionService.MarketActionSave(market);
                 }
-                // marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic = UploadBase64Pic("", marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic);
+                marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic = UploadBase64Pic("", marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic);
                 marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks);
                 // 先全部删除活动流程，然后统一再保存
                 marketActionService.MarketActionBefore4WeeksActivityProcessDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
@@ -377,7 +377,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     }
                 }
                 //保存线下的照片
-                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine!=null&& marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine.Count>0)
+                if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine.Count > 0)
                 {
                     foreach (MarketActionPic marketActionPic in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine)
                     {
@@ -1276,47 +1276,78 @@ namespace com.yrtech.SurveyAPI.Controllers
                 /*活动报告的报价单，合同，发票，报价单自动赋值到费用报销,查询该活动是否已经有报销的附件.
                  * 如果已经有报销的附件，说明已经关联过，不再进行管理.
                  * 如果不存在附件，说明还没有关联，自动把活动计划和活动报告的附件关联过来*/
-                List<ExpenseAccountFile> expenseAccountFileList= dmfService.ExpenseAccountFileSearch(expenseAccount.ExpenseAccountId.ToString(), "", "");
+                List<ExpenseAccountFile> expenseAccountFileList = dmfService.ExpenseAccountFileSearch(expenseAccount.ExpenseAccountId.ToString(), "", "");
                 if (expenseAccountFileList == null || expenseAccountFileList.Count == 0)
                 {
-                    List<MarketActionPic>marketActionPicList = new List<MarketActionPic>();
-                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF01"));//活动计划报价单
+                    List<MarketActionPic> marketActionPicList = new List<MarketActionPic>();
+                    // 活动计划-报价单
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF01"));//活动计划报价单-线下
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPN01"));//活动计划报价单-线上
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPH01"));//活动计划报价单-交车仪式
+                    // 活动计划-邮件截图
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF01-1"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPN02"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPH02"));
+                    // 活动计划PPT
                     marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF13"));//活动计划PPT
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPN11"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPH11"));
+                    // 活动报告-报价单
                     marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF01"));//活动报告报价单
-                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF02")); //活动报告合同
-                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF03")); //活动报告发票
-                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF04")); //活动报告邮件截图
-                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF15")); //活动报告PPT
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRN01"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRH01"));
+                    // 活动报告-合同
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF02"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRN02"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRH02"));
+                    // 活动报告-发票
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF03"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRN03"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRH03"));
+                    // 活动报告-邮件截图
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF04"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRN04"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRH04"));
+                    // 活动报告-ppt
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRF15"));//活动计划PPT
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRN11"));
+                    marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MRH11"));
+
                     foreach (MarketActionPic marketActionPic in marketActionPicList)
                     {
                         ExpenseAccountFile expenseAccountFile = new ExpenseAccountFile();
                         expenseAccountFile.ExpenseAccountId = expenseAccount.ExpenseAccountId;
                         expenseAccountFile.SeqNO = 0;
                         expenseAccountFile.FileName = marketActionPic.PicName;
-                        if (marketActionPic.PicType == "MPF01")
+                        if (marketActionPic.PicType == "MPF01" || marketActionPic.PicType == "MPN01" || marketActionPic.PicType == "MPH01")
                         {
                             expenseAccountFile.FileTypeCode = "1";
                         }
-                        else if (marketActionPic.PicType == "MPF13")
+                        if (marketActionPic.PicType == "MPF01-1" || marketActionPic.PicType == "MPN02" || marketActionPic.PicType == "MPH02")
+                        {
+                            expenseAccountFile.FileTypeCode = "2";
+                        }
+                        else if (marketActionPic.PicType == "MPF13" || marketActionPic.PicType == "MPN11" || marketActionPic.PicType == "MPH11")
                         {
                             expenseAccountFile.FileTypeCode = "7";
                         }
-                        else if (marketActionPic.PicType == "MRF01") {
+                        else if (marketActionPic.PicType == "MRF01" || marketActionPic.PicType == "MRN01" || marketActionPic.PicType == "MRH01")
+                        {
                             expenseAccountFile.FileTypeCode = "3";
                         }
-                        else if (marketActionPic.PicType == "MRF02")
+                        else if (marketActionPic.PicType == "MRF02" || marketActionPic.PicType == "MRN02" || marketActionPic.PicType == "MRH02")
                         {
                             expenseAccountFile.FileTypeCode = "4";
                         }
-                        else if (marketActionPic.PicType == "MRF03")
+                        else if (marketActionPic.PicType == "MRF03" || marketActionPic.PicType == "MRN03" || marketActionPic.PicType == "MRH03")
                         {
                             expenseAccountFile.FileTypeCode = "5";
                         }
-                        else if (marketActionPic.PicType == "MRF04")
+                        else if (marketActionPic.PicType == "MRF04" || marketActionPic.PicType == "MRN04" || marketActionPic.PicType == "MRH04")
                         {
                             expenseAccountFile.FileTypeCode = "9";
                         }
-                        else if (marketActionPic.PicType == "MRF15")
+                        else if (marketActionPic.PicType == "MRF15" || marketActionPic.PicType == "MRN11" || marketActionPic.PicType == "MRH11")
                         {
                             expenseAccountFile.FileTypeCode = "8";
                         }
@@ -1328,7 +1359,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         dmfService.ExpenseAccountFileSave(expenseAccountFile);
                     }
                 }
-                
+
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(expenseAccount) };
             }
             catch (Exception ex)
