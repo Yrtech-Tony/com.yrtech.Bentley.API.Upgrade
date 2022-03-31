@@ -351,6 +351,8 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.Vehide_Model = marketActionBefore4Weeks.Vehide_Model;
                 findOne.Vehide_Qty = marketActionBefore4Weeks.Vehide_Qty;
                 findOne.Vehide_Usage = marketActionBefore4Weeks.Vehide_Usage;
+                findOne.Platform_ExposureForm = marketActionBefore4Weeks.Platform_ExposureForm;
+                findOne.Platform_Media = marketActionBefore4Weeks.Platform_Media;
                 findOne.KeyVisionApprovalCode = marketActionBefore4Weeks.KeyVisionApprovalCode;
                 findOne.KeyVisionApprovalDesc = marketActionBefore4Weeks.KeyVisionApprovalDesc;
                 findOne.KeyVisionDesc = marketActionBefore4Weeks.KeyVisionDesc;
@@ -641,6 +643,8 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.People_OthersCount = marketActionAfter7.People_OthersCount;
                 findOne.People_ParticipantsCount = marketActionAfter7.People_ParticipantsCount;
                 findOne.ProcessPercent = marketActionAfter7.ProcessPercent;
+                findOne.Platform_Media = marketActionAfter7.Platform_Media;
+                findOne.Platform_ExposuerForm = marketActionAfter7.Platform_ExposuerForm;
             }
 
             db.SaveChanges();
