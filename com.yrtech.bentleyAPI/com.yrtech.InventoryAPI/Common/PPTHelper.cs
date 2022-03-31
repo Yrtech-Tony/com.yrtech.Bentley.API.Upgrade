@@ -217,10 +217,10 @@ namespace com.yrtech.InventoryAPI.Common
     public class PicturePPTObject
     {
         List<string> paths;
-        float x = 15;
-        float y = 90;
-        float width = 770;
-        float height = 320;
+        float x = 50;
+        float y = 95;
+        float width = 860;
+        float height = 400;
         int rows;
         int cols;
 
