@@ -568,11 +568,11 @@ namespace com.yrtech.InventoryAPI.Service
                                                     new SqlParameter("@FileType", fileType)};
             Type t = typeof(ExpenseAccountFile);
             string sql = "";
-            sql = @"SELECT A.*  FROM dbo.ExpenseAccountFile A WHERE 1=1";
-            if (!string.IsNullOrEmpty(expenseAccountId))
-            {
-                sql += " AND ExpenseAccountId = @ExpenseAccountId";
-            }
+            sql = @"SELECT A.*  FROM dbo.ExpenseAccountFile A WHERE 1=1 AND ExpenseAccountId = @ExpenseAccountId";
+            //if (!string.IsNullOrEmpty(expenseAccountId))
+            //{
+            //    sql += " AND ExpenseAccountId = @ExpenseAccountId";
+            //}
             if (!string.IsNullOrEmpty(seqNO))
             {
                 sql += " AND SeqNO = @SeqNO";
