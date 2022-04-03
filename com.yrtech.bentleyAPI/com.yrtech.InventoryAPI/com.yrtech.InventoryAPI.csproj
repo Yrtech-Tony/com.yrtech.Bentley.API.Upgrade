@@ -292,10 +292,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="template\2022 Dealer Coop fund event plan template-线下.pptx" />
-    <Content Include="template\2022 Dealer Coop fund event report template-线下.pptx" />
+    <Content Include="template\2022 Dealer Coop fund event plan template-under.pptx" />
+    <Content Include="template\2022 Dealer Coop fund event report template-under.pptx" />
     <Content Include="template\2022 Dealer Coop fund event plan template-handover ceremony.pptx" />
     <Content Include="template\2022 Dealer Coop fund event report template-handover ceremony.pptx" />
+    <Content Include="template\2022 Dealer coop fund application-online event plan template.pptx" />
+    <Content Include="template\2022 Dealer coop fund application-online event report template.pptx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
