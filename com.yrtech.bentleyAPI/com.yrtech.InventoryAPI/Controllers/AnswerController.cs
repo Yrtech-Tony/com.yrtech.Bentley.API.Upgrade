@@ -8,6 +8,7 @@ using com.yrtech.InventoryAPI.Controllers;
 using com.yrtech.InventoryAPI.DTO;
 using com.yrtech.bentley.DAL;
 using System.Web.Configuration;
+using System.IO;
 
 namespace com.yrtech.SurveyAPI.Controllers
 {
@@ -282,6 +283,69 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("MarketAction/CreatePPT")]
+        public APIResult CreatePPT(string userId, string id, string type)
+        {
+            PPTService service = new PPTService();
+            string path = "";
+            string picType = "";
+            switch (type)
+            {
+                case "MPF":
+                    path = service.GetActionPlanPPT(id);
+                    picType = "MPF13";
+                    break;
+                case "MPN":
+                    path = service.GetActionReportPPT(id);
+                    picType = "MPN11";
+                    break;
+                case "MRF":
+                    path = service.GetActionReportPPT(id);
+                    picType = "MRF15";
+                    break;
+                case "MRN":
+                    path = service.GetActionReportPPT(id);
+                    picType = "MRN11";
+                    break;
+                case "MPH":
+                    path = service.GetHandOverPlatPPT(id);
+                    picType = "MPH11";
+                    break;
+                case "MRH":
+                    path = service.GetHandOverReportPPT(id);
+                    picType = "MPH11";
+                    break;
+                default:
+                    path = service.GetActionPlanPPT(id);
+                    picType = "MPF13";
+                    break;
+            }
+            if (!string.IsNullOrEmpty(path))
+            {
+                string fileName = Path.GetFileName(path);
+                Stream stream = new FileStream(path, FileMode.Open);
+                string ossFile = @"Bentley/" + WebConfigurationManager.AppSettings["Year"] + @"/MarketAction/" + fileName;
+
+                OSSClientHelper.UploadOSSFile(ossFile, stream, stream.Length);
+                MarketActionService actionService = new MarketActionService();
+                MarketActionPic marketActionPic = new MarketActionPic()
+                {
+                    MarketActionId = Convert.ToInt32(id),
+                    InUserId = Convert.ToInt32(userId),
+                    PicDesc = fileName,
+                    PicName = fileName,
+                    PicPath = ossFile,
+                    PicType = picType,
+                };
+                actionService.MarketActionPicSave(marketActionPic);
+                return APIResult.OK(CommonHelper.Encode(new { FilePath = ossFile }));
+            }
+
+            return APIResult.ERROR(CommonHelper.Encode(new { }));
+        }
+
         #region Before4Weeks
         [HttpGet]
         [Route("MarketAction/MarketActionBefore4WeeksSearch")]

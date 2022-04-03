@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <select id="typeSelect">
+        <option value="MPF">线下活动计划PPT</option>
+        <option value="MPN">线上活动计划PPT</option>
+        <option value="MRF">线下活动报告PPT</option>
+        <option value="MRN">线上活动报告PPT</option>
+        <option value="MPH">交车仪式活动计划PPT</option>
+        <option value="MRH">交车仪式活动报告PPT</option>
+    </select>
+    <input type="text" id="actionId" style="height: 20px; line-height: 20px; padding: 10px 5px; font-size: 14px" value="2779" />
+    <input type="button" onclick="createPPT()" value="createPPT" style="height: 30px; line-height: 30px;font-size:14px" />
+    <div id="result" style="font-size:14px;font-weight:800"></div>
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script>
+        function createPPT() {
+            $.get("bentley/api/MarketAction/CreatePPT", { userId: 1, id: $('#actionId').val(), type: $('#typeSelect').val() }, function (data) {
+                $("#result").html(JSON.stringify(data))
+            });
+        }
+    </script>
+</body>
+</html>

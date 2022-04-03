@@ -248,6 +248,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="HtmlPage1.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -293,6 +294,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="template\2022 Dealer Coop fund event plan template-线下.pptx" />
     <Content Include="template\2022 Dealer Coop fund event report template-线下.pptx" />
+    <Content Include="template\2022 Dealer Coop fund event plan template-handover ceremony.pptx" />
+    <Content Include="template\2022 Dealer Coop fund event report template-handover ceremony.pptx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

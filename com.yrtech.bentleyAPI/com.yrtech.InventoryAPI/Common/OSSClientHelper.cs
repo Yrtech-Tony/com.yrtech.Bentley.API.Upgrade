@@ -15,7 +15,7 @@ namespace com.yrtech.InventoryAPI.Common
         protected const string accessKey = "QeEoL0ERxEOUaReCxZhMKY5oFjLFuV";
         protected const string endpoin = "http://oss-cn-beijing.aliyuncs.com";
         protected const string bucket = "yrsurvey";
-
+        public const string OSS_BASE_URL = "http://yrsurvey.oss-cn-beijing.aliyuncs.com/";
         public static bool UploadOSSFile(string key, Stream fileStream,long length)
         {
             try
