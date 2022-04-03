@@ -27,6 +27,8 @@ namespace com.yrtech.bentley.DAL
         public Nullable<int> People_ActualDepositorCount { get; set; }
         public Nullable<int> People_ActualPotentialCount { get; set; }
         public Nullable<int> People_OthersCount { get; set; }
+        public string Platform_Media { get; set; }
+        public string Platform_ExposuerForm { get; set; }
         public Nullable<decimal> TotalBudgetAmt { get; set; }
         public Nullable<decimal> CoopFundSumAmt { get; set; }
         public Nullable<decimal> ProcessPercent { get; set; }
