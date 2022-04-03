@@ -29,6 +29,8 @@ namespace com.yrtech.bentley.DAL
         public string Vehide_Usage { get; set; }
         public string Vehide_Model { get; set; }
         public Nullable<int> Vehide_Qty { get; set; }
+        public string Platform_Media { get; set; }
+        public string Platform_ExposureForm { get; set; }
         public Nullable<decimal> TotalBudgetAmt { get; set; }
         public Nullable<decimal> CoopFundSumAmt { get; set; }
         public string KeyVisionPic { get; set; }

@@ -27,31 +27,31 @@ namespace com.yrtech.bentley.DAL
     
         public virtual DbSet<Area> Area { get; set; }
         public virtual DbSet<CommitFile> CommitFile { get; set; }
+        public virtual DbSet<CoopFundType> CoopFundType { get; set; }
         public virtual DbSet<DMFDetail> DMFDetail { get; set; }
         public virtual DbSet<DMFItem> DMFItem { get; set; }
+        public virtual DbSet<DTTApprove> DTTApprove { get; set; }
         public virtual DbSet<EventType> EventType { get; set; }
         public virtual DbSet<ExpenseAccount> ExpenseAccount { get; set; }
         public virtual DbSet<ExpenseAccountFile> ExpenseAccountFile { get; set; }
         public virtual DbSet<HiddenCode> HiddenCode { get; set; }
         public virtual DbSet<MarketAction> MarketAction { get; set; }
         public virtual DbSet<MarketActionAfter2LeadsReport> MarketActionAfter2LeadsReport { get; set; }
+        public virtual DbSet<MarketActionAfter7> MarketActionAfter7 { get; set; }
+        public virtual DbSet<MarketActionAfter7ActualExpense> MarketActionAfter7ActualExpense { get; set; }
         public virtual DbSet<MarketActionAfter7ActualProcess> MarketActionAfter7ActualProcess { get; set; }
+        public virtual DbSet<MarketActionAfter7CoopFund> MarketActionAfter7CoopFund { get; set; }
+        public virtual DbSet<MarketActionAfter7HandOverArrangement> MarketActionAfter7HandOverArrangement { get; set; }
+        public virtual DbSet<MarketActionBefore4Weeks> MarketActionBefore4Weeks { get; set; }
         public virtual DbSet<MarketActionBefore4WeeksActivityProcess> MarketActionBefore4WeeksActivityProcess { get; set; }
+        public virtual DbSet<MarketActionBefore4WeeksCoopFund> MarketActionBefore4WeeksCoopFund { get; set; }
+        public virtual DbSet<MarketActionBefore4WeeksHandOverArrangement> MarketActionBefore4WeeksHandOverArrangement { get; set; }
+        public virtual DbSet<MarketActionPic> MarketActionPic { get; set; }
         public virtual DbSet<MonthSale> MonthSale { get; set; }
+        public virtual DbSet<ProgressSetting> ProgressSetting { get; set; }
         public virtual DbSet<RoleType> RoleType { get; set; }
         public virtual DbSet<Shop> Shop { get; set; }
         public virtual DbSet<ShopCommitFileRecord> ShopCommitFileRecord { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
-        public virtual DbSet<MarketActionAfter7ActualExpense> MarketActionAfter7ActualExpense { get; set; }
-        public virtual DbSet<DTTApprove> DTTApprove { get; set; }
-        public virtual DbSet<MarketActionAfter7CoopFund> MarketActionAfter7CoopFund { get; set; }
-        public virtual DbSet<MarketActionBefore4WeeksCoopFund> MarketActionBefore4WeeksCoopFund { get; set; }
-        public virtual DbSet<ProgressSetting> ProgressSetting { get; set; }
-        public virtual DbSet<MarketActionAfter7> MarketActionAfter7 { get; set; }
-        public virtual DbSet<MarketActionBefore4Weeks> MarketActionBefore4Weeks { get; set; }
-        public virtual DbSet<MarketActionPic> MarketActionPic { get; set; }
-        public virtual DbSet<CoopFundType> CoopFundType { get; set; }
-        public virtual DbSet<MarketActionAfter7HandOverArrangement> MarketActionAfter7HandOverArrangement { get; set; }
-        public virtual DbSet<MarketActionBefore4WeeksHandOverArrangement> MarketActionBefore4WeeksHandOverArrangement { get; set; }
     }
 }

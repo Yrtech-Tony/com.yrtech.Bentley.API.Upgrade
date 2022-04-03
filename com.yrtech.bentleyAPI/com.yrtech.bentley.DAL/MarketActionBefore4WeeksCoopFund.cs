@@ -20,6 +20,10 @@ namespace com.yrtech.bentley.DAL
         public Nullable<decimal> CoopFundAmt { get; set; }
         public Nullable<bool> CoopFund_DMFChk { get; set; }
         public string CoopFundDesc { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<int> TotalDays { get; set; }
+        public Nullable<decimal> AmtPerDay { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> ModifyDateTime { get; set; }
