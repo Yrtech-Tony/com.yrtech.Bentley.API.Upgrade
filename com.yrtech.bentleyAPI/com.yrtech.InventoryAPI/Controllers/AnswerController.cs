@@ -23,6 +23,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         DMFService dmfService = new DMFService();
         ExcelDataService excelDataService = new ExcelDataService();
         ApproveService approveService = new ApproveService();
+        PPTService service = new PPTService();
 
         #region CommitFile
         [HttpGet]
@@ -283,67 +284,87 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("MarketAction/MarketActionPicSearch")]
+        public APIResult MarketActionPicSearch(string marketActionId, string picType)
+        {
+            try
+            {
+                List<MarketActionPic> marketActionPicList = marketActionService.MarketActionPicSearch(marketActionId,picType);
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionPicList) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
 
+        }
         [HttpGet]
         [Route("MarketAction/CreatePPT")]
-        public APIResult CreatePPT(string userId, string id, string type)
+        public APIResult CreatePPT(string marketActionId, string type,string userId)
         {
-            PPTService service = new PPTService();
-            string path = "";
-            string picType = "";
-            switch (type)
-            {
-                case "MPF":
-                    path = service.GetActionPlanPPT(id);
-                    picType = "MPF13";
-                    break;
-                case "MPN":
-                    path = service.GetActionReportPPT(id);
-                    picType = "MPN11";
-                    break;
-                case "MRF":
-                    path = service.GetActionReportPPT(id);
-                    picType = "MRF15";
-                    break;
-                case "MRN":
-                    path = service.GetActionReportPPT(id);
-                    picType = "MRN11";
-                    break;
-                case "MPH":
-                    path = service.GetHandOverPlatPPT(id);
-                    picType = "MPH11";
-                    break;
-                case "MRH":
-                    path = service.GetHandOverReportPPT(id);
-                    picType = "MPH11";
-                    break;
-                default:
-                    path = service.GetActionPlanPPT(id);
-                    picType = "MPF13";
-                    break;
-            }
-            if (!string.IsNullOrEmpty(path))
-            {
-                string fileName = Path.GetFileName(path);
-                Stream stream = new FileStream(path, FileMode.Open);
-                string ossFile = @"Bentley/" + WebConfigurationManager.AppSettings["Year"] + @"/MarketAction/" + fileName;
 
-                OSSClientHelper.UploadOSSFile(ossFile, stream, stream.Length);
-                MarketActionService actionService = new MarketActionService();
-                MarketActionPic marketActionPic = new MarketActionPic()
+            try
+            {
+                string path = "";
+                string picType = "";
+                switch (type)
                 {
-                    MarketActionId = Convert.ToInt32(id),
-                    InUserId = Convert.ToInt32(userId),
-                    PicDesc = fileName,
-                    PicName = fileName,
-                    PicPath = ossFile,
-                    PicType = picType,
-                };
-                actionService.MarketActionPicSave(marketActionPic);
-                return APIResult.OK(CommonHelper.Encode(new { FilePath = ossFile }));
-            }
+                    case "MPF":
+                        path = service.GetActionPlanPPT(marketActionId);
+                        picType = "MPF13";
+                        break;
+                    case "MPN":
+                        path = service.GetActionReportPPT(marketActionId);
+                        picType = "MPN11";
+                        break;
+                    case "MRF":
+                        path = service.GetActionReportPPT(marketActionId);
+                        picType = "MRF15";
+                        break;
+                    case "MRN":
+                        path = service.GetActionReportPPT(marketActionId);
+                        picType = "MRN11";
+                        break;
+                    case "MPH":
+                        path = service.GetHandOverPlatPPT(marketActionId);
+                        picType = "MPH11";
+                        break;
+                    case "MRH":
+                        path = service.GetHandOverReportPPT(marketActionId);
+                        picType = "MPH11";
+                        break;
+                    default:
+                        path = service.GetActionPlanPPT(marketActionId);
+                        picType = "MPF13";
+                        break;
+                }
+                if (!string.IsNullOrEmpty(path))
+                {
+                    string fileName = Path.GetFileName(path);
+                    Stream stream = new FileStream(path, FileMode.Open);
+                    string ossFile = @"Bentley/" + WebConfigurationManager.AppSettings["Year"] + @"/MarketAction/" + fileName;
 
-            return APIResult.ERROR(CommonHelper.Encode(new { }));
+                    OSSClientHelper.UploadOSSFile(ossFile, stream, stream.Length);
+                    MarketActionService actionService = new MarketActionService();
+                    MarketActionPic marketActionPic = new MarketActionPic()
+                    {
+                        MarketActionId = Convert.ToInt32(marketActionId),
+                        InUserId = Convert.ToInt32(userId),
+                        PicDesc = fileName,
+                        PicName = fileName,
+                        PicPath = ossFile,
+                        PicType = picType,
+                    };
+                    actionService.MarketActionPicSave(marketActionPic);
+                   
+                }
+                return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
         }
 
         #region Before4Weeks
@@ -359,8 +380,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
                 if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
                 {
-                    // 如果活动模式为线下活动，预算的总金额=市场基金的合计
-                    marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, marketActionBefore4WeeksList[0].TotalBudgetAmt);
+                    marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                     marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks = marketActionBefore4WeeksList[0];
                 }
                 marketActionBefore4WeeksMainDto.ActivityProcess = marketActionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
@@ -383,26 +403,6 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 MarketActionBefore4WeeksMainDto marketActionBefore4WeeksMainDto = CommonHelper.DecodeString<MarketActionBefore4WeeksMainDto>(upload.ListJson);
-                // 更新主推车型
-                List<MarketActionDto> marketActionList = marketActionService.MarketActionSearchById(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
-                foreach (MarketActionDto marketDto in marketActionList)
-                {
-                    MarketAction market = new MarketAction();
-                    market.ActionCode = marketDto.ActionCode;
-                    market.ActionName = marketDto.ActionName;
-                    market.ActionPlace = marketDto.ActionPlace;
-                    market.ActivityBudget = marketDto.ActivityBudget;
-                    market.EndDate = marketDto.EndDate;
-                    market.EventTypeId = marketDto.EventTypeId;
-                    market.ExpectLeadsCount = marketDto.ExpectLeadsCount;
-                    market.ExpenseAccount = marketDto.ExpenseAccount;
-                    market.MarketActionId = marketDto.MarketActionId;
-                    market.MarketActionStatusCode = marketDto.MarketActionStatusCode;
-                    market.MarketActionTargetModelCode = marketActionBefore4WeeksMainDto.TarketModelCode;//更新主推车型
-                    market.ShopId = marketDto.ShopId;
-                    market.StartDate = marketDto.StartDate;
-                    marketActionService.MarketActionSave(market);
-                }
                 marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic = UploadBase64Pic("", marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic);
                 marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks);
                 // 先全部删除活动流程，然后统一再保存
@@ -414,7 +414,8 @@ namespace com.yrtech.SurveyAPI.Controllers
                         marketActionService.MarketActionBefore4WeeksActivityProcessSave(process);
                     }
                 }
-                // 先全部删除市场基金申请，然后统一再保存
+                // 先全部删除市场基金申请，然后统一再保存,同时计算预算合计
+                
                 marketActionService.MarketActionBefore4WeeksCoopFundDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
                 if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund.Count > 0)
                 {
@@ -455,6 +456,27 @@ namespace com.yrtech.SurveyAPI.Controllers
                     {
                         marketActionService.MarketActionPicSave(marketActionPic);
                     }
+                }
+                // 更新主推车型和活动预算
+                List<MarketActionDto> marketActionList = marketActionService.MarketActionSearchById(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
+                foreach (MarketActionDto marketDto in marketActionList)
+                {
+                    MarketAction market = new MarketAction();
+                    market.ActionCode = marketDto.ActionCode;
+                    market.ActionName = marketDto.ActionName;
+                    market.ActionPlace = marketDto.ActionPlace;
+                    market.ActivityBudget = marketDto.ActivityBudget;
+                    market.EndDate = marketDto.EndDate;
+                    market.EventTypeId = marketDto.EventTypeId;
+                    market.ExpectLeadsCount = marketDto.ExpectLeadsCount;
+                    market.ExpenseAccount = marketDto.ExpenseAccount;
+                    market.MarketActionId = marketDto.MarketActionId;
+                    market.MarketActionStatusCode = marketDto.MarketActionStatusCode;
+                    market.MarketActionTargetModelCode = marketActionBefore4WeeksMainDto.TarketModelCode;//更新主推车型
+                    market.ActivityBudget = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketDto.MarketActionId.ToString());
+                    market.ShopId = marketDto.ShopId;
+                    market.StartDate = marketDto.StartDate;
+                    marketActionService.MarketActionSave(market);
                 }
                 return new APIResult() { Status = true, Body = "" };
             }
@@ -782,25 +804,15 @@ namespace com.yrtech.SurveyAPI.Controllers
                 MarketActionAfter7MainDto marketActionAfter7MainDto = new MarketActionAfter7MainDto();
                 // 活动报告填写信息
                 List<MarketActionAfter7> marketActionAfter7List = marketActionService.MarketActionAfter7Search(marketActionId);
-                // 活动计划查询信息，用于显示从活动计划关联过来的信息
-                List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
-                if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
-                {
-                    marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, marketActionBefore4WeeksList[0].TotalBudgetAmt);
-                    marketActionAfter7MainDto.MarketActionBefore4Weeks = marketActionBefore4WeeksList[0];
-                }
+                
                 if (marketActionAfter7List != null && marketActionAfter7List.Count > 0)
                 {
+                    marketActionAfter7List[0].TotalBudgetAmt = marketActionService.MarketActionAfter7TotalBudgetAmt(marketActionId.ToString());
                     marketActionAfter7MainDto.MarketActionAfter7 = marketActionAfter7List[0];
                 }
                 marketActionAfter7MainDto.ActualProcess = marketActionService.MarketActionAfter7ActualProcessSearch(marketActionId);
                 marketActionAfter7MainDto.MarketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSearch(marketActionId);
                 marketActionAfter7MainDto.MarketActionAfter7HandOverArrangement = marketActionService.MarketActionAfter7HandOverArrangementSearch(marketActionId);
-                //List<MarketActionLeadsCountDto> marketActionLeadsCountList = marketActionService.MarketActionLeadsCountSearch(marketActionId);
-                //if (marketActionLeadsCountList != null && marketActionLeadsCountList.Count > 0)
-                //{
-                //    marketActionAfter7MainDto.LeadsCount = marketActionLeadsCountList[0];
-                //}
                 marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId, "MRF");
                 marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine = marketActionService.MarketActionPicSearch(marketActionId, "MRN");
                 marketActionAfter7MainDto.MarketActionAfter7PicList_HandOver = marketActionService.MarketActionPicSearch(marketActionId, "MRH");

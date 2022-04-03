@@ -76,7 +76,7 @@ namespace com.yrtech.InventoryAPI.Service
 			                      WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7 AND EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId) 
                                   WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7 AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
-                                  THEN '0.00'
+                                  THEN '0.00 '
 			                      ELSE 'UnCommit'
 	                        END AS 	After7Days	
 	                       
@@ -356,7 +356,7 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.KeyVisionApprovalCode = marketActionBefore4Weeks.KeyVisionApprovalCode;
                 findOne.KeyVisionApprovalDesc = marketActionBefore4Weeks.KeyVisionApprovalDesc;
                 findOne.KeyVisionDesc = marketActionBefore4Weeks.KeyVisionDesc;
-                if (marketActionBefore4Weeks.KeyVisionPic!="https://yrsurvey.oss-cn-beijing.aliyuncs.com/Bentley/fail2.png")
+                if (marketActionBefore4Weeks.KeyVisionPic != "https://yrsurvey.oss-cn-beijing.aliyuncs.com/Bentley/fail2.png")
                     findOne.KeyVisionPic = marketActionBefore4Weeks.KeyVisionPic;
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = marketActionBefore4Weeks.ModifyUserId;
@@ -479,20 +479,14 @@ namespace com.yrtech.InventoryAPI.Service
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
-        // 线下模式时活动预算合计的计算
-        public decimal? MarketActionBefore4WeeksTotalBudgetAmt(string marketActionId,decimal? totalBudgetAmt)
+        // 活动预算合计的计算
+        public decimal? MarketActionBefore4WeeksTotalBudgetAmt(string marketActionId)
         {
-            totalBudgetAmt = totalBudgetAmt == null ? 0 : totalBudgetAmt;
+            decimal? totalBudgetAmt = 0;
             List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = MarketActionBefore4WeeksCoopFundSearch(marketActionId);
-            // 查询当前活动的活动模式
-            List<MarketActionDto> marketActionList = MarketActionSearchById(marketActionId);
-            // 如果活动模式为线下活动，预算的总金额=市场基金的合计
-            if (marketActionList != null && marketActionList[0].EventModeId == 2 )
+            foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
             {
-                foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
-                {
-                    totalBudgetAmt += marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0: marketActionBefore4WeeksCoopFund.CoopFundAmt;
-                }
+                totalBudgetAmt += marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0 : marketActionBefore4WeeksCoopFund.CoopFundAmt;
             }
             return totalBudgetAmt;
         }
@@ -767,6 +761,17 @@ namespace com.yrtech.InventoryAPI.Service
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
+        // 活动预算合计的计算
+        public decimal? MarketActionAfter7TotalBudgetAmt(string marketActionId)
+        {
+            decimal? totalBudgetAmt = 0;
+            List<MarketActionAfter7CoopFund> marketActionAfter7CoopFundList = MarketActionAfter7CoopFundSearch(marketActionId);
+            foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7CoopFundList)
+            {
+                totalBudgetAmt += marketActionAfter7CoopFund.CoopFundAmt == null ? 0 : marketActionAfter7CoopFund.CoopFundAmt;
+            }
+            return totalBudgetAmt;
+        }
         public List<MarketActionAfter7HandOverArrangement> MarketActionAfter7HandOverArrangementSearch(string marketActionId)
         {
             if (marketActionId == null) marketActionId = "";
@@ -843,7 +848,8 @@ namespace com.yrtech.InventoryAPI.Service
             {
                 sql += " AND A.EventTypeId = 99 ";
             }
-            else {
+            else
+            {
                 sql += " AND A.EventTypeId <> 99 ";
             }
             if (roleTypeShop != null && roleTypeShop.Count > 0)

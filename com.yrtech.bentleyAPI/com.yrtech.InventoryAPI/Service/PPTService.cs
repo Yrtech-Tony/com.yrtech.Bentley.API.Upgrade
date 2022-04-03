@@ -55,7 +55,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 2);
@@ -324,7 +324,7 @@ Catering 餐饮
             List<MarketActionAfter7> actionAfter7 = actionService.MarketActionAfter7Search(marketActionId);
             if (actionAfter7.Count > 0)
             {
-                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, actionAfter7[0].TotalBudgetAmt);
+                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 6);
@@ -342,7 +342,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 6);
@@ -637,7 +637,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 2);
@@ -848,7 +848,7 @@ Catering 餐饮
             List<MarketActionAfter7> actionAfter7 = actionService.MarketActionAfter7Search(marketActionId);
             if (actionAfter7.Count > 0)
             {
-                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, actionAfter7[0].TotalBudgetAmt);
+                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide fourSlide = helper.GetSlide(4);
                 Shape table1 = helper.GetShape(fourSlide, 6);
@@ -866,7 +866,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide fourSlide = helper.GetSlide(4);
                 Shape table1 = helper.GetShape(fourSlide, 6);
