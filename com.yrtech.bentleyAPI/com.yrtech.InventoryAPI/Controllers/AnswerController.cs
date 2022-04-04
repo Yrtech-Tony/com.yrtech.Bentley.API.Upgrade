@@ -315,7 +315,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         picType = "MPF13";
                         break;
                     case "MPN":
-                        path = service.GetActionReportPPT(marketActionId);
+                        path = service.GetActionPlanOnlinePPT(marketActionId);                       
                         picType = "MPN11";
                         break;
                     case "MRF":
@@ -323,7 +323,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         picType = "MRF15";
                         break;
                     case "MRN":
-                        path = service.GetActionReportPPT(marketActionId);
+                        path = service.GetActionReportOnlinePPT(marketActionId);
                         picType = "MRN11";
                         break;
                     case "MPH":

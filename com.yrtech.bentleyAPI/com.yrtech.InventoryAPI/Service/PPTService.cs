@@ -27,6 +27,8 @@ Catering 餐饮
         string[] ActionReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Performance", "MC", "Hospitality", "Catering", "Others" };
         string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
         string[] HandOverReportUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "Catering_Drink" };
+        string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
+        string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
 
         /// <summary>
         /// 生成活动计划PPT
@@ -59,7 +61,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 2);
@@ -88,7 +90,7 @@ Catering 餐饮
                 helper.SaveTableCell(table3, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table3, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
-            
+
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
             if (before4WeeksCoopFund.Count > 0)
             {
@@ -118,10 +120,12 @@ Catering 餐饮
                     int index = MPF02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(4), pic);
 
             }
+            //场地选择理由 TODO
+
 
             //第5页 Venue 场地简介 内部照片  平面图
             List<MarketActionPic> MPF03Pics = actionService.MarketActionPicSearch(marketActionId, "MPF03");
@@ -135,7 +139,7 @@ Catering 餐饮
                     int index = MPF03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
 
             }
@@ -150,11 +154,11 @@ Catering 餐饮
                     int index = MPF04Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
-            
+
             // 第6页 Brand Representation – KV 活动主视觉或背板设计 
             if (before4Weeks.Count > 0)
             {
@@ -176,7 +180,7 @@ Catering 餐饮
                     int index = MPF05Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             List<MarketActionPic> MPF06Pics = actionService.MarketActionPicSearch(marketActionId, "MPF06");
@@ -190,10 +194,10 @@ Catering 餐饮
                     int index = MPF06Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
-            }                      
+            }
 
             //第8页 Performance 表演
             List<MarketActionPic> MPF07Pics = actionService.MarketActionPicSearch(marketActionId, "MPF07");
@@ -207,7 +211,7 @@ Catering 餐饮
                     int index = MPF07Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
             List<MarketActionPic> MPF08Pics = actionService.MarketActionPicSearch(marketActionId, "MPF08");
@@ -221,8 +225,8 @@ Catering 餐饮
                     int index = MPF08Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
 
@@ -238,7 +242,7 @@ Catering 餐饮
                     int index = MPF09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
             List<MarketActionPic> MPF10Pics = actionService.MarketActionPicSearch(marketActionId, "MPF10");
@@ -252,8 +256,8 @@ Catering 餐饮
                     int index = MPF10Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
 
@@ -269,7 +273,7 @@ Catering 餐饮
                     int index = MPF11Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
             List<MarketActionPic> MPF12Pics = actionService.MarketActionPicSearch(marketActionId, "MPF12");
@@ -283,8 +287,8 @@ Catering 餐饮
                     int index = MPF12Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
             //第11页 活动流程
@@ -341,7 +345,7 @@ Catering 餐饮
             List<MarketActionAfter7> actionAfter7 = actionService.MarketActionAfter7Search(marketActionId);
             if (actionAfter7.Count > 0)
             {
-                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, actionAfter7[0].TotalBudgetAmt);
+                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 6);
@@ -354,7 +358,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 6);
@@ -371,34 +375,34 @@ Catering 餐饮
                 helper.SaveTableCell(table2, 2, 5, IntNullabelToString(before4Weeks[0].People_InvitationOtherCount));
 
             }
+            
             //第3页 线索报告
-            List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "2022");
+            List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
             {
                 //绑定线索报告
-                Slide fiveSlide = helper.GetSlide(5);
-                Shape table2 = helper.GetShape(fiveSlide, 2);
+                Slide fiveSlide = helper.GetSlide(3);
+                Shape table2 = helper.GetShape(fiveSlide, 5);
                 after2LeadsReport.ForEach(item =>
                 {
                     int index = after2LeadsReport.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
                     helper.SaveTableCell(table2, row, 2, item.TelNO);
-                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString( item.TestDriverCheck));
+                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString(item.TestDriverCheck));
                     helper.SaveTableCell(table2, row, 4, item.InterestedModelName);
                     helper.SaveTableCell(table2, row, 5, BoolNullabelToString(item.DealCheck));
                     helper.SaveTableCell(table2, row, 6, item.DealCheckName);
                 });
             }
-           
-
+            
             //第4页 Event Budget 费用总览 
             //Spending Overview 费用总计 实际
             if (actionAfter7.Count > 0)
             {
                 //Event Budget 费用总览
-                Slide fourSlide = helper.GetSlide(4);
-                Shape table2 = helper.GetShape(fourSlide, 5);
+                Slide slide = helper.GetSlide(4);
+                Shape table2 = helper.GetShape(slide, 5);
                 helper.SaveTableCell(table2, 2, 2, DecimalNullabelToString(actionAfter7[0].TotalBudgetAmt));
                 helper.SaveTableCell(table2, 3, 2, DecimalNullabelToString(actionAfter7[0].CoopFundSumAmt));
             }
@@ -406,8 +410,8 @@ Catering 餐饮
             if (before4Weeks.Count > 0)
             {
                 //Event Budget 费用总览
-                Slide fourSlide = helper.GetSlide(4);
-                Shape table2 = helper.GetShape(fourSlide, 5);
+                Slide slide = helper.GetSlide(4);
+                Shape table2 = helper.GetShape(slide, 5);
                 helper.SaveTableCell(table2, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table2, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
@@ -415,8 +419,8 @@ Catering 餐饮
             if (after7CoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情 Actual Cost
-                Slide fourSlide = helper.GetSlide(4);
-                Shape table1 = helper.GetShape(fourSlide, 6);
+                Slide slide = helper.GetSlide(4);
+                Shape table1 = helper.GetShape(slide, 6);
                 after7CoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
@@ -430,8 +434,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情  Plan Budget预算列
-                Slide sixSlide = helper.GetSlide(6);
-                Shape table1 = helper.GetShape(sixSlide, 6);
+                Slide slide = helper.GetSlide(4);
+                Shape table1 = helper.GetShape(slide, 6);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
@@ -468,7 +472,7 @@ Catering 餐饮
                     int index = MRF05Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(6), pic);
             }
             List<MarketActionPic> MRF06Pics = actionService.MarketActionPicSearch(marketActionId, "MRF06");
@@ -482,8 +486,8 @@ Catering 餐饮
                     int index = MRF06Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(6), pic);
             }
 
@@ -499,7 +503,6 @@ Catering 餐饮
                     int index = MRF08Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             //第8页 Brand Representation – KV 活动主视觉或背板设计
@@ -522,7 +525,7 @@ Catering 餐饮
                     int index = MRF09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
 
@@ -538,7 +541,7 @@ Catering 餐饮
                     int index = MRF10Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
 
@@ -553,8 +556,8 @@ Catering 餐饮
                     int index = MRF11Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
 
@@ -570,7 +573,7 @@ Catering 餐饮
                     int index = MRF12Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(11), pic);
             }
             List<MarketActionPic> MRF13Pics = actionService.MarketActionPicSearch(marketActionId, "MRF13");
@@ -584,8 +587,8 @@ Catering 餐饮
                     int index = MRF13Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(11), pic);
             }
 
@@ -601,7 +604,7 @@ Catering 餐饮
                     int index = MRF14Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(12), pic);
             }
 
@@ -617,7 +620,7 @@ Catering 餐饮
                     int index = MRF02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 250;
 
                 helper.AddPictureToSlide(helper.GetSlide(13), pic);
             }
@@ -632,10 +635,10 @@ Catering 餐饮
                     int index = MRF01Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X += 300;
+                pic.Width = 250;
+                pic.X += 290;
                 helper.AddPictureToSlide(helper.GetSlide(13), pic);
-            }            
+            }
             List<MarketActionPic> MRF03Pics = actionService.MarketActionPicSearch(marketActionId, "MRF03");
             if (MRF03Pics.Count > 0)
             {
@@ -647,8 +650,8 @@ Catering 餐饮
                     int index = MRF03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X += 600;
+                pic.Width = 250;
+                pic.X += 580;
                 helper.AddPictureToSlide(helper.GetSlide(13), pic);
             }
 
@@ -676,268 +679,331 @@ Catering 餐饮
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(1);
-                Shape shape = helper.GetShape(secSlide, 2);
+                Slide firstSlide = helper.GetSlide(1);
+                Shape shape = helper.GetShape(firstSlide, 2);
 
                 string actionName = lst[0].ActionName;
                 string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
                 string place = lst[0].ActionPlace;
                 helper.SaveTableCell(shape, 2, 2, actionName);
                 helper.SaveTableCell(shape, 3, 2, date);
-                helper.SaveTableCell(shape, 3, 5, place);
+                helper.SaveTableCell(shape, 3, 4, place);
 
             }
-
+            //第1页 活动总览 Overview
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 2);
-                helper.SaveTableCell(table1, 4, 3, IntNullabelToString(before4Weeks[0].People_ParticipantsCount));
-                helper.SaveTableCell(table1, 5, 3, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
-                helper.SaveTableCell(table1, 6, 3, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
-                helper.SaveTableCell(table1, 7, 3, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
+                Slide firstSlide = helper.GetSlide(1);
+                Shape table1 = helper.GetShape(firstSlide, 2);
+                helper.SaveTableCell(table1, 4, 3, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
+                helper.SaveTableCell(table1, 5, 3, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
+                helper.SaveTableCell(table1, 6, 3, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
 
-                helper.SaveTableCell(table1, 4, 6, before4Weeks[0].Vehide_Usage);
-                helper.SaveTableCell(table1, 6, 6, before4Weeks[0].Vehide_Model);
-                helper.SaveTableCell(table1, 7, 6, IntNullabelToString(before4Weeks[0].Vehide_Qty));
-
-                Shape table2 = helper.GetShape(secSlide, 5);
-                helper.SaveTableCell(table2, 2, 1, IntNullabelToString(before4Weeks[0].People_InvitationTotalCount));
-                helper.SaveTableCell(table2, 2, 2, IntNullabelToString(before4Weeks[0].People_InvitationCarOwnerCount));
-                helper.SaveTableCell(table2, 2, 3, IntNullabelToString(before4Weeks[0].People_InvitationDepositorCount));
-                helper.SaveTableCell(table2, 2, 4, IntNullabelToString(before4Weeks[0].People_InvitationPotentialCount));
-                helper.SaveTableCell(table2, 2, 5, IntNullabelToString(before4Weeks[0].People_InvitationOtherCount));
+                Shape table2 = helper.GetShape(firstSlide, 7);
+                helper.SaveTableCell(table1, 2, 2, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
+                helper.SaveTableCell(table1, 2, 4, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
 
             }
-            //第3页 Event Budget 费用总览
-            if (before4Weeks.Count > 0)
-            {
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table3 = helper.GetShape(thirdSlide, 2);
-                helper.SaveTableCell(table3, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
-                helper.SaveTableCell(table3, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
-            }
-
+            //第1页 Event Budget 费用总览
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
             if (before4WeeksCoopFund.Count > 0)
             {
-                //Event Budget 费用总览 Budget Detail 费用详情
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table3 = helper.GetShape(thirdSlide, 2);
+                
+                Slide firstSlide = helper.GetSlide(1);
+                Shape table3 = helper.GetShape(firstSlide, 8);
                 before4WeeksCoopFund.ForEach(item =>
                 {
-                    int index = Array.IndexOf(ActionPlanUnderBudgetTypes, item.CoopFundCode);
-                    int row = 7 + index / 2;
-                    int col = 3 + (index % 2) * 4;
-                    helper.SaveTableCell(table3, row, col, DecimalNullabelToString(item.CoopFundAmt));
-                    helper.SaveTableCell(table3, row, col + 1, BoolNullabelToString(item.CoopFund_DMFChk));
-                    helper.SaveTableCell(table3, row, col + 2, item.CoopFundDesc);
+                    int index = Array.IndexOf(ActionPlanOnlineBudgetTypes, item.CoopFundCode);
+                    int row = 3 + index;
+                    helper.SaveTableCell(table3, row, 2, DecimalNullabelToString(item.CoopFundAmt));
+                    helper.SaveTableCell(table3, row, 3, BoolNullabelToString(item.CoopFund_DMFChk));
+                    helper.SaveTableCell(table3, row, 4, DateTimeToString(item.StartDate));
+                    helper.SaveTableCell(table3, row, 5, DateTimeToString(item.EndDate));
+                    helper.SaveTableCell(table3, row, 6, IntNullabelToString(item.TotalDays));
+                    helper.SaveTableCell(table3, row, 7, DecimalNullabelToString(item.AmtPerDay));
                 });
             }
 
-            //第4页 Venue 场地简介
-            List<MarketActionPic> MPF02Pics = actionService.MarketActionPicSearch(marketActionId, "MPF02");
-            if (MPF02Pics.Count > 0)
+            //第2页  Platform 平台简介
+            List<MarketActionPic> MPN03Pics = actionService.MarketActionPicSearch(marketActionId, "MPN03");
+            if (MPN03Pics.Count > 0)
             {
-                //绑定场地实景照片
+                //绑定媒体平台截图
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MPF02Pics.ForEach(item =>
+                MPN03Pics.ForEach(item =>
                 {
-                    int index = MPF02Pics.IndexOf(item);
+                    int index = MPN03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
+                helper.AddPictureToSlide(helper.GetSlide(2), pic);
+
+            }
+            //媒体平台选择理由
+
+            //第3页  品牌曝光
+            List<MarketActionPic> MPN04Pics = actionService.MarketActionPicSearch(marketActionId, "MPN04");
+            if (MPN04Pics.Count > 0)
+            {
+                //绑定
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MPN04Pics.ForEach(item =>
+                {
+                    int index = MPN04Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
+                helper.AddPictureToSlide(helper.GetSlide(3), pic);
+
+            }
+
+            //第4页  物料设计
+            List<MarketActionPic> MPN05Pics = actionService.MarketActionPicSearch(marketActionId, "MPN05");
+            if (MPN05Pics.Count > 0)
+            {
+                //绑定物料设计
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MPN05Pics.ForEach(item =>
+                {
+                    int index = MPN05Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
                 helper.AddPictureToSlide(helper.GetSlide(4), pic);
-
             }
 
-            //第5页 Venue 场地简介 内部照片  平面图
-            List<MarketActionPic> MPF03Pics = actionService.MarketActionPicSearch(marketActionId, "MPF03");
-            if (MPF03Pics.Count > 0)
+            //第5页 媒体投放示例
+            List<MarketActionPic> MPN06Pics = actionService.MarketActionPicSearch(marketActionId, "MPN06");
+            if (MPN06Pics.Count > 0)
             {
-                //绑定场地内部照片
+                //绑定媒体投放示例
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MPF03Pics.ForEach(item =>
+                MPN06Pics.ForEach(item =>
                 {
-                    int index = MPF03Pics.IndexOf(item);
+                    int index = MPN06Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
-
-            }
-            List<MarketActionPic> MPF04Pics = actionService.MarketActionPicSearch(marketActionId, "MPF04");
-            if (MPF04Pics.Count > 0)
-            {
-                //绑定场地使用计划 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF04Pics.ForEach(item =>
-                {
-                    int index = MPF04Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
-                helper.AddPictureToSlide(helper.GetSlide(5), pic);
-            }
-
-            // 第6页 Brand Representation – KV 活动主视觉或背板设计 
-            if (before4Weeks.Count > 0)
-            {
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
-                helper.AddPictureToSlide(helper.GetSlide(6), pic);
-            }
-
-            //第7页 Event Setup 场地布置
-            List<MarketActionPic> MPF05Pics = actionService.MarketActionPicSearch(marketActionId, "MPF05");
-            if (MPF05Pics.Count > 0)
-            {
-                //绑定场地搭建方案 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF05Pics.ForEach(item =>
-                {
-                    int index = MPF05Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                helper.AddPictureToSlide(helper.GetSlide(7), pic);
-            }
-            List<MarketActionPic> MPF06Pics = actionService.MarketActionPicSearch(marketActionId, "MPF06");
-            if (MPF06Pics.Count > 0)
-            {
-                //绑定场地效果图 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF06Pics.ForEach(item =>
-                {
-                    int index = MPF06Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
-                helper.AddPictureToSlide(helper.GetSlide(7), pic);
-            }
-
-            //第8页 Performance 表演
-            List<MarketActionPic> MPF07Pics = actionService.MarketActionPicSearch(marketActionId, "MPF07");
-            if (MPF07Pics.Count > 0)
-            {
-                //绑定表演计划 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF07Pics.ForEach(item =>
-                {
-                    int index = MPF07Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                helper.AddPictureToSlide(helper.GetSlide(8), pic);
-            }
-            List<MarketActionPic> MPF08Pics = actionService.MarketActionPicSearch(marketActionId, "MPF08");
-            if (MPF08Pics.Count > 0)
-            {
-                //绑定表演方案 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF08Pics.ForEach(item =>
-                {
-                    int index = MPF08Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
-                helper.AddPictureToSlide(helper.GetSlide(8), pic);
-            }
-
-            //第9页 Photography 摄影摄像
-            List<MarketActionPic> MPF09Pics = actionService.MarketActionPicSearch(marketActionId, "MPF09");
-            if (MPF09Pics.Count > 0)
-            {
-                //绑定摄影师介绍 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF09Pics.ForEach(item =>
-                {
-                    int index = MPF09Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
-            }
-            List<MarketActionPic> MPF10Pics = actionService.MarketActionPicSearch(marketActionId, "MPF10");
-            if (MPF10Pics.Count > 0)
-            {
-                //绑定摄影师作品 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF10Pics.ForEach(item =>
-                {
-                    int index = MPF10Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
-            }
-
-            //第10页 Hospitality 礼仪 others其他
-            List<MarketActionPic> MPF11Pics = actionService.MarketActionPicSearch(marketActionId, "MPF11");
-            if (MPF11Pics.Count > 0)
-            {
-                //绑定礼仪 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF11Pics.ForEach(item =>
-                {
-                    int index = MPF11Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
-            }
-            List<MarketActionPic> MPF12Pics = actionService.MarketActionPicSearch(marketActionId, "MPF12");
-            if (MPF12Pics.Count > 0)
-            {
-                //绑定其他 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF12Pics.ForEach(item =>
-                {
-                    int index = MPF12Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
-            }
-            //第11页 活动流程
-            List<MarketActionBefore4WeeksActivityProcess> before4WeeksActivitys = actionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
-            if (before4WeeksActivitys.Count > 0)
-            {
-                //绑定活动流程
-                Slide elevenSlide = helper.GetSlide(11);
-                Shape table2 = helper.GetShape(elevenSlide, 2);
-                before4WeeksActivitys.ForEach(item =>
-                {
-                    int index = before4WeeksActivitys.IndexOf(item);
-                    int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTime);
-                    helper.SaveTableCell(table2, row, 2, item.Contents);
-                    helper.SaveTableCell(table2, row, 3, item.Responsible);
-                });
-            }
+            }           
 
             string dirPath = basePath + @"\Temp\";
             string path = dirPath + "活动计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            helper.SaveAs(path); //保存ppt
+
+            return path;
+        }
+
+        /// <summary>
+        /// 生成线上活动报告PPT
+        /// </summary>
+        /// <param name="marketActionId"></param>
+        /// <returns></returns>
+        public string GetActionReportOnlinePPT(string marketActionId)
+        {
+            string basePath = HostingEnvironment.MapPath(@"~/");
+            PPTHelper helper = new PPTHelper();
+            helper.Open(basePath + @"template\2022 Dealer coop fund application-online event report template.pptx");
+
+            MarketActionService actionService = new MarketActionService();
+
+            //第1页 活动总览 Overview
+            List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst.Count > 0)
+            {
+                Slide firstSlide = helper.GetSlide(1);
+                Shape shape = helper.GetShape(firstSlide, 6);
+
+                string actionName = lst[0].ActionName;              
+                helper.SaveTableCell(shape, 2, 3, actionName);
+            }                      
+           
+            //第1页 活动总览 Overview
+            List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
+            if (before4Weeks.Count > 0)
+            {
+                Slide firstSlide = helper.GetSlide(1);
+                Shape shape = helper.GetShape(firstSlide, 6);
+                helper.SaveTableCell(shape, 3, 3, before4Weeks[0].Platform_Media);
+                helper.SaveTableCell(shape, 4, 3, before4Weeks[0].Platform_ExposureForm);
+            }
+
+            if (before4Weeks.Count > 0)
+            {
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
+                //活动总览 Overview
+                Slide firstSlide = helper.GetSlide(1);
+                Shape table1 = helper.GetShape(firstSlide, 6);
+                helper.SaveTableCell(table1, 6, 5, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
+                helper.SaveTableCell(table1, 7, 5, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
+                helper.SaveTableCell(table1, 8, 5, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));                
+            }
+ 
+            List<MarketActionAfter7> actionAfter7 = actionService.MarketActionAfter7Search(marketActionId);
+            if (actionAfter7.Count > 0)
+            {
+                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
+                //活动总览 Overview
+                Slide firstSlide = helper.GetSlide(1);
+                Shape table1 = helper.GetShape(firstSlide, 6);
+                helper.SaveTableCell(table1, 6, 4, IntNullabelToString(actionAfter7[0].People_DCPIDCount));
+                helper.SaveTableCell(table1, 7, 4, GetCostPerLead(actionAfter7[0].TotalBudgetAmt, actionAfter7[0].People_NewLeadsThsYearCount));
+                helper.SaveTableCell(table1, 8, 4, IntNullabelToString(actionAfter7[0].People_NewLeadsThsYearCount)); 
+            }          
+
+            //第2页 Event Budget 费用总览
+            if (before4Weeks.Count > 0)
+            {
+                Slide secSlide = helper.GetSlide(2);
+                Shape table1 = helper.GetShape(secSlide, 5);
+                helper.SaveTableCell(table1, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
+                helper.SaveTableCell(table1, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
+            }
+            if (actionAfter7.Count > 0)
+            {
+                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
+                Slide secSlide = helper.GetSlide(2);
+                Shape table1 = helper.GetShape(secSlide, 5);
+                helper.SaveTableCell(table1, 2, 2, DecimalNullabelToString(actionAfter7[0].TotalBudgetAmt));
+                helper.SaveTableCell(table1, 3, 2, DecimalNullabelToString(actionAfter7[0].CoopFundSumAmt));
+            }
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            if (before4WeeksCoopFund.Count > 0)
+            {
+
+                Slide secSlide = helper.GetSlide(2);
+                Shape table1 = helper.GetShape(secSlide, 6);
+                before4WeeksCoopFund.ForEach(item =>
+                {
+                    int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
+                    int row = 3 + index;
+                    helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));
+                    helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
+                    helper.SaveTableCell(table1, row, 5, DateTimeToString(item.StartDate));
+                    helper.SaveTableCell(table1, row, 6, DateTimeToString(item.EndDate));
+                    helper.SaveTableCell(table1, row, 7, IntNullabelToString(item.TotalDays));
+                    helper.SaveTableCell(table1, row, 9, DecimalNullabelToString(item.AmtPerDay));
+                });
+            }
+            List<MarketActionAfter7CoopFund> after7CoopFunds = actionService.MarketActionAfter7CoopFundSearch(marketActionId);
+            if (after7CoopFunds.Count > 0)
+            {
+                Slide secSlide = helper.GetSlide(2);
+                Shape table1 = helper.GetShape(secSlide, 6);
+                after7CoopFunds.ForEach(item =>
+                {
+                    int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
+                    int row = 3 + index;
+                    helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
+                });
+            }
+
+
+            //第3页 线索报告
+            List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "2022");
+            if (after2LeadsReport.Count > 0)
+            {
+                //绑定线索报告
+                Slide fiveSlide = helper.GetSlide(5);
+                Shape table2 = helper.GetShape(fiveSlide, 2);
+                after2LeadsReport.ForEach(item =>
+                {
+                    int index = after2LeadsReport.IndexOf(item);
+                    int row = 2 + index;
+                    helper.SaveTableCell(table2, row, 1, item.CustomerName);
+                    helper.SaveTableCell(table2, row, 2, item.TelNO);
+                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString(item.TestDriverCheck));
+                    helper.SaveTableCell(table2, row, 4, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 5, BoolNullabelToString(item.DealCheck));
+                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                });
+            }
+
+
+            //第4页 实际投放截图
+            List<MarketActionPic> MRN05Pics = actionService.MarketActionPicSearch(marketActionId, "MRN05");
+            if (MRN05Pics.Count > 0)
+            {
+                //实际投放截图 开始
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MRN05Pics.ForEach(item =>
+                {
+                    int index = MRN05Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
+                pic.Width = 400;
+                helper.AddPictureToSlide(helper.GetSlide(4), pic);
+            }
+            List<MarketActionPic> MRN06Pics = actionService.MarketActionPicSearch(marketActionId, "MRN06");
+            if (MRN06Pics.Count > 0)
+            {
+                //实际投放截图 结束
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MRN06Pics.ForEach(item =>
+                {
+                    int index = MRN06Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
+                pic.Width = 400;
+                pic.X += 400;
+                helper.AddPictureToSlide(helper.GetSlide(4), pic);
+            }
+             
+ 
+            //5页  Reimbursement Materials 报销材料
+            List<MarketActionPic> MRF02Pics = actionService.MarketActionPicSearch(marketActionId, "MRF02");
+            if (MRF02Pics.Count > 0)
+            {
+                //绑定合同照片
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MRF02Pics.ForEach(item =>
+                {
+                    int index = MRF02Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
+                pic.Width = 250;
+                helper.AddPictureToSlide(helper.GetSlide(5), pic);
+            }
+            List<MarketActionPic> MRF01Pics = actionService.MarketActionPicSearch(marketActionId, "MRF01");
+            if (MRF01Pics.Count > 0)
+            {
+                //绑定报价单照片
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MRF01Pics.ForEach(item =>
+                {
+                    int index = MRF01Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
+                pic.Width = 250;
+                pic.X += 300;
+                helper.AddPictureToSlide(helper.GetSlide(5), pic);
+            }
+            List<MarketActionPic> MRF03Pics = actionService.MarketActionPicSearch(marketActionId, "MRF03");
+            if (MRF03Pics.Count > 0)
+            {
+                //绑定发票照片
+                PicturePPTObject pic = new PicturePPTObject();
+                pic.Paths = new List<string>();
+                MRF03Pics.ForEach(item =>
+                {
+                    int index = MRF03Pics.IndexOf(item);
+                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+                });
+                pic.Width = 250;
+                pic.X += 600;
+                helper.AddPictureToSlide(helper.GetSlide(5), pic);
+            }
+
+            string dirPath = basePath + @"\Temp\";
+            string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -975,7 +1041,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 2);
@@ -1051,7 +1117,7 @@ Catering 餐饮
                     int index = MPF02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
 
             }
@@ -1068,7 +1134,7 @@ Catering 餐饮
                     int index = MPF03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
 
             }
@@ -1084,8 +1150,8 @@ Catering 餐饮
                     int index = MPF04Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
 
@@ -1112,7 +1178,7 @@ Catering 餐饮
                     int index = MPH06Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             List<MarketActionPic> MPH07Pics = actionService.MarketActionPicSearch(marketActionId, "MPH07");
@@ -1126,8 +1192,8 @@ Catering 餐饮
                     int index = MPH07Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             // 第8页 Photography 摄影摄像
@@ -1142,7 +1208,7 @@ Catering 餐饮
                     int index = MPH08Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
             List<MarketActionPic> MPH09Pics = actionService.MarketActionPicSearch(marketActionId, "MPH09");
@@ -1156,8 +1222,8 @@ Catering 餐饮
                     int index = MPH09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
 
@@ -1199,7 +1265,7 @@ Catering 餐饮
             List<MarketActionAfter7> actionAfter7 = actionService.MarketActionAfter7Search(marketActionId);
             if (actionAfter7.Count > 0)
             {
-                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, actionAfter7[0].TotalBudgetAmt);
+                actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 6);
@@ -1213,7 +1279,7 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId, before4Weeks[0].TotalBudgetAmt);
+                before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview 计划
                 Slide secSlide = helper.GetSlide(2);
                 Shape table1 = helper.GetShape(secSlide, 6);
@@ -1320,7 +1386,7 @@ Catering 餐饮
                     int index = MRF05Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
             List<MarketActionPic> MRF06Pics = actionService.MarketActionPicSearch(marketActionId, "MRF06");
@@ -1334,8 +1400,8 @@ Catering 餐饮
                     int index = MRF06Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
-                pic.X = pic.X + 400;
+                pic.Width = 400;
+                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
 
@@ -1351,7 +1417,7 @@ Catering 餐饮
                     int index = MRF08Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(6), pic);
             }
             //ppt 第7页
@@ -1375,7 +1441,7 @@ Catering 餐饮
                     int index = MRF09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
 
@@ -1391,7 +1457,7 @@ Catering 餐饮
                     int index = MRF13Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(19), pic);
             }
 
@@ -1407,7 +1473,7 @@ Catering 餐饮
                     int index = MRF02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
 
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
 
@@ -1424,7 +1490,7 @@ Catering 餐饮
                     int index = MRF01Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 pic.X += 300;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
@@ -1441,7 +1507,7 @@ Catering 餐饮
                     int index = MRF03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 350;
+                pic.Width = 400;
                 pic.X += 600;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
