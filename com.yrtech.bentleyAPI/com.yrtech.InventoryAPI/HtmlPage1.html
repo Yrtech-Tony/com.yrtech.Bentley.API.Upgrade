@@ -19,7 +19,7 @@
     <script src="Scripts/jquery-1.10.2.js"></script>
     <script>
         function createPPT() {
-            $.get("bentley/api/MarketAction/CreatePPT", { userId: 1, id: $('#actionId').val(), type: $('#typeSelect').val() }, function (data) {
+            $.get("bentley/api/MarketAction/CreatePPT", { marketActionId: $('#actionId').val(), type: $('#typeSelect').val(), userId: 1 }, function (data) {
                 $("#result").html(JSON.stringify(data))
             });
         }

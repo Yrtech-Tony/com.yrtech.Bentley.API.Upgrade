@@ -22,7 +22,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string TestDriverCheckName { get; set; }//显示是否
         public Nullable<bool> LeadsCheck { get; set; }//是否为线索
         public string LeadsCheckName { get; set; }//显示是否
-        public string InterestedModel { get; set; } // 刚兴趣车型代码
+        public string InterestedModel { get; set; } // 感兴趣车型代码
         public string InterestedModelName { get; set; }// 感兴趣车型名称
         public string InterestedModelNameEn { get; set; }// 感兴趣车型名称
         public Nullable<bool> DealCheck { get; set; }//是否成交

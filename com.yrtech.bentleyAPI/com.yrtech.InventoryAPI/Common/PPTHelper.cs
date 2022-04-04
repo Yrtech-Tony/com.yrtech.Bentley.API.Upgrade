@@ -218,9 +218,9 @@ namespace com.yrtech.InventoryAPI.Common
     {
         List<string> paths;
         float x = 50;
-        float y = 95;
+        float y = 135;
         float width = 860;
-        float height = 400;
+        float height = 380;
         int rows;
         int cols;
 
