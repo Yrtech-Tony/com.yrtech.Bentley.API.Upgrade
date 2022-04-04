@@ -366,7 +366,7 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+                return new APIResult() { Status = false, Body = ex.ToString() };
             }
         }
         #region Before4Weeks
