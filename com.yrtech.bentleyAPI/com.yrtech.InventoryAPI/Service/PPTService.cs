@@ -39,7 +39,7 @@ Catering 餐饮
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
             PPTHelper helper = new PPTHelper();
-            helper.Open(basePath + @"template\2022 Dealer Coop fund event plan template-under.pptx");
+            helper.Open(basePath + @"template\PlanOffLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
 
@@ -323,7 +323,7 @@ Catering 餐饮
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
             PPTHelper helper = new PPTHelper();
-            helper.Open(basePath + @"template\2022 Dealer Coop fund event report template-under.pptx");
+            helper.Open(basePath + @"template\ReportOffLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
 
@@ -671,7 +671,7 @@ Catering 餐饮
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
             PPTHelper helper = new PPTHelper();
-            helper.Open(basePath + @"template\2022 Dealer coop fund application-online event plan template.pptx");
+            helper.Open(basePath + @"template\PlanOnLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
 
@@ -807,7 +807,7 @@ Catering 餐饮
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
             PPTHelper helper = new PPTHelper();
-            helper.Open(basePath + @"template\2022 Dealer coop fund application-online event report template.pptx");
+            helper.Open(basePath + @"template\ReportOnLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
 
@@ -1018,7 +1018,7 @@ Catering 餐饮
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
             PPTHelper helper = new PPTHelper();
-            helper.Open(basePath + @"template\2022 Dealer Coop fund event plan template-handover ceremony.pptx");
+            helper.Open(basePath + @"template\PlanHandOver.pptx");
 
             MarketActionService actionService = new MarketActionService();
 
@@ -1244,7 +1244,7 @@ Catering 餐饮
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
             PPTHelper helper = new PPTHelper();
-            helper.Open(basePath + @"template\2022 Dealer Coop fund event report template-handover ceremony.pptx");
+            helper.Open(basePath + @"template\ReportHandOver.pptx");
 
             MarketActionService actionService = new MarketActionService();
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
