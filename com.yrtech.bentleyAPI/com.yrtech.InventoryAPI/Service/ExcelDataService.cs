@@ -493,7 +493,7 @@ namespace com.yrtech.InventoryAPI.Service
         // UserInfo Export
         public string UserInfoExport()
         {
-            List<UserInfoDto> list = masterService.UserInfoSearch("","","","","","");
+            List<UserInfoDto> list = masterService.UserInfoSearch("","","","","","","","");
             Workbook book = Workbook.Load(basePath + @"Content\Excel\" + "UserInfo.xlsx", false);
             //填充数据
             Worksheet sheet = book.Worksheets[0];
