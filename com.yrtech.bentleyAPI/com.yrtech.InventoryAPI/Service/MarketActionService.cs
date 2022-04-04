@@ -301,13 +301,22 @@ namespace com.yrtech.InventoryAPI.Service
         }
         public void MarketActionPicDelete(string marketActionId, string picType, string seqNO)
         {
+            if (picType == null) picType = "";
+            if (seqNO == null) seqNO = "";
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId)
                                                         ,new SqlParameter("@PicType", picType)
                                                         ,new SqlParameter("@SeqNO", seqNO) };
             string sql = @"DELETE MarketActionPic WHERE MarketActionId = @MarketActionId 
-                                                            AND PicType = @PicType
-                                                            AND SeqNO = @SeqNO
                         ";
+            if (!string.IsNullOrEmpty(picType))
+            {
+                sql += @" AND PicType LIKE @PicType+'%' ";
+            }
+            if (!string.IsNullOrEmpty(seqNO))
+            {
+                sql += @" AND SeqNO = @SeqNO";
+            }
+
             db.Database.ExecuteSqlCommand(sql, para);
         }
         #endregion
@@ -870,6 +879,76 @@ namespace com.yrtech.InventoryAPI.Service
             }
             sql += " ) B";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionStatusCountDto>().ToList();
+        }
+        // 报告
+        public List<MarketActionReportCountDto> MarketActionReportCountSearch(string year, string eventTypeId, List<Shop> roleTypeShop)
+        {
+            if (year == null) year = "";
+            if (eventTypeId == null) eventTypeId = "";
+
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year) };
+            Type t = typeof(MarketActionReportCountDto);
+            string sql = "";
+            sql += @"SELECT ISNULL(SUM(PlanBugetUnCommit),0) AS PlanBugetUnCommit 
+	                       ,ISNULL(SUM(PlanCoopFundUnCommit),0) AS PlanCoopFundUnCommit
+	                       ,ISNULL(SUM(LeadsUnCommit),0) AS LeadsUnCommit
+	                       ,ISNULL(SUM(ReportBugetUnCommit),0) AS ReportBugetUnCommit
+	                       ,ISNULL(SUM(ReportCoopFundUnCommit),0) AS ReportCoopFundUnCommit
+                    FROM (
+                            SELECT 
+                            CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksCoopFund WHERE MarketActionId = A.MarketActionId )
+				                            THEN 1
+				                            ELSE 0
+			                            END AS PlanBugetUnCommit
+                            , CASE WHEN B.CoopFundSumAmt IS NULL
+				                            THEN 1
+				                            ELSE 0
+			                            END AS PlanCoopFundUnCommit
+                            , CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
+				                            THEN 1
+				                            ELSE 0
+			                            END AS LeadsUnCommit
+			                 ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter7CoopFund WHERE MarketActionId = A.MarketActionId )
+				                            THEN 1
+				                            ELSE 0
+			                            END AS ReportBugetUnCommit
+                            , CASE WHEN B.CoopFundSumAmt IS NULL
+				                            THEN 1
+				                            ELSE 0
+			                            END AS ReportCoopFundUnCommit
+                            FROM MarketAction A LEFT JOIN  MarketActionBefore4Weeks B ON  A.MarketActionId = B.MarketActionId
+												LEFT JOIN MarketActionAfter7 C  ON  A.MarketActionId = C.MarketActionId
+                            WHERE 1=1 AND A.MarketActionStatusCode<>2 AND Month(A.StartDate)=Month(GETDATE()) ";
+            if (!string.IsNullOrEmpty(year))
+            {
+                sql += " AND Year(A.StartDate) = @Year";
+            }
+            if (eventTypeId == "99")
+            {
+                sql += " AND A.EventTypeId = 99 ";
+            }
+            else
+            {
+                sql += " AND A.EventTypeId <> 99 ";
+            }
+            if (roleTypeShop != null && roleTypeShop.Count > 0)
+            {
+                sql += " AND A.ShopId IN( ";
+                foreach (Shop shop in roleTypeShop)
+                {
+                    if (roleTypeShop.IndexOf(shop) == roleTypeShop.Count - 1)
+                    {
+                        sql += shop.ShopId;
+                    }
+                    else
+                    {
+                        sql += shop.ShopId + ",";
+                    }
+                }
+                sql += ")";
+            }
+            sql += " ) B";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionReportCountDto>().ToList();
         }
 
         #endregion

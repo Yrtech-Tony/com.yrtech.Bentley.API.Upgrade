@@ -229,7 +229,7 @@ namespace com.yrtech.InventoryAPI.Service
         }
         #endregion
         #region UserInfo
-        public List<UserInfoDto> UserInfoSearch(string userId, string accountId, string accountName,string shopCode,string shopName,string email)
+        public List<UserInfoDto> UserInfoSearch(string userId, string accountId, string accountName,string shopCode,string shopName,string email,string shopId,string areaId)
         {
             if (userId == null) userId = "";
             if (accountId == null) accountId = "";
@@ -237,11 +237,16 @@ namespace com.yrtech.InventoryAPI.Service
             if (shopCode == null) shopCode = "";
             if (shopName == null) shopName = "";
             if (email == null) email = "";
+            if (shopId == null) shopId = "";
+            if (areaId == null) areaId = "";
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@UserId", userId),
                                                     new SqlParameter("@AccountId", accountId),
                                                     new SqlParameter("@AccountName", accountName),
                                                     new SqlParameter("@ShopCode", shopCode),
-                                                    new SqlParameter("@ShopName", shopName),new SqlParameter("@Email", email)};
+                                                    new SqlParameter("@ShopName", shopName),
+                                                    new SqlParameter("@Email", email),
+                                                    new SqlParameter("@ShopId", shopId),
+                                                    new SqlParameter("@AreaId", areaId)};
             Type t = typeof(UserInfoDto);
             string sql = "";
             sql = @"SELECT [UserId]
@@ -303,6 +308,14 @@ namespace com.yrtech.InventoryAPI.Service
             if (!string.IsNullOrEmpty(shopName))
             {
                 sql += " AND ShopName = @ShopName";
+            }
+            if (!string.IsNullOrEmpty(shopId))
+            {
+                sql += " AND A.ShopId = @ShopId";
+            }
+            if (!string.IsNullOrEmpty(areaId))
+            {
+                sql += " AND A.AreaId = @AreaId";
             }
             if (!string.IsNullOrEmpty(email))
             {

@@ -209,7 +209,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userId, accountId, accountName, shopCode, shopName, email);
+                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userId, accountId, accountName, shopCode, shopName, email,"","");
                 foreach (UserInfoDto userinfo in userInfoList)
                 {
                     userinfo.Password = TokenHelper.DecryptDES(userinfo.Password);
@@ -244,7 +244,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<UserInfoDto> userInfoList = masterService.UserInfoSearch("", userInfo.AccountId, "", "", "", "");
+                List<UserInfoDto> userInfoList = masterService.UserInfoSearch("", userInfo.AccountId, "", "", "", "","","");
 
                 if (userInfoList != null && userInfoList.Count != 0 && userInfoList[0].UserId != userInfo.UserId)
                 {
@@ -271,7 +271,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userInfo.UserId.ToString(), "", "", "", "", "");
+                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userInfo.UserId.ToString(), "", "", "", "", "","","");
                 if (userInfoList == null || userInfoList.Count == 0)
                 {
                     return new APIResult() { Status = false, Body = "该账号不存在，请确认账号" };
