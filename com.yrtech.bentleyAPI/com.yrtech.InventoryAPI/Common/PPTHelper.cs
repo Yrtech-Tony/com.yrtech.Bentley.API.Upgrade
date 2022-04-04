@@ -46,7 +46,7 @@ namespace com.yrtech.InventoryAPI.Common
             catch (Exception ex)
             {
                 this.objApp.Quit();
-                throw new PPTException("PPT 初始化失败;" + ex.Message);
+                throw new PPTException("PPT 初始化失败;" + ex.ToString());
             }
         }
         public POWERPOINT.Slide GetSlide(int index)

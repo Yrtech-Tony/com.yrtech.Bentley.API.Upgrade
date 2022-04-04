@@ -1100,9 +1100,9 @@ Catering 餐饮
                 {
                     int index = before4WeeksHandOvers.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, DateTimeToString(item.HandOverDate));
-                    helper.SaveTableCell(table2, row, 2, item.Model);
-                    helper.SaveTableCell(table2, row, 3, item.MainProcess);
+                    helper.SaveTableCell(table2, row, 2, DateTimeToString(item.HandOverDate));
+                    helper.SaveTableCell(table2, row, 3, item.Model);
+                    helper.SaveTableCell(table2, row, 4, item.MainProcess);
                 });
             }
 
@@ -1368,9 +1368,9 @@ Catering 餐饮
                 {
                     int index = after7HandOverArrangement.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, DateTimeToString(item.HandOverDate));
-                    helper.SaveTableCell(table2, row, 2, item.Model);
-                    helper.SaveTableCell(table2, row, 3, item.MainProcess);
+                    helper.SaveTableCell(table2, row, 2, DateTimeToString(item.HandOverDate));
+                    helper.SaveTableCell(table2, row, 3, item.Model);
+                    helper.SaveTableCell(table2, row, 4, item.MainProcess);
                 });
             }
 
