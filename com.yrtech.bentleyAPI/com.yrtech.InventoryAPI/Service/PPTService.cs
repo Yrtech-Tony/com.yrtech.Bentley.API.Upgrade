@@ -5,6 +5,7 @@ using Microsoft.Office.Interop.PowerPoint;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 namespace com.yrtech.InventoryAPI.Service
@@ -37,12 +38,19 @@ Catering 餐饮
         /// <returns></returns>
         public string GetActionPlanPPT(string marketActionId)
         {
+            CommonHelper.log("进入service");
+            Thread.Sleep(1000);
             string basePath = HostingEnvironment.MapPath(@"~/");
+            CommonHelper.log(basePath);
+            Thread.Sleep(1000);
             PPTHelper helper = new PPTHelper();
+            CommonHelper.log("初始化路径");
+            Thread.Sleep(1000);
             helper.Open(basePath + @"template\PlanOffLine.pptx");
-
+            CommonHelper.log("打开文件");
+            Thread.Sleep(1000);
             MarketActionService actionService = new MarketActionService();
-
+            
             //第二页 活动总览 Overview
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)

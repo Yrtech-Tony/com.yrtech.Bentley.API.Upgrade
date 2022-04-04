@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using POWERPOINT = Microsoft.Office.Interop.PowerPoint;
 using OFFICECORE = Microsoft.Office.Core;
+using System.Threading;
 
 namespace com.yrtech.InventoryAPI.Common
 {
@@ -37,10 +38,16 @@ namespace com.yrtech.InventoryAPI.Common
             }
             try
             {
+                CommonHelper.log("进入try");
+                Thread.Sleep(1000);
+                
                 objApp = new POWERPOINT.Application();
+                CommonHelper.log("new");
+                Thread.Sleep(1000);
                 //以非只读方式打开,方便操作结束后保存.
                 objPresSet = objApp.Presentations.Open(filePath, OFFICECORE.MsoTriState.msoFalse, OFFICECORE.MsoTriState.msoFalse, OFFICECORE.MsoTriState.msoFalse);
-
+                CommonHelper.log("打开");
+                Thread.Sleep(1000);
                 BOpenState = true;
             }
             catch (Exception ex)
