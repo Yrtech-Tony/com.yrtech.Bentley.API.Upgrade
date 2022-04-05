@@ -1,18 +1,15 @@
-﻿using System;
+﻿using Microsoft.Office.Core;
+using Microsoft.Office.Interop.PowerPoint;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using POWERPOINT = Microsoft.Office.Interop.PowerPoint;
-using OFFICECORE = Microsoft.Office.Core;
 using System.Threading;
 
 namespace com.yrtech.InventoryAPI.Common
 {
     public class PPTHelper
     {
-        POWERPOINT.Application objApp = null;
-        POWERPOINT.Presentation objPresSet = null;
+        Application objApp = null;
+        Presentation objPresSet = null;
 
         bool bOpenState = false;
         double pixperPoint = 0;
@@ -41,11 +38,11 @@ namespace com.yrtech.InventoryAPI.Common
                 CommonHelper.log("进入try");
                 Thread.Sleep(1000);
                 
-                objApp = new POWERPOINT.Application();
+                objApp = new Application();
                 CommonHelper.log("new");
                 Thread.Sleep(1000);
                 //以非只读方式打开,方便操作结束后保存.
-                objPresSet = objApp.Presentations.Open(filePath, OFFICECORE.MsoTriState.msoFalse, OFFICECORE.MsoTriState.msoFalse, OFFICECORE.MsoTriState.msoFalse);
+                objPresSet = objApp.Presentations.Open(filePath,MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
                 CommonHelper.log("打开");
                 Thread.Sleep(1000);
                 BOpenState = true;
@@ -53,10 +50,10 @@ namespace com.yrtech.InventoryAPI.Common
             catch (Exception ex)
             {
                 this.objApp.Quit();
-                throw new PPTException("PPT 初始化失败;" + ex.Message);
+                throw new PPTException("PPT 初始化失败;" + ex.ToString());
             }
         }
-        public POWERPOINT.Slide GetSlide(int index)
+        public Slide GetSlide(int index)
         {
             if (objPresSet != null)
             {
@@ -68,7 +65,7 @@ namespace com.yrtech.InventoryAPI.Common
             }
         }
 
-        public POWERPOINT.Shape GetShape(POWERPOINT.Slide slide, int index)
+        public Microsoft.Office.Interop.PowerPoint.Shape GetShape(Slide slide, int index)
         {
             if (objPresSet != null)
             {
@@ -100,24 +97,24 @@ namespace com.yrtech.InventoryAPI.Common
         /// </summary>
         /// <param name="slide">要插入图片的幻灯片</param>
         /// <param name="pic">图片信息（图片地址集合，位置，大小）  默认一行两个，需要计算</param>
-        public void AddPictureToSlide(POWERPOINT.Slide slide, PicturePPTObject pic)
+        public void AddPictureToSlide(Slide slide, PicturePPTObject pic)
         {
-            AddPictureToSlide(slide, pic, OFFICECORE.MsoTriState.msoFalse, OFFICECORE.MsoTriState.msoTrue);
+            AddPictureToSlide(slide, pic, MsoTriState.msoFalse, MsoTriState.msoTrue);
         }
         /// <summary>
         /// 对目标幻灯片指定位置插入图片 
         /// </summary>
         /// <param name="slide">要插入图片的幻灯片</param>
         /// <param name="pic">图片信息（图片地址集合，位置，大小）  默认一行两个，需要计算</param>
-        public void AddLinkPictureToSlide(POWERPOINT.Slide slide, PicturePPTObject pic)
+        public void AddLinkPictureToSlide(Slide slide, PicturePPTObject pic)
         {
-            AddPictureToSlide(slide, pic, OFFICECORE.MsoTriState.msoTrue, OFFICECORE.MsoTriState.msoFalse);
+            AddPictureToSlide(slide, pic, MsoTriState.msoTrue, MsoTriState.msoFalse);
         }
 
         /// <summary>
         /// 对目标幻灯片指定位置插入图片 
         /// </summary>
-        private void AddPictureToSlide(POWERPOINT.Slide slide, PicturePPTObject pic, OFFICECORE.MsoTriState linkToFile, OFFICECORE.MsoTriState saveWithDoc)
+        private void AddPictureToSlide(Slide slide, PicturePPTObject pic, MsoTriState linkToFile, MsoTriState saveWithDoc)
         {
             if (pic.Paths.Count == 0)
             {
@@ -167,17 +164,17 @@ namespace com.yrtech.InventoryAPI.Common
             }
 
         }
-        public void SaveTitle(POWERPOINT.Shape shape, string title)
+        public void SaveTitle(Microsoft.Office.Interop.PowerPoint.Shape shape, string title)
         {
-            if (shape.TextFrame.HasText == OFFICECORE.MsoTriState.msoTrue)
+            if (shape.TextFrame.HasText == MsoTriState.msoTrue)
             {
                 shape.TextFrame.TextRange.Text = title;
             }
         }
 
-        public void SaveTableCell(POWERPOINT.Shape shape, int row, int col, string cell)
+        public void SaveTableCell(Microsoft.Office.Interop.PowerPoint.Shape shape, int row, int col, string cell)
         {
-            if (shape.HasTable == OFFICECORE.MsoTriState.msoTrue)
+            if (shape.HasTable == MsoTriState.msoTrue)
             {
                 if (shape.Table != null)
                 {

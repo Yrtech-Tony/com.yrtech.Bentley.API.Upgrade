@@ -46,7 +46,7 @@ Catering 餐饮
             PPTHelper helper = new PPTHelper();
             CommonHelper.log("初始化路径");
             Thread.Sleep(1000);
-            helper.Open(basePath + @"template\PlanOffLine.pptx");
+            helper.Open(basePath + @"Content\Excel\PlanOffLine.pptx");
             CommonHelper.log("打开文件");
             Thread.Sleep(1000);
             MarketActionService actionService = new MarketActionService();
@@ -1108,9 +1108,9 @@ Catering 餐饮
                 {
                     int index = before4WeeksHandOvers.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, DateTimeToString(item.HandOverDate));
-                    helper.SaveTableCell(table2, row, 2, item.Model);
-                    helper.SaveTableCell(table2, row, 3, item.MainProcess);
+                    helper.SaveTableCell(table2, row, 2, DateTimeToString(item.HandOverDate));
+                    helper.SaveTableCell(table2, row, 3, item.Model);
+                    helper.SaveTableCell(table2, row, 4, item.MainProcess);
                 });
             }
 
@@ -1376,9 +1376,9 @@ Catering 餐饮
                 {
                     int index = after7HandOverArrangement.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, DateTimeToString(item.HandOverDate));
-                    helper.SaveTableCell(table2, row, 2, item.Model);
-                    helper.SaveTableCell(table2, row, 3, item.MainProcess);
+                    helper.SaveTableCell(table2, row, 2, DateTimeToString(item.HandOverDate));
+                    helper.SaveTableCell(table2, row, 3, item.Model);
+                    helper.SaveTableCell(table2, row, 4, item.MainProcess);
                 });
             }
 

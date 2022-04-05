@@ -68,10 +68,10 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -297,12 +297,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="template\2022 Dealer Coop fund event plan template-under.pptx" />
-    <Content Include="template\2022 Dealer Coop fund event report template-under.pptx" />
-    <Content Include="template\2022 Dealer Coop fund event plan template-handover ceremony.pptx" />
-    <Content Include="template\2022 Dealer Coop fund event report template-handover ceremony.pptx" />
-    <Content Include="template\2022 Dealer coop fund application-online event plan template.pptx" />
-    <Content Include="template\2022 Dealer coop fund application-online event report template.pptx" />
+    <Content Include="template\PlanHandOver.pptx" />
+    <Content Include="template\PlanOffLine.pptx" />
+    <Content Include="template\PlanOnLine.pptx" />
+    <Content Include="template\ReportHandOver.pptx" />
+    <Content Include="template\ReportOffLine.pptx" />
+    <Content Include="template\ReportOnLine.pptx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
