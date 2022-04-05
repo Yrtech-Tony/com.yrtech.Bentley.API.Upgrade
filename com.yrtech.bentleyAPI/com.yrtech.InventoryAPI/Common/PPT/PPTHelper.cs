@@ -49,8 +49,10 @@ namespace com.yrtech.InventoryAPI.Common
             }
             catch (Exception ex)
             {
-                this.objApp.Quit();
-                throw new PPTException("PPT 初始化失败;" + ex.ToString());
+                if (this.objApp != null)
+                    this.objApp.Quit();
+                CommonHelper.log("打开ppt异常；file=" + filePath + "\n  error=" + ex.ToString());
+                throw ex;
             }
         }
         public Slide GetSlide(int index)
@@ -215,65 +217,6 @@ namespace com.yrtech.InventoryAPI.Common
                 this.objApp.Quit();
 
             GC.Collect();
-        }
-    }
-
-    public class PicturePPTObject
-    {
-        List<string> paths;
-        float x = 50;
-        float y = 135;
-        float width = 860;
-        float height = 380;
-        int rows;
-        int cols;
-
-        public int Rows
-        {
-            get { return rows; }
-            set { rows = value; }
-        }
-
-        public int Cols
-        {
-            get { return cols; }
-            set { cols = value; }
-        }
-
-
-        public float X
-        {
-            set { x = value; }
-            get { return x; }
-        }
-        public float Y
-        {
-            set { y = value; }
-            get { return y; }
-        }
-        public float Width
-        {
-            set { width = value; }
-            get { return width; }
-        }
-        public float Height
-        {
-            set { height = value; }
-            get { return height; }
-        }
-        public List<string> Paths
-        {
-            set { paths = value; }
-            get { return paths; }
-        }
-
-    }
-
-    public class PPTException : Exception
-    {
-        public PPTException(string message)
-            : base(message)
-        {
         }
     }
 

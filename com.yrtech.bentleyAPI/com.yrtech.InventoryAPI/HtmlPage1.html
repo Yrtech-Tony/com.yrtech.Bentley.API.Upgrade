@@ -16,6 +16,22 @@
     <input type="text" id="actionId" style="height: 20px; line-height: 20px; padding: 10px 5px; font-size: 14px" value="2779" />
     <input type="button" onclick="createPPT()" value="createPPT" style="height: 30px; line-height: 30px;font-size:14px" />
     <div id="result" style="font-size:14px;font-weight:800"></div>
+
+    <h3>Get content</h3>
+    <p>
+        filePath:<input type="text" id="file" style="width:800px; height: 20px; line-height: 20px; padding: 10px 5px; font-size: 14px" value="D:\Deloitte\Bentley2022Upgrade\API\template\PlanOffLine.pptx" />
+
+    </p>
+    <p>
+        slide:<input type="text" id="slide" style="height: 20px; line-height: 20px; padding: 10px 5px; font-size: 14px" value="2" />
+    </p>
+    <p>
+        <input type="button" onclick="GetPPTContent()" value="GetPPTContent" style="height: 30px; line-height: 30px;font-size:14px" />
+
+    </p>
+    <p>
+        <textarea id="result2" style="font-size:14px;font-weight:800"></textarea>
+    </p>
     <script src="Scripts/jquery-1.10.2.js"></script>
     <script>
         function createPPT() {
@@ -23,6 +39,12 @@
                 $("#result").html(JSON.stringify(data))
             });
         }
+        function GetPPTContent() {
+            $.get("bentley/api/MarketAction/GetPPTContent", { file: $('#file').val(), slide: $('#slide').val() }, function (data) {
+                $("#result2").val(data.Body)
+            });
+        }
+
     </script>
 </body>
 </html>
