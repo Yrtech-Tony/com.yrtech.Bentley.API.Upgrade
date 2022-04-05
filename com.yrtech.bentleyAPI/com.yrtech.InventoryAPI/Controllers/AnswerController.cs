@@ -366,6 +366,21 @@ namespace com.yrtech.SurveyAPI.Controllers
                 return new APIResult() { Status = false, Body = ex.ToString() };
             }
         }
+
+        [HttpGet]
+        [Route("MarketAction/GetPPTContent")]
+        public APIResult GetPPTContent(string file, string slide)
+        {
+            try
+            {
+                string content = service.GetContent(file, slide);
+                return new APIResult() { Status = true, Body = content };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.ToString() };
+            }
+        }
         #region Before4Weeks
         [HttpGet]
         [Route("MarketAction/MarketActionBefore4WeeksSearch")]

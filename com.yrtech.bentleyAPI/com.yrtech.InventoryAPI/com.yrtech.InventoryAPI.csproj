@@ -48,6 +48,10 @@
     <Reference Include="Aliyun.OSS">
       <HintPath>..\packages\Aliyun.OSS.SDK.2.8.0\lib\Aliyun.OSS.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Slides, Version=15.1.0.0, Culture=neutral, PublicKeyToken=00725b1ceb58d0a9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Aspose.Slides.dll</HintPath>
+    </Reference>
     <Reference Include="DES">
       <HintPath>..\..\DES\bin\Debug\DES.dll</HintPath>
     </Reference>
@@ -67,11 +71,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="Office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -194,7 +198,10 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Common\APIResult.cs" />
     <Compile Include="Common\CommonHelper.cs" />
-    <Compile Include="Common\PPTHelper.cs" />
+    <Compile Include="Common\PPT\AsposePPTHelper.cs" />
+    <Compile Include="Common\PPT\PicturePPTObject.cs" />
+    <Compile Include="Common\PPT\PPTException.cs" />
+    <Compile Include="Common\PPT\PPTHelper.cs" />
     <Compile Include="Common\TokenHelper.cs" />
     <Compile Include="Common\OSSClientHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -249,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Aspose.Slides.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
