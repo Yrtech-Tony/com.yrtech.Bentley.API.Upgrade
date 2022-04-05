@@ -130,6 +130,7 @@ Catering 餐饮
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionPlanUnderBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 7 + index / 2;
                     int col = 3 + (index % 2) * 4;
                     helper.SaveTableCell(table3, row, col, DecimalNullabelToString(item.CoopFundAmt));
@@ -190,7 +191,7 @@ Catering 餐饮
             }
 
             // 第6页 Brand Representation – KV 活动主视觉或背板设计 
-            if (before4Weeks.Count > 0)
+            if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
@@ -454,6 +455,7 @@ Catering 餐饮
                 after7CoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 2 + index;
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
@@ -469,6 +471,7 @@ Catering 餐饮
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 2 + index;
                     helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));
                 });
@@ -536,7 +539,7 @@ Catering 餐饮
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             //第8页 Brand Representation – KV 活动主视觉或背板设计
-            if (before4Weeks.Count > 0)
+            if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
@@ -747,6 +750,7 @@ Catering 餐饮
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionPlanOnlineBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 3 + index;
                     helper.SaveTableCell(table3, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table3, row, 3, BoolNullabelToString(item.CoopFund_DMFChk));
@@ -910,6 +914,7 @@ Catering 餐饮
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 3 + index;
                     helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
@@ -927,6 +932,7 @@ Catering 餐饮
                 after7CoopFunds.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 3 + index;
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                 });
@@ -1110,6 +1116,7 @@ Catering 餐饮
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverPlanUnderBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 7 + index / 2;
                     int col = 3 + (index % 2) * 4;
                     helper.SaveTableCell(table3, row, col, DecimalNullabelToString(item.CoopFundAmt));
@@ -1186,7 +1193,7 @@ Catering 餐饮
             }
 
             // 第6页 Brand Representation – KV 活动主视觉或背板设计 
-            if (before4Weeks.Count > 0)
+            if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
                 ISlide sixSlide = helper.GetSlide(7);
                 PicturePPTObject pic = new PicturePPTObject();
@@ -1352,6 +1359,7 @@ Catering 餐饮
                 after7CoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverReportUnderBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 2 + index;
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
@@ -1367,6 +1375,7 @@ Catering 餐饮
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverReportUnderBudgetTypes, item.CoopFundCode);
+                    if (index < 0) return;
                     int row = 2 + index;
                     helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));
                 });
@@ -1451,7 +1460,7 @@ Catering 餐饮
                 helper.AddPictureToSlide(helper.GetSlide(6), pic);
             }
             //ppt 第7页
-            if (before4Weeks.Count > 0)
+            if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
                 //Brand Representation – KV 活动主视觉或背板设计  ppt 第7页
                 PicturePPTObject pic = new PicturePPTObject();
