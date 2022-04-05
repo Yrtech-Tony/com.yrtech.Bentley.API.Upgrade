@@ -55,7 +55,7 @@ Catering 餐饮
                 {
                     Aspose.Slides.AutoShape autoShape = (Aspose.Slides.AutoShape)shape;
                     content += autoShape.TextFrame.Text;
-                }               
+                }
             }
 
             return content;
@@ -72,17 +72,25 @@ Catering 餐饮
             helper.Open(basePath + @"template\PlanOffLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
-
+            string shopName = "";
+            string eventModeName = "";
+            string actionName = "";
+            string date = "";
+            string place = "";
             //第二页 活动总览 Overview
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst != null && lst.Count > 0)
+            {
+                shopName = lst[0].ShopName;
+                eventModeName = lst[0].EventModeName;
+                actionName = lst[0].ActionName;
+                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                place = lst[0].ActionPlace;
+            }
             if (lst.Count > 0)
             {
                 ISlide secSlide = helper.GetSlide(2);
                 IShape shape = helper.GetShape(secSlide, 2);
-
-                string actionName = lst[0].ActionName;
-                string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                string place = lst[0].ActionPlace;
                 helper.SaveTableCell(shape, 2, 2, actionName);
                 helper.SaveTableCell(shape, 3, 2, date);
                 helper.SaveTableCell(shape, 3, 5, place);
@@ -305,7 +313,7 @@ Catering 餐饮
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
+                helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
             List<MarketActionPic> MPF12Pics = actionService.MarketActionPicSearch(marketActionId, "MPF12");
             if (MPF12Pics.Count > 0)
@@ -320,7 +328,7 @@ Catering 餐饮
                 });
                 pic.Width = 400;
                 pic.X = pic.X + 450;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
+                helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
             //第11页 活动流程
             List<MarketActionBefore4WeeksActivityProcess> before4WeeksActivitys = actionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
@@ -340,7 +348,7 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + "活动计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString()+"-"+shopName+"-市场活动-活动计划"+eventModeName+DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -406,7 +414,7 @@ Catering 餐饮
                 helper.SaveTableCell(table2, 2, 5, IntNullabelToString(before4Weeks[0].People_InvitationOtherCount));
 
             }
-            
+
             //第3页 线索报告
             List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
@@ -426,7 +434,7 @@ Catering 餐饮
                     helper.SaveTableCell(table2, row, 6, item.DealCheckName);
                 });
             }
-            
+
             //第4页 Event Budget 费用总览 
             //Spending Overview 费用总计 实际
             if (actionAfter7.Count > 0)
@@ -744,7 +752,7 @@ Catering 餐饮
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
             if (before4WeeksCoopFund.Count > 0)
             {
-                
+
                 ISlide firstSlide = helper.GetSlide(1);
                 IShape table3 = helper.GetShape(firstSlide, 8);
                 before4WeeksCoopFund.ForEach(item =>
@@ -823,7 +831,7 @@ Catering 餐饮
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
-            }           
+            }
 
             string dirPath = basePath + @"\Temp\";
             string path = dirPath + "活动计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
@@ -852,10 +860,10 @@ Catering 餐饮
                 ISlide firstSlide = helper.GetSlide(1);
                 IShape shape = helper.GetShape(firstSlide, 6);
 
-                string actionName = lst[0].ActionName;              
+                string actionName = lst[0].ActionName;
                 helper.SaveTableCell(shape, 2, 3, actionName);
-            }                      
-           
+            }
+
             //第1页 活动总览 Overview
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
@@ -874,9 +882,9 @@ Catering 餐饮
                 IShape table1 = helper.GetShape(firstSlide, 6);
                 helper.SaveTableCell(table1, 6, 5, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 5, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
-                helper.SaveTableCell(table1, 8, 5, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));                
+                helper.SaveTableCell(table1, 8, 5, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
             }
- 
+
             List<MarketActionAfter7> actionAfter7 = actionService.MarketActionAfter7Search(marketActionId);
             if (actionAfter7.Count > 0)
             {
@@ -886,8 +894,8 @@ Catering 餐饮
                 IShape table1 = helper.GetShape(firstSlide, 6);
                 helper.SaveTableCell(table1, 6, 4, IntNullabelToString(actionAfter7[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 4, GetCostPerLead(actionAfter7[0].TotalBudgetAmt, actionAfter7[0].People_NewLeadsThsYearCount));
-                helper.SaveTableCell(table1, 8, 4, IntNullabelToString(actionAfter7[0].People_NewLeadsThsYearCount)); 
-            }          
+                helper.SaveTableCell(table1, 8, 4, IntNullabelToString(actionAfter7[0].People_NewLeadsThsYearCount));
+            }
 
             //第2页 Event Budget 费用总览
             if (before4Weeks.Count > 0)
@@ -990,8 +998,8 @@ Catering 餐饮
                 pic.X += 400;
                 helper.AddPictureToSlide(helper.GetSlide(4), pic);
             }
-             
- 
+
+
             //5页  Reimbursement Materials 报销材料
             List<MarketActionPic> MRF02Pics = actionService.MarketActionPicSearch(marketActionId, "MRF02");
             if (MRF02Pics.Count > 0)
