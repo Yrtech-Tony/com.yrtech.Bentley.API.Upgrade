@@ -129,7 +129,7 @@ namespace com.yrtech.InventoryAPI.Common
                     {
                         int index = r * pic.Cols + c;
                         if (index >= pic.Paths.Count) break;
-                        slide.Shapes.AddPictureFrame(ShapeType.Rectangle, pic.X, pic.Y, pic.Width, pic.Height, objPresSet.Images.AddImage(GetImage(pic.Paths[index])));
+                        slide.Shapes.AddPictureFrame(ShapeType.Rectangle, pic.X + c * width, pic.Y + r * height, width, height, objPresSet.Images.AddImage(GetImage(pic.Paths[index])));
                     }
                 }
             }
