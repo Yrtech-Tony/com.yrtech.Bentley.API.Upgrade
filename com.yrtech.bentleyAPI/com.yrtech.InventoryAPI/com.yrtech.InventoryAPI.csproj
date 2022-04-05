@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="Aspose.Slides, Version=15.1.0.0, Culture=neutral, PublicKeyToken=00725b1ceb58d0a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Aspose.Slides.dll</HintPath>
+      <HintPath>..\packages\Aspose.Slides.dll</HintPath>
     </Reference>
     <Reference Include="DES">
       <HintPath>..\..\DES\bin\Debug\DES.dll</HintPath>
@@ -71,12 +71,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -201,7 +195,6 @@
     <Compile Include="Common\PPT\AsposePPTHelper.cs" />
     <Compile Include="Common\PPT\PicturePPTObject.cs" />
     <Compile Include="Common\PPT\PPTException.cs" />
-    <Compile Include="Common\PPT\PPTHelper.cs" />
     <Compile Include="Common\TokenHelper.cs" />
     <Compile Include="Common\OSSClientHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />

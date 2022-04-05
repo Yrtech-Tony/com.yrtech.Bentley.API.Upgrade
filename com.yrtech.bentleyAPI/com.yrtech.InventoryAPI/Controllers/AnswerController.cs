@@ -311,7 +311,9 @@ namespace com.yrtech.SurveyAPI.Controllers
                 switch (type)
                 {
                     case "MPF":
+                        CommonHelper.log("开始调用");
                         path = service.GetActionPlanPPT(marketActionId);
+                        CommonHelper.log("调用完成"+path);
                         picType = "MPF13";
                         break;
                     case "MPN":
@@ -339,6 +341,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         picType = "MPF13";
                         break;
                 }
+               
                 if (!string.IsNullOrEmpty(path))
                 {
                     string fileName = Path.GetFileName(path);
