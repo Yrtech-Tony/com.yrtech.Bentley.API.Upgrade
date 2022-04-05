@@ -359,6 +359,8 @@ namespace com.yrtech.SurveyAPI.Controllers
                         PicPath = ossFile,
                         PicType = picType,
                     };
+                    // 插入之前先把之前的删除
+                    actionService.MarketActionPicDelete(marketActionPic.MarketActionId.ToString(), marketActionPic.PicType, "");
                     actionService.MarketActionPicSave(marketActionPic);
 
                 }
