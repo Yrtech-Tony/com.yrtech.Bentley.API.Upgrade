@@ -1362,8 +1362,8 @@ Catering 餐饮
             if (after7CoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情 Actual Cost
-                ISlide sixSlide = helper.GetSlide(4);
-                IShape table1 = helper.GetShape(sixSlide, 6);
+                ISlide slide = helper.GetSlide(3);
+                IShape table1 = helper.GetShape(slide, 6);
                 after7CoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverReportUnderBudgetTypes, item.CoopFundCode);
@@ -1378,8 +1378,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情  Plan Budget预算列
-                ISlide sixSlide = helper.GetSlide(6);
-                IShape table1 = helper.GetShape(sixSlide, 6);
+                ISlide slide = helper.GetSlide(3);
+                IShape table1 = helper.GetShape(slide, 6);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverReportUnderBudgetTypes, item.CoopFundCode);
