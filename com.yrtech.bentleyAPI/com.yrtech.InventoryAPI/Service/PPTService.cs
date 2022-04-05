@@ -348,7 +348,7 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + marketActionId.ToString()+"-"+shopName+"-市场活动-活动计划"+eventModeName+DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString()+"-"+shopName+"-市场活动-活动计划"+eventModeName+"-"+actionName+"-"+ DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -365,17 +365,26 @@ Catering 餐饮
             helper.Open(basePath + @"template\ReportOffLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
-
-            //第2页 Overview 概述
+            string shopName = "";
+            string eventModeName = "";
+            string actionName = "";
+            string date = "";
+            string place = "";
+            //第二页 活动总览 Overview
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst != null && lst.Count > 0)
+            {
+                shopName = lst[0].ShopName;
+                eventModeName = lst[0].EventModeName;
+                actionName = lst[0].ActionName;
+                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                place = lst[0].ActionPlace;
+            }
+            //第2页 Overview 概述
             if (lst.Count > 0)
             {
                 ISlide secSlide = helper.GetSlide(2);
                 IShape table1 = helper.GetShape(secSlide, 6);
-
-                string actionName = lst[0].ActionName;
-                string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                string place = lst[0].ActionPlace;
                 helper.SaveTableCell(table1, 2, 2, actionName);
                 helper.SaveTableCell(table1, 2, 5, date);
                 helper.SaveTableCell(table1, 3, 2, place);
@@ -697,7 +706,8 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            //string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动报告" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -715,17 +725,26 @@ Catering 餐饮
             helper.Open(basePath + @"template\PlanOnLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
-
-            //第1页 活动总览 Overview
+            string shopName = "";
+            string eventModeName = "";
+            string actionName = "";
+            string date = "";
+            string place = "";
+            
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst != null && lst.Count > 0)
+            {
+                shopName = lst[0].ShopName;
+                eventModeName = lst[0].EventModeName;
+                actionName = lst[0].ActionName;
+                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                place = lst[0].ActionPlace;
+            }
+    
             if (lst.Count > 0)
             {
                 ISlide firstSlide = helper.GetSlide(1);
                 IShape shape = helper.GetShape(firstSlide, 2);
-
-                string actionName = lst[0].ActionName;
-                string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                string place = lst[0].ActionPlace;
                 helper.SaveTableCell(shape, 2, 2, actionName);
                 helper.SaveTableCell(shape, 3, 2, date);
                 helper.SaveTableCell(shape, 3, 4, place);
@@ -834,7 +853,8 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + "活动计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            //string path = dirPath + "活动计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动计划" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -852,15 +872,27 @@ Catering 餐饮
             helper.Open(basePath + @"template\ReportOnLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
+            string shopName = "";
+            string eventModeName = "";
+            string actionName = "";
+            string date = "";
+            string place = "";
 
-            //第1页 活动总览 Overview
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst != null && lst.Count > 0)
+            {
+                shopName = lst[0].ShopName;
+                eventModeName = lst[0].EventModeName;
+                actionName = lst[0].ActionName;
+                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                place = lst[0].ActionPlace;
+            }
+            //第1页 活动总览 Overview
+         
             if (lst.Count > 0)
             {
                 ISlide firstSlide = helper.GetSlide(1);
                 IShape shape = helper.GetShape(firstSlide, 6);
-
-                string actionName = lst[0].ActionName;
                 helper.SaveTableCell(shape, 2, 3, actionName);
             }
 
@@ -1047,7 +1079,8 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+           // string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动计划" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -1065,17 +1098,27 @@ Catering 餐饮
             helper.Open(basePath + @"template\PlanHandOver.pptx");
 
             MarketActionService actionService = new MarketActionService();
+            string shopName = "";
+            string eventModeName = "";
+            string actionName = "";
+            string date = "";
+            string place = "";
 
-            //Overview 概述 第二页
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst != null && lst.Count > 0)
+            {
+                shopName = lst[0].ShopName;
+                eventModeName = lst[0].EventModeName;
+                actionName = lst[0].ActionName;
+                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                place = lst[0].ActionPlace;
+            }
+            //Overview 概述 第二页
             if (lst.Count > 0)
             {
                 ISlide secSlide = helper.GetSlide(2);
                 IShape table1 = helper.GetShape(secSlide, 2);
 
-                string actionName = lst[0].ActionName;
-                string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                string place = lst[0].ActionPlace;
                 helper.SaveTableCell(table1, 2, 2, actionName);
                 //helper.SaveTableCell(table1, 3, 2, date);
                 helper.SaveTableCell(table1, 3, 5, place);
@@ -1274,7 +1317,8 @@ Catering 餐饮
 
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + "交车仪式计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+           // string path = dirPath + "交车仪式计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-交车仪式-活动计划-"  + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -1292,15 +1336,26 @@ Catering 餐饮
             helper.Open(basePath + @"template\ReportHandOver.pptx");
 
             MarketActionService actionService = new MarketActionService();
+            string shopName = "";
+            string eventModeName = "";
+            string actionName = "";
+            string date = "";
+            string place = "";
+
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
+            if (lst != null && lst.Count > 0)
+            {
+                shopName = lst[0].ShopName;
+                eventModeName = lst[0].EventModeName;
+                actionName = lst[0].ActionName;
+                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                place = lst[0].ActionPlace;
+            }
+ 
             if (lst.Count > 0)
             {
                 ISlide secSlide = helper.GetSlide(2);
                 IShape table1 = helper.GetShape(secSlide, 6);
-
-                string actionName = lst[0].ActionName;
-                string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                string place = lst[0].ActionPlace;
                 helper.SaveTableCell(table1, 2, 2, actionName);
                 helper.SaveTableCell(table1, 2, 5, date);
                 helper.SaveTableCell(table1, 3, 2, place);
@@ -1561,7 +1616,8 @@ Catering 餐饮
 
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + "交车报告计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            //string path = dirPath + "交车报告计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-交车仪式-活动报告-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
