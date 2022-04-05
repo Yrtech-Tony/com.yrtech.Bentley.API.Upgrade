@@ -1246,10 +1246,11 @@ Catering 餐饮
             // 第6页 Brand Representation – KV 活动主视觉或背板设计 
             if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
-                ISlide sixSlide = helper.GetSlide(7);
+                ISlide sixSlide = helper.GetSlide(6);
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
+                pic.Y = 90;
                 helper.AddPictureToSlide(sixSlide, pic);
             }
 
