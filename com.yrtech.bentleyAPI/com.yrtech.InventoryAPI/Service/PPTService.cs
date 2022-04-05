@@ -25,8 +25,8 @@ Catering 餐饮
          * */
         string[] ActionPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality" };
         string[] ActionReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Performance", "MC", "Hospitality", "Catering", "Others" };
-        string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
-        string[] HandOverReportUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "Catering_Drink" };
+        string[] HandOverReportUnderBudgetTypes  = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
+        string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food","", "Catering_Drink","" };
         string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
         string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
 
