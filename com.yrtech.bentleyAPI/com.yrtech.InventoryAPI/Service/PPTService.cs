@@ -1,11 +1,10 @@
-﻿using com.yrtech.bentley.DAL;
+﻿using Aspose.Slides;
+using com.yrtech.bentley.DAL;
 using com.yrtech.InventoryAPI.Common;
 using com.yrtech.InventoryAPI.DTO;
-using Microsoft.Office.Interop.PowerPoint;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 namespace com.yrtech.InventoryAPI.Service
@@ -31,6 +30,36 @@ Catering 餐饮
         string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
         string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
 
+        public string GetContent(string file, string slide)
+        {
+            AsposePPTHelper helper = new AsposePPTHelper();
+            helper.Open(file);
+            ISlide thirdSlide = helper.GetSlide(int.Parse(slide));
+            string content = "";
+            for (int s = 0; s < thirdSlide.Shapes.Count; s++)
+            {
+                IShape shape = thirdSlide.Shapes[s];
+                if (shape.GetType().Name == "Table")
+                {
+                    Aspose.Slides.Table table = (Aspose.Slides.Table)shape;
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < table.Columns.Count; j++)
+                        {
+                            string cell = table[j, i].TextFrame.Text;
+                            content += string.Format("cell({0},{1}) = {2}", i + 1, j + 1, cell);
+                        }
+                    }
+                }
+                if (shape.GetType().Name == "AutoShape")
+                {
+                    Aspose.Slides.AutoShape autoShape = (Aspose.Slides.AutoShape)shape;
+                    content += autoShape.TextFrame.Text;
+                }               
+            }
+
+            return content;
+        }
         /// <summary>
         /// 生成活动计划PPT
         /// </summary>
@@ -38,25 +67,18 @@ Catering 餐饮
         /// <returns></returns>
         public string GetActionPlanPPT(string marketActionId)
         {
-            CommonHelper.log("进入service");
-            Thread.Sleep(1000);
             string basePath = HostingEnvironment.MapPath(@"~/");
-            CommonHelper.log(basePath);
-            Thread.Sleep(1000);
-            PPTHelper helper = new PPTHelper();
-            CommonHelper.log("初始化路径");
-            Thread.Sleep(1000);
-            helper.Open(basePath + @"Content\Excel\PlanOffLine.pptx");
-            CommonHelper.log("打开文件");
-            Thread.Sleep(1000);
+            AsposePPTHelper helper = new AsposePPTHelper();
+            helper.Open(basePath + @"template\PlanOffLine.pptx");
+
             MarketActionService actionService = new MarketActionService();
-            
+
             //第二页 活动总览 Overview
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(2);
-                Shape shape = helper.GetShape(secSlide, 2);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape shape = helper.GetShape(secSlide, 2);
 
                 string actionName = lst[0].ActionName;
                 string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
@@ -71,8 +93,8 @@ Catering 餐饮
             {
                 before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 2);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 2);
                 helper.SaveTableCell(table1, 4, 3, IntNullabelToString(before4Weeks[0].People_ParticipantsCount));
                 helper.SaveTableCell(table1, 5, 3, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 6, 3, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
@@ -82,7 +104,7 @@ Catering 餐饮
                 helper.SaveTableCell(table1, 6, 6, before4Weeks[0].Vehide_Model);
                 helper.SaveTableCell(table1, 7, 6, IntNullabelToString(before4Weeks[0].Vehide_Qty));
 
-                Shape table2 = helper.GetShape(secSlide, 5);
+                IShape table2 = helper.GetShape(secSlide, 5);
                 helper.SaveTableCell(table2, 2, 1, IntNullabelToString(before4Weeks[0].People_InvitationTotalCount));
                 helper.SaveTableCell(table2, 2, 2, IntNullabelToString(before4Weeks[0].People_InvitationCarOwnerCount));
                 helper.SaveTableCell(table2, 2, 3, IntNullabelToString(before4Weeks[0].People_InvitationDepositorCount));
@@ -93,8 +115,8 @@ Catering 餐饮
             //第3页 Event Budget 费用总览
             if (before4Weeks.Count > 0)
             {
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table3 = helper.GetShape(thirdSlide, 2);
+                ISlide thirdSlide = helper.GetSlide(3);
+                IShape table3 = helper.GetShape(thirdSlide, 2);
                 helper.SaveTableCell(table3, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table3, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
@@ -103,8 +125,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table3 = helper.GetShape(thirdSlide, 2);
+                ISlide thirdSlide = helper.GetSlide(3);
+                IShape table3 = helper.GetShape(thirdSlide, 2);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionPlanUnderBudgetTypes, item.CoopFundCode);
@@ -304,8 +326,8 @@ Catering 餐饮
             if (before4WeeksActivitys.Count > 0)
             {
                 //绑定活动流程
-                Slide elevenSlide = helper.GetSlide(11);
-                Shape table2 = helper.GetShape(elevenSlide, 2);
+                ISlide elevenSlide = helper.GetSlide(11);
+                IShape table2 = helper.GetShape(elevenSlide, 2);
                 before4WeeksActivitys.ForEach(item =>
                 {
                     int index = before4WeeksActivitys.IndexOf(item);
@@ -330,7 +352,7 @@ Catering 餐饮
         public string GetActionReportPPT(string marketActionId)
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
-            PPTHelper helper = new PPTHelper();
+            AsposePPTHelper helper = new AsposePPTHelper();
             helper.Open(basePath + @"template\ReportOffLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
@@ -339,8 +361,8 @@ Catering 餐饮
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
 
                 string actionName = lst[0].ActionName;
                 string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
@@ -355,8 +377,8 @@ Catering 餐饮
             {
                 actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
                 helper.SaveTableCell(table1, 5, 3, IntNullabelToString(actionAfter7[0].People_ParticipantsCount));
                 helper.SaveTableCell(table1, 6, 3, IntNullabelToString(actionAfter7[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 3, GetCostPerLead(actionAfter7[0].TotalBudgetAmt, actionAfter7[0].People_NewLeadsThsYearCount));
@@ -368,14 +390,14 @@ Catering 餐饮
             {
                 before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
                 helper.SaveTableCell(table1, 5, 5, IntNullabelToString(before4Weeks[0].People_ParticipantsCount));
                 helper.SaveTableCell(table1, 6, 5, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 5, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
                 helper.SaveTableCell(table1, 8, 5, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
 
-                Shape table2 = helper.GetShape(secSlide, 7);
+                IShape table2 = helper.GetShape(secSlide, 7);
                 helper.SaveTableCell(table2, 2, 1, IntNullabelToString(before4Weeks[0].People_InvitationTotalCount));
                 helper.SaveTableCell(table2, 2, 2, IntNullabelToString(before4Weeks[0].People_InvitationCarOwnerCount));
                 helper.SaveTableCell(table2, 2, 3, IntNullabelToString(before4Weeks[0].People_InvitationDepositorCount));
@@ -389,8 +411,8 @@ Catering 餐饮
             if (after2LeadsReport.Count > 0)
             {
                 //绑定线索报告
-                Slide fiveSlide = helper.GetSlide(3);
-                Shape table2 = helper.GetShape(fiveSlide, 5);
+                ISlide fiveSlide = helper.GetSlide(3);
+                IShape table2 = helper.GetShape(fiveSlide, 5);
                 after2LeadsReport.ForEach(item =>
                 {
                     int index = after2LeadsReport.IndexOf(item);
@@ -409,8 +431,8 @@ Catering 餐饮
             if (actionAfter7.Count > 0)
             {
                 //Event Budget 费用总览
-                Slide slide = helper.GetSlide(4);
-                Shape table2 = helper.GetShape(slide, 5);
+                ISlide slide = helper.GetSlide(4);
+                IShape table2 = helper.GetShape(slide, 5);
                 helper.SaveTableCell(table2, 2, 2, DecimalNullabelToString(actionAfter7[0].TotalBudgetAmt));
                 helper.SaveTableCell(table2, 3, 2, DecimalNullabelToString(actionAfter7[0].CoopFundSumAmt));
             }
@@ -418,8 +440,8 @@ Catering 餐饮
             if (before4Weeks.Count > 0)
             {
                 //Event Budget 费用总览
-                Slide slide = helper.GetSlide(4);
-                Shape table2 = helper.GetShape(slide, 5);
+                ISlide slide = helper.GetSlide(4);
+                IShape table2 = helper.GetShape(slide, 5);
                 helper.SaveTableCell(table2, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table2, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
@@ -427,8 +449,8 @@ Catering 餐饮
             if (after7CoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情 Actual Cost
-                Slide slide = helper.GetSlide(4);
-                Shape table1 = helper.GetShape(slide, 6);
+                ISlide slide = helper.GetSlide(4);
+                IShape table1 = helper.GetShape(slide, 6);
                 after7CoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
@@ -442,8 +464,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情  Plan Budget预算列
-                Slide slide = helper.GetSlide(4);
-                Shape table1 = helper.GetShape(slide, 6);
+                ISlide slide = helper.GetSlide(4);
+                IShape table1 = helper.GetShape(slide, 6);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
@@ -457,8 +479,8 @@ Catering 餐饮
             if (after7ActualProcess.Count > 0)
             {
                 //绑定活动流程
-                Slide fiveSlide = helper.GetSlide(5);
-                Shape table2 = helper.GetShape(fiveSlide, 2);
+                ISlide fiveSlide = helper.GetSlide(5);
+                IShape table2 = helper.GetShape(fiveSlide, 2);
                 after7ActualProcess.ForEach(item =>
                 {
                     int index = after7ActualProcess.IndexOf(item);
@@ -678,7 +700,7 @@ Catering 餐饮
         public string GetActionPlanOnlinePPT(string marketActionId)
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
-            PPTHelper helper = new PPTHelper();
+            AsposePPTHelper helper = new AsposePPTHelper();
             helper.Open(basePath + @"template\PlanOnLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
@@ -687,8 +709,8 @@ Catering 餐饮
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide firstSlide = helper.GetSlide(1);
-                Shape shape = helper.GetShape(firstSlide, 2);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape shape = helper.GetShape(firstSlide, 2);
 
                 string actionName = lst[0].ActionName;
                 string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
@@ -704,13 +726,13 @@ Catering 餐饮
             {
                 before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide firstSlide = helper.GetSlide(1);
-                Shape table1 = helper.GetShape(firstSlide, 2);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape table1 = helper.GetShape(firstSlide, 2);
                 helper.SaveTableCell(table1, 4, 3, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 5, 3, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
                 helper.SaveTableCell(table1, 6, 3, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
 
-                Shape table2 = helper.GetShape(firstSlide, 7);
+                IShape table2 = helper.GetShape(firstSlide, 7);
                 helper.SaveTableCell(table1, 2, 2, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table1, 2, 4, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
 
@@ -720,8 +742,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 
-                Slide firstSlide = helper.GetSlide(1);
-                Shape table3 = helper.GetShape(firstSlide, 8);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape table3 = helper.GetShape(firstSlide, 8);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionPlanOnlineBudgetTypes, item.CoopFundCode);
@@ -814,7 +836,7 @@ Catering 餐饮
         public string GetActionReportOnlinePPT(string marketActionId)
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
-            PPTHelper helper = new PPTHelper();
+            AsposePPTHelper helper = new AsposePPTHelper();
             helper.Open(basePath + @"template\ReportOnLine.pptx");
 
             MarketActionService actionService = new MarketActionService();
@@ -823,8 +845,8 @@ Catering 餐饮
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide firstSlide = helper.GetSlide(1);
-                Shape shape = helper.GetShape(firstSlide, 6);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape shape = helper.GetShape(firstSlide, 6);
 
                 string actionName = lst[0].ActionName;              
                 helper.SaveTableCell(shape, 2, 3, actionName);
@@ -834,8 +856,8 @@ Catering 餐饮
             List<MarketActionBefore4Weeks> before4Weeks = actionService.MarketActionBefore4WeeksSearch(marketActionId);
             if (before4Weeks.Count > 0)
             {
-                Slide firstSlide = helper.GetSlide(1);
-                Shape shape = helper.GetShape(firstSlide, 6);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape shape = helper.GetShape(firstSlide, 6);
                 helper.SaveTableCell(shape, 3, 3, before4Weeks[0].Platform_Media);
                 helper.SaveTableCell(shape, 4, 3, before4Weeks[0].Platform_ExposureForm);
             }
@@ -844,8 +866,8 @@ Catering 餐饮
             {
                 before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide firstSlide = helper.GetSlide(1);
-                Shape table1 = helper.GetShape(firstSlide, 6);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape table1 = helper.GetShape(firstSlide, 6);
                 helper.SaveTableCell(table1, 6, 5, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 5, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
                 helper.SaveTableCell(table1, 8, 5, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));                
@@ -856,8 +878,8 @@ Catering 餐饮
             {
                 actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide firstSlide = helper.GetSlide(1);
-                Shape table1 = helper.GetShape(firstSlide, 6);
+                ISlide firstSlide = helper.GetSlide(1);
+                IShape table1 = helper.GetShape(firstSlide, 6);
                 helper.SaveTableCell(table1, 6, 4, IntNullabelToString(actionAfter7[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 4, GetCostPerLead(actionAfter7[0].TotalBudgetAmt, actionAfter7[0].People_NewLeadsThsYearCount));
                 helper.SaveTableCell(table1, 8, 4, IntNullabelToString(actionAfter7[0].People_NewLeadsThsYearCount)); 
@@ -866,16 +888,16 @@ Catering 餐饮
             //第2页 Event Budget 费用总览
             if (before4Weeks.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 5);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 5);
                 helper.SaveTableCell(table1, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table1, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
             if (actionAfter7.Count > 0)
             {
                 actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 5);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 5);
                 helper.SaveTableCell(table1, 2, 2, DecimalNullabelToString(actionAfter7[0].TotalBudgetAmt));
                 helper.SaveTableCell(table1, 3, 2, DecimalNullabelToString(actionAfter7[0].CoopFundSumAmt));
             }
@@ -883,8 +905,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
 
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
@@ -900,8 +922,8 @@ Catering 餐饮
             List<MarketActionAfter7CoopFund> after7CoopFunds = actionService.MarketActionAfter7CoopFundSearch(marketActionId);
             if (after7CoopFunds.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
                 after7CoopFunds.ForEach(item =>
                 {
                     int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
@@ -916,8 +938,8 @@ Catering 餐饮
             if (after2LeadsReport.Count > 0)
             {
                 //绑定线索报告
-                Slide fiveSlide = helper.GetSlide(5);
-                Shape table2 = helper.GetShape(fiveSlide, 2);
+                ISlide fiveSlide = helper.GetSlide(5);
+                IShape table2 = helper.GetShape(fiveSlide, 2);
                 after2LeadsReport.ForEach(item =>
                 {
                     int index = after2LeadsReport.IndexOf(item);
@@ -1025,7 +1047,7 @@ Catering 餐饮
         public string GetHandOverPlatPPT(string marketActionId)
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
-            PPTHelper helper = new PPTHelper();
+            AsposePPTHelper helper = new AsposePPTHelper();
             helper.Open(basePath + @"template\PlanHandOver.pptx");
 
             MarketActionService actionService = new MarketActionService();
@@ -1034,8 +1056,8 @@ Catering 餐饮
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 2);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 2);
 
                 string actionName = lst[0].ActionName;
                 string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
@@ -1051,8 +1073,8 @@ Catering 餐饮
             {
                 before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 2);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 2);
                 helper.SaveTableCell(table1, 3, 3, IntNullabelToString(before4Weeks[0].People_ParticipantsCount));
                 helper.SaveTableCell(table1, 4, 3, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 5, 3, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
@@ -1062,7 +1084,7 @@ Catering 餐饮
                 //helper.SaveTableCell(table1, 6, 6, before4Weeks[0].Vehide_Model);
                 //helper.SaveTableCell(table1, 7, 6, IntNullabelToString(before4Weeks[0].Vehide_Qty));
 
-                Shape table2 = helper.GetShape(secSlide, 5);
+                IShape table2 = helper.GetShape(secSlide, 5);
                 helper.SaveTableCell(table2, 2, 1, IntNullabelToString(before4Weeks[0].People_InvitationTotalCount));
                 helper.SaveTableCell(table2, 2, 2, IntNullabelToString(before4Weeks[0].People_InvitationCarOwnerCount));
                 helper.SaveTableCell(table2, 2, 3, IntNullabelToString(before4Weeks[0].People_InvitationDepositorCount));
@@ -1074,8 +1096,8 @@ Catering 餐饮
             if (before4Weeks.Count > 0)
             {
                 //Event Budget 费用总览
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table3 = helper.GetShape(thirdSlide, 2);
+                ISlide thirdSlide = helper.GetSlide(3);
+                IShape table3 = helper.GetShape(thirdSlide, 2);
                 helper.SaveTableCell(table3, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table3, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
@@ -1083,8 +1105,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table3 = helper.GetShape(thirdSlide, 2);
+                ISlide thirdSlide = helper.GetSlide(3);
+                IShape table3 = helper.GetShape(thirdSlide, 2);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverPlanUnderBudgetTypes, item.CoopFundCode);
@@ -1102,8 +1124,8 @@ Catering 餐饮
             if (before4WeeksHandOvers.Count > 0)
             {
                 //绑定
-                Slide elevenSlide = helper.GetSlide(4);
-                Shape table2 = helper.GetShape(elevenSlide, 2);
+                ISlide elevenSlide = helper.GetSlide(4);
+                IShape table2 = helper.GetShape(elevenSlide, 2);
                 before4WeeksHandOvers.ForEach(item =>
                 {
                     int index = before4WeeksHandOvers.IndexOf(item);
@@ -1166,7 +1188,7 @@ Catering 餐饮
             // 第6页 Brand Representation – KV 活动主视觉或背板设计 
             if (before4Weeks.Count > 0)
             {
-                Slide sixSlide = helper.GetSlide(7);
+                ISlide sixSlide = helper.GetSlide(7);
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
@@ -1251,15 +1273,15 @@ Catering 餐饮
         public string GetHandOverReportPPT(string marketActionId)
         {
             string basePath = HostingEnvironment.MapPath(@"~/");
-            PPTHelper helper = new PPTHelper();
+            AsposePPTHelper helper = new AsposePPTHelper();
             helper.Open(basePath + @"template\ReportHandOver.pptx");
 
             MarketActionService actionService = new MarketActionService();
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst.Count > 0)
             {
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
 
                 string actionName = lst[0].ActionName;
                 string date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
@@ -1275,8 +1297,8 @@ Catering 餐饮
             {
                 actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
                 //活动总览 Overview
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
                 helper.SaveTableCell(table1, 5, 3, IntNullabelToString(actionAfter7[0].People_ParticipantsCount));
                 helper.SaveTableCell(table1, 6, 3, IntNullabelToString(actionAfter7[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 3, GetCostPerLead(actionAfter7[0].TotalBudgetAmt, actionAfter7[0].People_NewLeadsThsYearCount));
@@ -1289,14 +1311,14 @@ Catering 餐饮
             {
                 before4Weeks[0].TotalBudgetAmt = actionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
                 //活动总览 Overview 计划
-                Slide secSlide = helper.GetSlide(2);
-                Shape table1 = helper.GetShape(secSlide, 6);
+                ISlide secSlide = helper.GetSlide(2);
+                IShape table1 = helper.GetShape(secSlide, 6);
                 helper.SaveTableCell(table1, 5, 5, IntNullabelToString(before4Weeks[0].People_ParticipantsCount));
                 helper.SaveTableCell(table1, 6, 5, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 7, 5, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
                 helper.SaveTableCell(table1, 8, 5, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
 
-                Shape table2 = helper.GetShape(secSlide, 7);
+                IShape table2 = helper.GetShape(secSlide, 7);
                 helper.SaveTableCell(table2, 2, 1, IntNullabelToString(before4Weeks[0].People_InvitationTotalCount));
                 helper.SaveTableCell(table2, 2, 2, IntNullabelToString(before4Weeks[0].People_InvitationCarOwnerCount));
                 helper.SaveTableCell(table2, 2, 3, IntNullabelToString(before4Weeks[0].People_InvitationDepositorCount));
@@ -1309,8 +1331,8 @@ Catering 餐饮
             if (after7ActualProcess.Count > 0)
             {
                 //绑定活动流程
-                Slide sevenSlide = helper.GetSlide(7);
-                Shape table2 = helper.GetShape(sevenSlide, 2);
+                ISlide sevenSlide = helper.GetSlide(7);
+                IShape table2 = helper.GetShape(sevenSlide, 2);
                 after7ActualProcess.ForEach(item =>
                 {
                     int index = after7ActualProcess.IndexOf(item);
@@ -1325,8 +1347,8 @@ Catering 餐饮
             if (after7CoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情 Actual Cost
-                Slide sixSlide = helper.GetSlide(4);
-                Shape table1 = helper.GetShape(sixSlide, 6);
+                ISlide sixSlide = helper.GetSlide(4);
+                IShape table1 = helper.GetShape(sixSlide, 6);
                 after7CoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverReportUnderBudgetTypes, item.CoopFundCode);
@@ -1340,8 +1362,8 @@ Catering 餐饮
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情  Plan Budget预算列
-                Slide sixSlide = helper.GetSlide(6);
-                Shape table1 = helper.GetShape(sixSlide, 6);
+                ISlide sixSlide = helper.GetSlide(6);
+                IShape table1 = helper.GetShape(sixSlide, 6);
                 before4WeeksCoopFund.ForEach(item =>
                 {
                     int index = Array.IndexOf(HandOverReportUnderBudgetTypes, item.CoopFundCode);
@@ -1352,16 +1374,16 @@ Catering 餐饮
             //Event Budget 费用总览 实际
             if (actionAfter7.Count > 0)
             {
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table2 = helper.GetShape(thirdSlide, 5);
+                ISlide thirdSlide = helper.GetSlide(3);
+                IShape table2 = helper.GetShape(thirdSlide, 5);
                 helper.SaveTableCell(table2, 2, 2, DecimalNullabelToString(actionAfter7[0].TotalBudgetAmt));
                 helper.SaveTableCell(table2, 3, 2, DecimalNullabelToString(actionAfter7[0].CoopFundSumAmt));
             }
             //Event Budget 费用总览 实际
             if (before4Weeks.Count > 0)
             {
-                Slide thirdSlide = helper.GetSlide(3);
-                Shape table2 = helper.GetShape(thirdSlide, 5);
+                ISlide thirdSlide = helper.GetSlide(3);
+                IShape table2 = helper.GetShape(thirdSlide, 5);
                 helper.SaveTableCell(table2, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table2, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
@@ -1370,8 +1392,8 @@ Catering 餐饮
             List<MarketActionAfter7HandOverArrangement> after7HandOverArrangement = actionService.MarketActionAfter7HandOverArrangementSearch(marketActionId);
             if (after7HandOverArrangement.Count > 0)
             {
-                Slide fourSlide = helper.GetSlide(4);
-                Shape table2 = helper.GetShape(fourSlide, 2);
+                ISlide fourSlide = helper.GetSlide(4);
+                IShape table2 = helper.GetShape(fourSlide, 2);
                 after7HandOverArrangement.ForEach(item =>
                 {
                     int index = after7HandOverArrangement.IndexOf(item);
