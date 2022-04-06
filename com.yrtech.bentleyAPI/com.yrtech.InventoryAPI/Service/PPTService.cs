@@ -25,8 +25,8 @@ Catering 餐饮
          * */
         string[] ActionPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality" };
         string[] ActionReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Performance", "MC", "Hospitality", "Catering", "Others" };
-        string[] HandOverReportUnderBudgetTypes  = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
-        string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food","", "Catering_Drink","" };
+        string[] HandOverReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
+        string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "", "Catering_Drink", "" };
         string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
         string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
 
@@ -348,7 +348,7 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-            string path = dirPath + marketActionId.ToString()+"-"+shopName+"-市场活动-活动计划"+eventModeName+"-"+actionName+"-"+ DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动计划" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -730,7 +730,6 @@ Catering 餐饮
             string actionName = "";
             string date = "";
             string place = "";
-            
             List<MarketActionDto> lst = actionService.MarketActionSearchById(marketActionId);
             if (lst != null && lst.Count > 0)
             {
@@ -738,16 +737,14 @@ Catering 餐饮
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
                 date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                place = lst[0].ActionPlace;
+                place = lst[0].ActionPlace; 
             }
     
             if (lst.Count > 0)
             {
                 ISlide firstSlide = helper.GetSlide(1);
-                IShape shape = helper.GetShape(firstSlide, 2);
-                helper.SaveTableCell(shape, 2, 2, actionName);
-                helper.SaveTableCell(shape, 3, 2, date);
-                helper.SaveTableCell(shape, 3, 4, place);
+                IShape table1 = helper.GetShape(firstSlide, 2);
+                helper.SaveTableCell(table1, 2, 2, actionName);             
 
             }
             //第1页 活动总览 Overview
@@ -758,13 +755,16 @@ Catering 餐饮
                 //活动总览 Overview
                 ISlide firstSlide = helper.GetSlide(1);
                 IShape table1 = helper.GetShape(firstSlide, 2);
+                helper.SaveTableCell(table1, 3, 2, before4Weeks[0].Platform_Media);
+                helper.SaveTableCell(table1, 3, 4, before4Weeks[0].Platform_ExposureForm);
+
                 helper.SaveTableCell(table1, 4, 3, IntNullabelToString(before4Weeks[0].People_DCPIDCount));
                 helper.SaveTableCell(table1, 5, 3, GetCostPerLead(before4Weeks[0].TotalBudgetAmt, before4Weeks[0].People_NewLeadsThisYearCount));
                 helper.SaveTableCell(table1, 6, 3, IntNullabelToString(before4Weeks[0].People_NewLeadsThisYearCount));
 
                 IShape table2 = helper.GetShape(firstSlide, 7);
-                helper.SaveTableCell(table1, 2, 2, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
-                helper.SaveTableCell(table1, 2, 4, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
+                helper.SaveTableCell(table2, 2, 2, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
+                helper.SaveTableCell(table2, 2, 4, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
 
             }
             //第1页 Event Budget 费用总览
@@ -888,7 +888,7 @@ Catering 餐饮
                 place = lst[0].ActionPlace;
             }
             //第1页 活动总览 Overview
-         
+
             if (lst.Count > 0)
             {
                 ISlide firstSlide = helper.GetSlide(1);
@@ -1079,7 +1079,7 @@ Catering 餐饮
             }
 
             string dirPath = basePath + @"\Temp\";
-           // string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            // string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动计划" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
@@ -1318,8 +1318,8 @@ Catering 餐饮
 
 
             string dirPath = basePath + @"\Temp\";
-           // string path = dirPath + "交车仪式计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
-            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-交车仪式-活动计划-"  + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            // string path = dirPath + "交车仪式计划_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-交车仪式-活动计划-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
@@ -1352,7 +1352,7 @@ Catering 餐饮
                 date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
- 
+
             if (lst.Count > 0)
             {
                 ISlide secSlide = helper.GetSlide(2);

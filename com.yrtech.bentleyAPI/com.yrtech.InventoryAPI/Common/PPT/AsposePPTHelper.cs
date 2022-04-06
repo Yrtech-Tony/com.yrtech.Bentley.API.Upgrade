@@ -74,10 +74,17 @@ namespace com.yrtech.InventoryAPI.Common
         }
         private static Image GetImage(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            using (WebResponse response = request.GetResponse())
+            try
             {
-                return Image.FromStream(response.GetResponseStream());
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                using (WebResponse response = request.GetResponse())
+                {
+                    return Image.FromStream(response.GetResponseStream());
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
             return null;
         }
