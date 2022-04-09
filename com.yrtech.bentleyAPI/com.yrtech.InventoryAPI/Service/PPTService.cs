@@ -164,7 +164,12 @@ Catering 餐饮
 
             }
             //场地选择理由 TODO
-
+            if (before4Weeks.Count > 0)
+            {
+                ISlide slide = helper.GetSlide(4);
+                AutoShape shape = (AutoShape)helper.GetShape(slide, 2);
+                helper.WriteTextFrame(shape, before4Weeks[0].PlatformReason);
+            }
 
             //第5页 Venue 场地简介 内部照片  平面图
             List<MarketActionPic> MPF03Pics = actionService.MarketActionPicSearch(marketActionId, "MPF03");
@@ -805,6 +810,12 @@ Catering 餐饮
 
             }
             //媒体平台选择理由
+            if (before4Weeks.Count > 0)
+            {
+                ISlide slide = helper.GetSlide(2);
+                AutoShape shape = (AutoShape)helper.GetShape(slide, 2);
+                helper.WriteTextFrame(shape, before4Weeks[0].PlatformReason);
+            }
 
             //第3页  品牌曝光
             List<MarketActionPic> MPN04Pics = actionService.MarketActionPicSearch(marketActionId, "MPN04");
@@ -984,8 +995,8 @@ Catering 餐饮
             if (after2LeadsReport.Count > 0)
             {
                 //绑定线索报告
-                ISlide fiveSlide = helper.GetSlide(3);
-                IShape table2 = helper.GetShape(fiveSlide, 2);
+                ISlide slide = helper.GetSlide(3);
+                IShape table2 = helper.GetShape(slide, 5);
                 after2LeadsReport.ForEach(item =>
                 {
                     int index = after2LeadsReport.IndexOf(item);
@@ -1194,40 +1205,8 @@ Catering 餐饮
                 });
             }
 
-            List<MarketActionPic> MPF02Pics = actionService.MarketActionPicSearch(marketActionId, "MPF02");
-            if (MPF02Pics.Count > 0)
-            {
-                //绑定场地实景照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF02Pics.ForEach(item =>
-                {
-                    int index = MPF02Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(5), pic);
-
-            }
-
-            //第5页 场地内部照片 场地实景照片
-            List<MarketActionPic> MPF03Pics = actionService.MarketActionPicSearch(marketActionId, "MPH03");
-            if (MPF03Pics.Count > 0)
-            {
-                //绑定场地内部照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF03Pics.ForEach(item =>
-                {
-                    int index = MPF03Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(5), pic);
-
-            }
-
-            List<MarketActionPic> MPF04Pics = actionService.MarketActionPicSearch(marketActionId, "MPH04");
+            //第5页 场地实景照片
+            List<MarketActionPic> MPF04Pics = actionService.MarketActionPicSearch(marketActionId, "MPH03");
             if (MPF04Pics.Count > 0)
             {
                 //绑定场地实景照片
@@ -1241,6 +1220,12 @@ Catering 餐饮
                 pic.Width = 400;
                 pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
+            }
+            if (before4Weeks.Count > 0)
+            {
+                ISlide slide = helper.GetSlide(5);
+                AutoShape shape = (AutoShape)helper.GetShape(slide, 2);
+                helper.WriteTextFrame(shape, before4Weeks[0].PlatformReason);
             }
 
             // 第6页 Brand Representation – KV 活动主视觉或背板设计 
