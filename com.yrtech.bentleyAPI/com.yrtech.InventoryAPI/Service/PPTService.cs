@@ -980,7 +980,7 @@ Catering 餐饮
 
 
             //第3页 线索报告
-            List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "2022");
+            List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
             {
                 //绑定线索报告

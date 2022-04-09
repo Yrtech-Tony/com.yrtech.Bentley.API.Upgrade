@@ -505,7 +505,7 @@ namespace com.yrtech.InventoryAPI.Service
         {
             if (marketActionId == null) marketActionId = "";
             if (year == null) year = "";
-            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId),new SqlParameter("@Year", year) };
             Type t = typeof(MarketActionAfter2LeadsReportDto);
             string sql = "";
             sql += @"SELECT A.*,B.ActionName,B.ShopId,C.ShopName,C.ShopNameEn,D.HiddenCodeName AS InterestedModelName,D.HiddenCodeNameEn AS InterestedModelNameEn
