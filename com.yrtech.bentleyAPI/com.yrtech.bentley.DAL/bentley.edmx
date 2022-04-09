@@ -314,6 +314,7 @@
           <Property Name="KeyVisionDesc" Type="nvarchar(max)" />
           <Property Name="KeyVisionApprovalCode" Type="nvarchar" MaxLength="50" />
           <Property Name="KeyVisionApprovalDesc" Type="nvarchar(max)" />
+          <Property Name="PlatformReason" Type="nvarchar" MaxLength="50" />
           <Property Name="ProcessPercent" Type="decimal" Precision="19" Scale="2" />
           <Property Name="InUserId" Type="int" />
           <Property Name="InDateTime" Type="datetime" />
@@ -398,19 +399,6 @@
           <Property Name="InDateTime" Type="datetime" />
           <Property Name="ModifyUserId" Type="int" />
           <Property Name="ModifyDateTime" Type="datetime" />
-        </EntityType>
-        <EntityType Name="ProgressSetting">
-          <Key>
-            <PropertyRef Name="ProgressId" />
-          </Key>
-          <Property Name="ProgressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProgressType" Type="nvarchar" MaxLength="50" />
-          <Property Name="EventMode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProgressRegion" Type="nvarchar" MaxLength="50" />
-          <Property Name="RegionPercent" Type="decimal" Precision="19" Scale="2" />
-          <Property Name="Remark" Type="nvarchar" MaxLength="100" />
-          <Property Name="InDateTime" Type="datetime" />
-          <Property Name="InUserId" Type="int" />
         </EntityType>
         <EntityType Name="RoleType">
           <Key>
@@ -499,7 +487,6 @@
           <EntitySet Name="MarketActionBefore4WeeksHandOverArrangement" EntityType="Self.MarketActionBefore4WeeksHandOverArrangement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarketActionPic" EntityType="Self.MarketActionPic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthSale" EntityType="Self.MonthSale" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProgressSetting" EntityType="Self.ProgressSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleType" EntityType="Self.RoleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shop" EntityType="Self.Shop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopCommitFileRecord" EntityType="Self.ShopCommitFileRecord" Schema="dbo" store:Type="Tables" />
@@ -533,7 +520,6 @@
           <EntitySet Name="MarketActionBefore4WeeksHandOverArrangement" EntityType="BentleyModel.MarketActionBefore4WeeksHandOverArrangement" />
           <EntitySet Name="MarketActionPic" EntityType="BentleyModel.MarketActionPic" />
           <EntitySet Name="MonthSale" EntityType="BentleyModel.MonthSale" />
-          <EntitySet Name="ProgressSetting" EntityType="BentleyModel.ProgressSetting" />
           <EntitySet Name="RoleType" EntityType="BentleyModel.RoleType" />
           <EntitySet Name="Shop" EntityType="BentleyModel.Shop" />
           <EntitySet Name="ShopCommitFileRecord" EntityType="BentleyModel.ShopCommitFileRecord" />
@@ -848,6 +834,7 @@
           <Property Name="KeyVisionDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="KeyVisionApprovalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="KeyVisionApprovalDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PlatformReason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProcessPercent" Type="Decimal" Precision="19" Scale="2" />
           <Property Name="InUserId" Type="Int32" />
           <Property Name="InDateTime" Type="DateTime" Precision="3" />
@@ -932,19 +919,6 @@
           <Property Name="InDateTime" Type="DateTime" Precision="3" />
           <Property Name="ModifyUserId" Type="Int32" />
           <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ProgressSetting">
-          <Key>
-            <PropertyRef Name="ProgressId" />
-          </Key>
-          <Property Name="ProgressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProgressType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EventMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProgressRegion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RegionPercent" Type="Decimal" Precision="19" Scale="2" />
-          <Property Name="Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="InDateTime" Type="DateTime" Precision="3" />
-          <Property Name="InUserId" Type="Int32" />
         </EntityType>
         <EntityType Name="RoleType">
           <Key>
@@ -1315,6 +1289,7 @@
                 <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
                 <ScalarProperty Name="InUserId" ColumnName="InUserId" />
                 <ScalarProperty Name="ProcessPercent" ColumnName="ProcessPercent" />
+                <ScalarProperty Name="PlatformReason" ColumnName="PlatformReason" />
                 <ScalarProperty Name="KeyVisionApprovalDesc" ColumnName="KeyVisionApprovalDesc" />
                 <ScalarProperty Name="KeyVisionApprovalCode" ColumnName="KeyVisionApprovalCode" />
                 <ScalarProperty Name="KeyVisionDesc" ColumnName="KeyVisionDesc" />
@@ -1417,20 +1392,6 @@
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="YearMonth" ColumnName="YearMonth" />
                 <ScalarProperty Name="MonthSaleId" ColumnName="MonthSaleId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProgressSetting">
-            <EntityTypeMapping TypeName="BentleyModel.ProgressSetting">
-              <MappingFragment StoreEntitySet="ProgressSetting">
-                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
-                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
-                <ScalarProperty Name="Remark" ColumnName="Remark" />
-                <ScalarProperty Name="RegionPercent" ColumnName="RegionPercent" />
-                <ScalarProperty Name="ProgressRegion" ColumnName="ProgressRegion" />
-                <ScalarProperty Name="EventMode" ColumnName="EventMode" />
-                <ScalarProperty Name="ProgressType" ColumnName="ProgressType" />
-                <ScalarProperty Name="ProgressId" ColumnName="ProgressId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

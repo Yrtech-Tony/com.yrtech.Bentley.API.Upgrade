@@ -48,7 +48,6 @@ namespace com.yrtech.bentley.DAL
         public virtual DbSet<MarketActionBefore4WeeksHandOverArrangement> MarketActionBefore4WeeksHandOverArrangement { get; set; }
         public virtual DbSet<MarketActionPic> MarketActionPic { get; set; }
         public virtual DbSet<MonthSale> MonthSale { get; set; }
-        public virtual DbSet<ProgressSetting> ProgressSetting { get; set; }
         public virtual DbSet<RoleType> RoleType { get; set; }
         public virtual DbSet<Shop> Shop { get; set; }
         public virtual DbSet<ShopCommitFileRecord> ShopCommitFileRecord { get; set; }

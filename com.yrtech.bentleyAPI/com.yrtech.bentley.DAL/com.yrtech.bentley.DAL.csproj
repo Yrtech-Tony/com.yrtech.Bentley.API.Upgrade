@@ -135,9 +135,6 @@
     <Compile Include="MonthSale.cs">
       <DependentUpon>bentley.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProgressSetting.cs">
-      <DependentUpon>bentley.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleType.cs">
       <DependentUpon>bentley.tt</DependentUpon>
