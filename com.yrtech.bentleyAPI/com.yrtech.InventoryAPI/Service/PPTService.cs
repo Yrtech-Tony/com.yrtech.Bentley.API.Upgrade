@@ -1561,7 +1561,7 @@ Catering 餐饮
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(19), pic);
+                helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
 
             //第10页
