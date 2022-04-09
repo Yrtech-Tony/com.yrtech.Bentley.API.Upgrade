@@ -97,16 +97,23 @@ namespace com.yrtech.InventoryAPI.Common
             {
                 throw new PPTException("没有图片地址！");
             }
-            else if (pic.Paths.Count == 1)
-            {
+             List<Image> images = new List<Image>();
+            foreach(string path in pic.Paths){
+                Image image = GetImage(path);
+                if(image!=null){
+                    images.Add(image);
+                }
+            }
 
-                slide.Shapes.AddPictureFrame(ShapeType.Rectangle, pic.X, pic.Y, pic.Width, pic.Height, objPresSet.Images.AddImage(GetImage(pic.Paths[0])));
+            if (images.Count == 1)
+            {
+                slide.Shapes.AddPictureFrame(ShapeType.Rectangle, pic.X, pic.Y, pic.Width, pic.Height, objPresSet.Images.AddImage(images[0]));
             }
             else
             {
                 if (pic.Rows == 0 || pic.Cols == 0)
                 {
-                    if (pic.Paths.Count == 2)
+                    if (images.Count == 2)
                     {
                         if (pic.Width > pic.Height * 1.2)
                         {
@@ -135,8 +142,9 @@ namespace com.yrtech.InventoryAPI.Common
                     for (int c = 0; c < pic.Cols; c++)
                     {
                         int index = r * pic.Cols + c;
-                        if (index >= pic.Paths.Count) break;
-                        slide.Shapes.AddPictureFrame(ShapeType.Rectangle, pic.X + c * width, pic.Y + r * height, width, height, objPresSet.Images.AddImage(GetImage(pic.Paths[index])));
+                        if (index >= images.Count) break;
+
+                        slide.Shapes.AddPictureFrame(ShapeType.Rectangle, pic.X + c * width, pic.Y + r * height, width, height, objPresSet.Images.AddImage(images[index]));
                     }
                 }
             }
@@ -150,6 +158,18 @@ namespace com.yrtech.InventoryAPI.Common
                 Table table = (Table)shape;
                 table[col-1, row-1].TextFrame.Text = cell == null?"":cell;
             }            
+        }
+        /// <summary>
+        /// 写入文本框内容
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="value"></param>
+        public void WriteTextFrame(AutoShape shape, string value)
+        {
+            if (shape!=null)
+            {
+                shape.TextFrame.Text = value;
+            }
         }
 
         /// <summary>
