@@ -30,6 +30,7 @@ Catering 餐饮
         string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
         string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
 
+        string[] keyVisionApprovals = {"","主视觉待审批","主视觉审批通过","主视觉修改中"};
         public string GetContent(string file, string slide)
         {
             AsposePPTHelper helper = new AsposePPTHelper();
@@ -203,8 +204,17 @@ Catering 餐饮
             {
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
+                pic.Y = 120;
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
                 helper.AddPictureToSlide(helper.GetSlide(6), pic);
+                //是否批准
+                string approval = keyVisionApprovals[1];
+                if (!string.IsNullOrEmpty(before4Weeks[0].KeyVisionApprovalCode))
+                {
+                    approval = keyVisionApprovals[int.Parse(before4Weeks[0].KeyVisionApprovalCode)];
+                }
+                AutoShape autoShape = (AutoShape)helper.GetShape(helper.GetSlide(6), 5);
+                helper.WriteTextFrame(autoShape, approval);
             }
 
             //第7页 Event Setup 场地布置
@@ -436,11 +446,13 @@ Catering 餐饮
                     int index = after2LeadsReport.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
-                    helper.SaveTableCell(table2, row, 2, item.TelNO);
-                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString(item.TestDriverCheck));
-                    helper.SaveTableCell(table2, row, 4, item.InterestedModelName);
-                    helper.SaveTableCell(table2, row, 5, BoolNullabelToString(item.DealCheck));
-                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 2, item.BPNO);
+                    helper.SaveTableCell(table2, row, 3, item.OwnerCheckName);
+                    helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
+                    helper.SaveTableCell(table2, row, 5, item.LeadsCheckName);
+                    helper.SaveTableCell(table2, row, 6, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 7, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 8, item.DealModelName);
                 });
             }
 
@@ -560,8 +572,18 @@ Catering 餐饮
             {
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
+                pic.Y = 120;
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
+
+                //是否批准
+                string approval = keyVisionApprovals[1];
+                if (!string.IsNullOrEmpty(before4Weeks[0].KeyVisionApprovalCode))
+                {
+                    approval = keyVisionApprovals[int.Parse(before4Weeks[0].KeyVisionApprovalCode)];
+                }
+                AutoShape autoShape = (AutoShape)helper.GetShape(helper.GetSlide(8), 7);
+                helper.WriteTextFrame(autoShape, approval);
             }
             //第9页
             List<MarketActionPic> MRF09Pics = actionService.MarketActionPicSearch(marketActionId, "MRF09");
@@ -985,17 +1007,19 @@ Catering 餐饮
             {
                 //绑定线索报告
                 ISlide fiveSlide = helper.GetSlide(3);
-                IShape table2 = helper.GetShape(fiveSlide, 2);
+                IShape table2 = helper.GetShape(fiveSlide, 5);
                 after2LeadsReport.ForEach(item =>
                 {
                     int index = after2LeadsReport.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
-                    helper.SaveTableCell(table2, row, 2, item.TelNO);
-                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString(item.TestDriverCheck));
-                    helper.SaveTableCell(table2, row, 4, item.InterestedModelName);
-                    helper.SaveTableCell(table2, row, 5, BoolNullabelToString(item.DealCheck));
-                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 2, item.BPNO);
+                    helper.SaveTableCell(table2, row, 3, item.OwnerCheckName);
+                    helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
+                    helper.SaveTableCell(table2, row, 5, item.LeadsCheckName);
+                    helper.SaveTableCell(table2, row, 6, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 7, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 8, item.DealModelName);
                 });
             }
 
@@ -1250,10 +1274,17 @@ Catering 餐饮
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
-                pic.Y = 90;
+                pic.Y = 120;
                 helper.AddPictureToSlide(sixSlide, pic);
+                //是否批准
+                string approval =  keyVisionApprovals[1];
+                if (!string.IsNullOrEmpty(before4Weeks[0].KeyVisionApprovalCode))
+                {
+                    approval = keyVisionApprovals[int.Parse(before4Weeks[0].KeyVisionApprovalCode)];                   
+                }
+                 AutoShape autoShape = (AutoShape)helper.GetShape(helper.GetSlide(6), 5);
+                helper.WriteTextFrame(autoShape, approval);
             }
-
 
             // 第7页 Event Setup 场地布置
             List<MarketActionPic> MPH06Pics = actionService.MarketActionPicSearch(marketActionId, "MPH06");
@@ -1529,8 +1560,17 @@ Catering 餐饮
                 //Brand Representation – KV 活动主视觉或背板设计  ppt 第7页
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
+                pic.Y = 120;
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
+                //是否批准
+                string approval = keyVisionApprovals[1];
+                if (!string.IsNullOrEmpty(before4Weeks[0].KeyVisionApprovalCode))
+                {
+                    approval = keyVisionApprovals[int.Parse(before4Weeks[0].KeyVisionApprovalCode)];
+                }
+                AutoShape autoShape = (AutoShape)helper.GetShape(helper.GetSlide(7), 7);
+                helper.WriteTextFrame(autoShape, approval);
             }
             //第8页
             List<MarketActionPic> MRH08Pics = actionService.MarketActionPicSearch(marketActionId, "MRH08");
