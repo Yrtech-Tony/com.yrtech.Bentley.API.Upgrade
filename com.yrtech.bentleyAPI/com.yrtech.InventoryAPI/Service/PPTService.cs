@@ -984,7 +984,7 @@ Catering 餐饮
             if (after2LeadsReport.Count > 0)
             {
                 //绑定线索报告
-                ISlide fiveSlide = helper.GetSlide(5);
+                ISlide fiveSlide = helper.GetSlide(3);
                 IShape table2 = helper.GetShape(fiveSlide, 2);
                 after2LeadsReport.ForEach(item =>
                 {
@@ -1033,44 +1033,44 @@ Catering 餐饮
 
 
             //5页  Reimbursement Materials 报销材料
-            List<MarketActionPic> MRF02Pics = actionService.MarketActionPicSearch(marketActionId, "MRF02");
-            if (MRF02Pics.Count > 0)
+            List<MarketActionPic> MRN02Pics = actionService.MarketActionPicSearch(marketActionId, "MRN02");
+            if (MRN02Pics.Count > 0)
             {
                 //绑定合同照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF02Pics.ForEach(item =>
+                MRN02Pics.ForEach(item =>
                 {
-                    int index = MRF02Pics.IndexOf(item);
+                    int index = MRN02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 250;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
-            List<MarketActionPic> MRF01Pics = actionService.MarketActionPicSearch(marketActionId, "MRF01");
-            if (MRF01Pics.Count > 0)
+            List<MarketActionPic> MRN01Pics = actionService.MarketActionPicSearch(marketActionId, "MRN01");
+            if (MRN01Pics.Count > 0)
             {
                 //绑定报价单照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF01Pics.ForEach(item =>
+                MRN01Pics.ForEach(item =>
                 {
-                    int index = MRF01Pics.IndexOf(item);
+                    int index = MRN01Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 250;
                 pic.X += 300;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
-            List<MarketActionPic> MRF03Pics = actionService.MarketActionPicSearch(marketActionId, "MRF03");
-            if (MRF03Pics.Count > 0)
+            List<MarketActionPic> MRN03Pics = actionService.MarketActionPicSearch(marketActionId, "MRN03");
+            if (MRN03Pics.Count > 0)
             {
                 //绑定发票照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF03Pics.ForEach(item =>
+                MRN03Pics.ForEach(item =>
                 {
-                    int index = MRF03Pics.IndexOf(item);
+                    int index = MRN03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 250;
@@ -1080,7 +1080,7 @@ Catering 餐饮
 
             string dirPath = basePath + @"\Temp\";
             // string path = dirPath + "活动报告_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
-            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动计划" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
+            string path = dirPath + marketActionId.ToString() + "-" + shopName + "-市场活动-活动报告" + eventModeName + "-" + actionName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pptx";
             helper.SaveAs(path); //保存ppt
 
             return path;
