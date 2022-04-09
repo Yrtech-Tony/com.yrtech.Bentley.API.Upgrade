@@ -1249,7 +1249,7 @@ Catering 餐饮
                 ISlide sixSlide = helper.GetSlide(6);
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
+                pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionApprovalCode);
                 pic.Y = 90;
                 helper.AddPictureToSlide(sixSlide, pic);
             }

@@ -369,6 +369,7 @@ namespace com.yrtech.InventoryAPI.Service
                     findOne.KeyVisionPic = marketActionBefore4Weeks.KeyVisionPic;
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = marketActionBefore4Weeks.ModifyUserId;
+                findOne.PlatformReason = marketActionBefore4Weeks.PlatformReason;
             }
 
             db.SaveChanges();
