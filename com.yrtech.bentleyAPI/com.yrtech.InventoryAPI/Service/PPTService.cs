@@ -441,11 +441,13 @@ Catering 餐饮
                     int index = after2LeadsReport.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
-                    helper.SaveTableCell(table2, row, 2, item.TelNO);
-                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString(item.TestDriverCheck));
-                    helper.SaveTableCell(table2, row, 4, item.InterestedModelName);
-                    helper.SaveTableCell(table2, row, 5, BoolNullabelToString(item.DealCheck));
-                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 2, item.BPNO);
+                    helper.SaveTableCell(table2, row, 3, item.OwnerCheckName);
+                    helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
+                    helper.SaveTableCell(table2, row, 5, item.LeadsCheckName);
+                    helper.SaveTableCell(table2, row, 6, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 7, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 8, item.DealModelName);
                 });
             }
 
@@ -988,8 +990,7 @@ Catering 餐饮
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                 });
             }
-
-
+            
             //第3页 线索报告
             List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
@@ -1002,11 +1003,13 @@ Catering 餐饮
                     int index = after2LeadsReport.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
-                    helper.SaveTableCell(table2, row, 2, item.TelNO);
-                    helper.SaveTableCell(table2, row, 3, BoolNullabelToString(item.TestDriverCheck));
-                    helper.SaveTableCell(table2, row, 4, item.InterestedModelName);
-                    helper.SaveTableCell(table2, row, 5, BoolNullabelToString(item.DealCheck));
-                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 2, item.BPNO);
+                    helper.SaveTableCell(table2, row, 3, item.OwnerCheckName);
+                    helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
+                    helper.SaveTableCell(table2, row, 5, item.LeadsCheckName);
+                    helper.SaveTableCell(table2, row, 6, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 7, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 8, item.DealModelName);
                 });
             }
 
