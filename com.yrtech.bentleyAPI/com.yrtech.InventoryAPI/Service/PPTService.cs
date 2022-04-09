@@ -1478,29 +1478,29 @@ Catering 餐饮
             }
 
             //第5页
-            List<MarketActionPic> MRF05Pics = actionService.MarketActionPicSearch(marketActionId, "MRF05");
-            if (MRF05Pics.Count > 0)
+            List<MarketActionPic> MRH05Pics = actionService.MarketActionPicSearch(marketActionId, "MRH05");
+            if (MRH05Pics.Count > 0)
             {
                 //绑定场地实景 照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF05Pics.ForEach(item =>
+                MRH05Pics.ForEach(item =>
                 {
-                    int index = MRF05Pics.IndexOf(item);
+                    int index = MRH05Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
-            List<MarketActionPic> MRF06Pics = actionService.MarketActionPicSearch(marketActionId, "MRF06");
-            if (MRF06Pics.Count > 0)
+            List<MarketActionPic> MRH06Pics = actionService.MarketActionPicSearch(marketActionId, "MRH06");
+            if (MRH06Pics.Count > 0)
             {
                 //绑定场地内部 照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF06Pics.ForEach(item =>
+                MRH06Pics.ForEach(item =>
                 {
-                    int index = MRF06Pics.IndexOf(item);
+                    int index = MRH06Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
@@ -1509,15 +1509,15 @@ Catering 餐饮
             }
 
             //第6页
-            List<MarketActionPic> MRF08Pics = actionService.MarketActionPicSearch(marketActionId, "MRF08");
-            if (MRF08Pics.Count > 0)
+            List<MarketActionPic> MRH07Pics = actionService.MarketActionPicSearch(marketActionId, "MRH07");
+            if (MRH07Pics.Count > 0)
             {
                 //绑定车辆 照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF08Pics.ForEach(item =>
+                MRH07Pics.ForEach(item =>
                 {
-                    int index = MRF08Pics.IndexOf(item);
+                    int index = MRH07Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
@@ -1533,15 +1533,15 @@ Catering 餐饮
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             //第8页
-            List<MarketActionPic> MRF09Pics = actionService.MarketActionPicSearch(marketActionId, "MRF09");
-            if (MRF09Pics.Count > 0)
+            List<MarketActionPic> MRH08Pics = actionService.MarketActionPicSearch(marketActionId, "MRH08");
+            if (MRH08Pics.Count > 0)
             {
                 //绑定场地布置 照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF09Pics.ForEach(item =>
+                MRH08Pics.ForEach(item =>
                 {
-                    int index = MRF09Pics.IndexOf(item);
+                    int index = MRH08Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
@@ -1549,15 +1549,15 @@ Catering 餐饮
             }
 
             //第9页
-            List<MarketActionPic> MRF13Pics = actionService.MarketActionPicSearch(marketActionId, "MRF13");
-            if (MRF13Pics.Count > 0)
+            List<MarketActionPic> MRH09Pics = actionService.MarketActionPicSearch(marketActionId, "MRH09");
+            if (MRH09Pics.Count > 0)
             {
                 //绑定其他活动 照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF13Pics.ForEach(item =>
+                MRH09Pics.ForEach(item =>
                 {
-                    int index = MRF13Pics.IndexOf(item);
+                    int index = MRH09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
@@ -1565,15 +1565,15 @@ Catering 餐饮
             }
 
             //第10页
-            List<MarketActionPic> MRF02Pics = actionService.MarketActionPicSearch(marketActionId, "MRF02");
-            if (MRF02Pics.Count > 0)
+            List<MarketActionPic> MRH02Pics = actionService.MarketActionPicSearch(marketActionId, "MRH02");
+            if (MRH02Pics.Count > 0)
             {
                 //绑定合同照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF02Pics.ForEach(item =>
+                MRH02Pics.ForEach(item =>
                 {
-                    int index = MRF02Pics.IndexOf(item);
+                    int index = MRH02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
@@ -1582,15 +1582,15 @@ Catering 餐饮
 
             }
 
-            List<MarketActionPic> MRF01Pics = actionService.MarketActionPicSearch(marketActionId, "MRF01");
-            if (MRF01Pics.Count > 0)
+            List<MarketActionPic> MRH01Pics = actionService.MarketActionPicSearch(marketActionId, "MRH01");
+            if (MRH01Pics.Count > 0)
             {
                 //绑定报价单照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF01Pics.ForEach(item =>
+                MRH01Pics.ForEach(item =>
                 {
-                    int index = MRF01Pics.IndexOf(item);
+                    int index = MRH01Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
@@ -1599,15 +1599,15 @@ Catering 餐饮
             }
 
 
-            List<MarketActionPic> MRF03Pics = actionService.MarketActionPicSearch(marketActionId, "MRF03");
-            if (MRF03Pics.Count > 0)
+            List<MarketActionPic> MRH03Pics = actionService.MarketActionPicSearch(marketActionId, "MRH03");
+            if (MRH03Pics.Count > 0)
             {
                 //绑定发票照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MRF03Pics.ForEach(item =>
+                MRH03Pics.ForEach(item =>
                 {
-                    int index = MRF03Pics.IndexOf(item);
+                    int index = MRH03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;

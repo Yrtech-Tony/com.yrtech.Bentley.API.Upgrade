@@ -806,7 +806,7 @@ namespace com.yrtech.InventoryAPI.Service
             }
             else
             {
-                sql += " AND EXISTS(SELECT 1 FROM MarketAction WHERE MarketActionId = A.MarketActionId AND A.EventTypeId <> 99 )";
+                sql += " AND EXISTS(SELECT 1 FROM MarketAction WHERE MarketActionId = A.MarketActionId AND EventTypeId <> 99 )";
             }
             if (roleTypeShop != null && roleTypeShop.Count > 0)
             {

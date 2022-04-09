@@ -334,7 +334,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         break;
                     case "MRH":
                         path = service.GetHandOverReportPPT(marketActionId);
-                        picType = "MPH11";
+                        picType = "MRH11";
                         break;
                     default:
                         path = service.GetActionPlanPPT(marketActionId);
@@ -1025,12 +1025,13 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("MarketAction/MarketActionStatusCountSearch")]
+        [Route("MarketAction/MarketActionReportCountSearch")]
         public APIResult MarketActionReportCountSearch(string year, string eventTypeId, string userId, string roleTypeCode)
         {
             try
             {
-                List<MarketActionReportCountDto> marketActionStatusCountListDto = marketActionService.MarketActionReportCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
+                List<MarketActionReportCountDto> marketActionStatusCountListDto = marketActionService.MarketActionReportCountSearch(year, "", accountService.GetShopByRole(userId, roleTypeCode));
+                marketActionStatusCountListDto.AddRange(marketActionService.MarketActionReportCountSearch(year, "99", accountService.GetShopByRole(userId, roleTypeCode)));
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionStatusCountListDto) };
             }
             catch (Exception ex)
@@ -1044,7 +1045,8 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
-                List<ExpenseAccountStatusCountDto> expenseAccountStatusCountList = dmfService.ExpenseAccountStatusCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
+                List<ExpenseAccountStatusCountDto> expenseAccountStatusCountList = dmfService.ExpenseAccountStatusCountSearch(year, "", accountService.GetShopByRole(userId, roleTypeCode));
+                expenseAccountStatusCountList.AddRange(dmfService.ExpenseAccountStatusCountSearch(year, "99", accountService.GetShopByRole(userId, roleTypeCode)));
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(expenseAccountStatusCountList) };
             }
             catch (Exception ex)
