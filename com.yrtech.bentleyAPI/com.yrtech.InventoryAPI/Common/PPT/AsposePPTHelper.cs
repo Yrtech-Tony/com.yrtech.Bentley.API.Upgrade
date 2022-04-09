@@ -168,7 +168,7 @@ namespace com.yrtech.InventoryAPI.Common
         {
             if (shape!=null)
             {
-                shape.TextFrame.Text = value;
+                shape.TextFrame.Text = (value==null?"":value);
             }
         }
 
