@@ -985,7 +985,7 @@ Catering 餐饮
                 {
                     int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
                     if (index < 0) return;
-                    int row = 3 + index;
+                    int row = 2 + index;
                     helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
                     helper.SaveTableCell(table1, row, 5, DateTimeToString(item.StartDate));
