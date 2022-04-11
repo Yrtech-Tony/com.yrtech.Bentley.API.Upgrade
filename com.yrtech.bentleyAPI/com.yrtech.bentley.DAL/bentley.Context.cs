@@ -25,9 +25,7 @@ namespace com.yrtech.bentley.DAL
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Area> Area { get; set; }
         public virtual DbSet<CommitFile> CommitFile { get; set; }
-        public virtual DbSet<CoopFundType> CoopFundType { get; set; }
         public virtual DbSet<DMFDetail> DMFDetail { get; set; }
         public virtual DbSet<DMFItem> DMFItem { get; set; }
         public virtual DbSet<DTTApprove> DTTApprove { get; set; }
@@ -52,5 +50,7 @@ namespace com.yrtech.bentley.DAL
         public virtual DbSet<Shop> Shop { get; set; }
         public virtual DbSet<ShopCommitFileRecord> ShopCommitFileRecord { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
+        public virtual DbSet<Area> Area { get; set; }
+        public virtual DbSet<CoopFundType> CoopFundType { get; set; }
     }
 }

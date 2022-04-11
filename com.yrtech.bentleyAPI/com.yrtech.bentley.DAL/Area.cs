@@ -18,6 +18,7 @@ namespace com.yrtech.bentley.DAL
         public string AreaCode { get; set; }
         public string AreaName { get; set; }
         public string AreaNameEn { get; set; }
+        public string DTTEmail { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }
         public Nullable<int> ModifyUserId { get; set; }

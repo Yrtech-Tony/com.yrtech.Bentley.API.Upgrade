@@ -431,7 +431,7 @@ namespace com.yrtech.InventoryAPI.Service
             sql += @"SELECT *  FROM [MarketActionBefore4WeeksCoopFund] WHERE MarketActionId = @MarketActionId";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionBefore4WeeksCoopFund>().ToList();
         }
-        public void MarketActionBefore4WeeksCoopFundSave(MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund)
+        public MarketActionBefore4WeeksCoopFund MarketActionBefore4WeeksCoopFundSave(MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund)
         {
             MarketActionBefore4WeeksCoopFund findOneMax = db.MarketActionBefore4WeeksCoopFund.Where(x => (x.MarketActionId == marketActionBefore4WeeksCoopFund.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
             if (findOneMax == null)
@@ -447,6 +447,7 @@ namespace com.yrtech.InventoryAPI.Service
             db.MarketActionBefore4WeeksCoopFund.Add(marketActionBefore4WeeksCoopFund);
 
             db.SaveChanges();
+            return marketActionBefore4WeeksCoopFund;
         }
         public void MarketActionBefore4WeeksCoopFundDelete(string marketActionId)
         {
@@ -747,7 +748,7 @@ namespace com.yrtech.InventoryAPI.Service
             sql += @"SELECT *  FROM [MarketActionAfter7CoopFund] WHERE MarketActionId = @MarketActionId";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionAfter7CoopFund>().ToList();
         }
-        public void MarketActionAfter7CoopFundSave(MarketActionAfter7CoopFund marketActionAfter7CoopFund)
+        public MarketActionAfter7CoopFund MarketActionAfter7CoopFundSave(MarketActionAfter7CoopFund marketActionAfter7CoopFund)
         {
             MarketActionAfter7CoopFund findOneMax = db.MarketActionAfter7CoopFund.Where(x => (x.MarketActionId == marketActionAfter7CoopFund.MarketActionId)).OrderByDescending(x => x.SeqNO).FirstOrDefault();
             if (findOneMax == null)
@@ -763,6 +764,7 @@ namespace com.yrtech.InventoryAPI.Service
             db.MarketActionAfter7CoopFund.Add(marketActionAfter7CoopFund);
 
             db.SaveChanges();
+            return marketActionAfter7CoopFund;
         }
         public void MarketActionAfter7CoopFundDelete(string marketActionId)
         {

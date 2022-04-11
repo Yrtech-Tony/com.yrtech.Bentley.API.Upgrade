@@ -313,11 +313,11 @@ namespace com.yrtech.SurveyAPI.Controllers
                     case "MPF":
                         CommonHelper.log("开始调用");
                         path = service.GetActionPlanPPT(marketActionId);
-                        CommonHelper.log("调用完成"+path);
+                        CommonHelper.log("调用完成" + path);
                         picType = "MPF13";
                         break;
                     case "MPN":
-                        path = service.GetActionPlanOnlinePPT(marketActionId);                       
+                        path = service.GetActionPlanOnlinePPT(marketActionId);
                         picType = "MPN11";
                         break;
                     case "MRF":
@@ -341,7 +341,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         picType = "MPF13";
                         break;
                 }
-               
+
                 if (!string.IsNullOrEmpty(path))
                 {
                     string fileName = Path.GetFileName(path);
@@ -510,6 +510,33 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
 
         }
+        [HttpPost]
+        [Route("MarketAction/MarketActionBefore4WeeksCoopFundSave")]
+        public APIResult MarketActionBefore4WeeksCoopFundSave(MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund)
+        {
+            try
+            {
+                if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.StartDate != null && marketActionBefore4WeeksCoopFund.EndDate != null)
+                {
+                    DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.StartDate).ToShortDateString());
+                    DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.EndDate).ToShortDateString());
+                    TimeSpan sp = end.Subtract(start);
+                    marketActionBefore4WeeksCoopFund.TotalDays = sp.Days;
+                }
+                if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.TotalDays != null && marketActionBefore4WeeksCoopFund.TotalDays != 0)
+                {
+                    marketActionBefore4WeeksCoopFund.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0 : marketActionBefore4WeeksCoopFund.CoopFundAmt;
+                    marketActionBefore4WeeksCoopFund.AmtPerDay = marketActionBefore4WeeksCoopFund.CoopFundAmt / marketActionBefore4WeeksCoopFund.TotalDays;
+                }
+                marketActionBefore4WeeksCoopFund = marketActionService.MarketActionBefore4WeeksCoopFundSave(marketActionBefore4WeeksCoopFund);
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionBefore4WeeksCoopFund) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+
+        }
         #endregion
         #region 发送邮件
         [HttpGet]
@@ -577,6 +604,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 string content = "";
                 List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
                 List<ShopDto> shop = new List<ShopDto>();
+                List<Area> area = new List<Area>();
                 List<UserInfoDto> userinfo = new List<UserInfoDto>();
                 if (marketAction != null && marketAction.Count > 0)
                 {
@@ -585,6 +613,10 @@ namespace com.yrtech.SurveyAPI.Controllers
                     //if (marketAction[0].EventModeId == 1) { eventMode = "线上"; }
                     //else { eventMode = "线下"; }
                     shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
+                    if (shop != null && shop.Count > 0)
+                    {
+                        area = masterService.AreaSearch(shop[0].AreaId.ToString(), "", "");
+                    }
                     userinfo = masterService.UserInfoSearch("", "", shop[0].ShopName.ToString(), "", "", "", "", "");
                     //fileName = marketactionId + "-" + shop[0].ShopName + "-" + "市场活动-活动计划" + eventMode + "-" + marketactionName;
                     if (type == "MP") { type = "市场活动计划"; }
@@ -599,8 +631,9 @@ namespace com.yrtech.SurveyAPI.Controllers
                     content += "邮件由系统自动发送如有问题请联系区域负责同事";
                 }
                 // 发送给经销商时抄送给自己，以备查看
-                SendEmail(WebConfigurationManager.AppSettings["DTTApprove_To"], WebConfigurationManager.AppSettings["DTTApprove_CC"]
-                        , title, content, "", "");
+                //SendEmail(WebConfigurationManager.AppSettings["DTTApprove_To"], WebConfigurationManager.AppSettings["DTTApprove_CC"]
+                //        , title, content, "", "");
+                SendEmail(area[0].DTTEmail, WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
                 return new APIResult() { Status = true, Body = "" };
             }
             catch (Exception ex)
@@ -963,6 +996,33 @@ namespace com.yrtech.SurveyAPI.Controllers
                     }
                 }
                 return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+
+        }
+        [HttpPost]
+        [Route("MarketAction/MarketActionAfter7CoopFundSave")]
+        public APIResult MarketActionAfter7CoopFundSave(MarketActionAfter7CoopFund marketActionAfter7CoopFund)
+        {
+            try
+            {
+                if (marketActionAfter7CoopFund != null && marketActionAfter7CoopFund.StartDate != null && marketActionAfter7CoopFund.EndDate != null)
+                {
+                    DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionAfter7CoopFund.StartDate).ToShortDateString());
+                    DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionAfter7CoopFund.EndDate).ToShortDateString());
+                    TimeSpan sp = end.Subtract(start);
+                    marketActionAfter7CoopFund.TotalDays = sp.Days;
+                }
+                if (marketActionAfter7CoopFund != null && marketActionAfter7CoopFund.TotalDays != null && marketActionAfter7CoopFund.TotalDays != 0)
+                {
+                    marketActionAfter7CoopFund.CoopFundAmt = marketActionAfter7CoopFund.CoopFundAmt == null ? 0 : marketActionAfter7CoopFund.CoopFundAmt;
+                    marketActionAfter7CoopFund.AmtPerDay = marketActionAfter7CoopFund.CoopFundAmt / marketActionAfter7CoopFund.TotalDays;
+                }
+                marketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionAfter7CoopFund) };
             }
             catch (Exception ex)
             {

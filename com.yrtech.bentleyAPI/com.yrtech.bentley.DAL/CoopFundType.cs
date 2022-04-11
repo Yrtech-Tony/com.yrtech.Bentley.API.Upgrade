@@ -19,6 +19,7 @@ namespace com.yrtech.bentley.DAL
         public string CoopFundTypeName { get; set; }
         public string CoopFundTypeNameEn { get; set; }
         public Nullable<bool> ShowChk { get; set; }
+        public string ModeType { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }
         public Nullable<int> ModifyUserId { get; set; }

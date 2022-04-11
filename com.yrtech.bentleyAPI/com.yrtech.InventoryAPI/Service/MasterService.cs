@@ -23,7 +23,7 @@ namespace com.yrtech.InventoryAPI.Service
                                                     new SqlParameter("@ShopNameEn", shopNameEn)};
             Type t = typeof(ShopDto);
             string sql = "";
-             sql = @"SELECT A.*,B.AreaCode,B.AreaName,B.AreaNameEn 
+             sql = @"SELECT A.*,B.AreaCode,B.AreaName,B.AreaNameEn,B.AreaId
                     FROM Shop A LEFT JOIN Area B ON A.AreaId = B.AreaId
                     WHERE 1=1";
             if (!string.IsNullOrEmpty(shopId))
@@ -121,6 +121,7 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.AreaNameEn = area.AreaNameEn;
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = area.ModifyUserId;
+                findOne.DTTEmail = area.DTTEmail;
                 area = findOne;
             }
             db.SaveChanges();
@@ -378,14 +379,16 @@ namespace com.yrtech.InventoryAPI.Service
         }
         #endregion
         #region CoopFundType
-        public List<CoopFundType> CoopFundTypeSearch(string coopFundTypeId, string coopFundTypeName, string coopFundTypeNameEn, bool? showChk)
+        public List<CoopFundType> CoopFundTypeSearch(string coopFundTypeId, string coopFundTypeName, string coopFundTypeNameEn, bool? showChk,string modeType)
         {
             if (coopFundTypeId == null) coopFundTypeId = "";
             if (coopFundTypeName == null) coopFundTypeName = "";
             if (coopFundTypeNameEn == null) coopFundTypeNameEn = "";
+            if (modeType == null) modeType = "";
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@CoopFundTypeId", coopFundTypeId),
                                                     new SqlParameter("@CoopFundTypeName", coopFundTypeName),
-                                                    new SqlParameter("@CoopFundTypeNameEn", coopFundTypeNameEn)};
+                                                    new SqlParameter("@CoopFundTypeNameEn", coopFundTypeNameEn),
+                                                    new SqlParameter("@ModeType", modeType)};
             Type t = typeof(CoopFundType);
             string sql = "";
             sql = @"SELECT *
@@ -402,6 +405,10 @@ namespace com.yrtech.InventoryAPI.Service
             if (!string.IsNullOrEmpty(coopFundTypeNameEn))
             {
                 sql += " AND CoopFundTypeNameEn = @CoopFundTypeNameEn";
+            }
+            if (!string.IsNullOrEmpty(modeType))
+            {
+                sql += " AND ModeType = @ModeType";
             }
             if (showChk.HasValue)
             {
