@@ -644,52 +644,61 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("MarketAction/DTTApproveEmail")]
-        public APIResult DTTApproveEmail(DTTApprove dttApprove, string type)
+        public APIResult DTTApproveEmail(string marketActionId, string type)
         {
             try
             {
                 string marketactionName = "";
-                string marketactionId = dttApprove.MarketActionId.ToString(); ;
+                string dttType = "";
+                string dttApproveCode = "";
+                if (type == "MP") { type = "市场活动计划"; dttType = "1"; }
+                else if (type == "MR") { type = "市场活动报告"; dttType = "2"; }
+                else if (type == "HP") { type = "交车仪式计划"; dttType = "1"; }
+                else if (type == "HR") { type = "交车仪式报告"; dttType = "2"; }
+               List<DTTApproveDto> dttAproveList = approveService.DTTApproveSearch("", marketActionId, dttType, "");
+                if (dttAproveList != null && dttAproveList.Count > 0)
+                {
+                    dttApproveCode = dttAproveList[0].DTTApproveCode;
+                }
                 string title = "";
                 string content = "";
-                List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketactionId);
+                List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
                 List<ShopDto> shop = new List<ShopDto>();
                 List<UserInfoDto> userinfo_shop = new List<UserInfoDto>();
                 List<UserInfoDto> userinfo_area = new List<UserInfoDto>();
                 if (marketAction != null && marketAction.Count > 0)
                 {
                     marketactionName = marketAction[0].ActionName;
-                    marketactionId = marketAction[0].MarketActionId.ToString();
+                    marketActionId = marketAction[0].MarketActionId.ToString();
                     shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
                     userinfo_shop = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "");
                     userinfo_area = masterService.UserInfoSearch("", "", "", "", "", "", "", shop[0].AreaId.ToString());
-                    if (type == "MP") { type = "市场活动计划"; }
-                    else if (type == "MR") { type = "市场活动报告"; }
-                    else if (type == "HP") { type = "交车仪式计划"; }
-                    else if (type == "HR") { type = "交车仪式报告"; }
-                    if (dttApprove.DTTApproveCode == "2")
+                    if (dttApproveCode == "2")
                     {
-                        title = "【DMN】" + marketactionId.ToString() + "-" + marketactionName + "-" + type;
+                        title = "【DMN】" + marketActionId.ToString() + "-" + marketactionName + "-" + type;
                         content = "尊敬的经销商市场经理，" + "\r\n";
-                        content += "您在DMN填报的" + marketactionId.ToString() + marketactionName + type + "初审已通过，请您知悉。" + "\r\n";
+                        content += "您在DMN填报的" + marketActionId.ToString() + marketactionName + type + "初审已通过，请您知悉。" + "\r\n";
                         content += "此外还提醒您，发送邮件申请至BMC区域经理邮箱并抄送德勤区域同事，以确保市场基金正常审批。" + "\r\n";
                         content += "顺颂商祺" + "\r\n";
                         content += "DMN市场行动智能助理" + "\r\n";
                         content += "邮件由系统自动发送如有问题请联系区域负责同事。";
                     }
-                    else
+                    else if(dttApproveCode == "3")
                     {
-                        title = "【DMN】请及时修改" + marketactionId.ToString() + "-" + marketactionName + "-" + type;
+                        title = "【DMN】请及时修改" + marketActionId.ToString() + "-" + marketactionName + "-" + type;
                         content = "尊敬的经销商市场经理，" + "\r\n";
-                        content += "您在DMN填报的" + marketactionId.ToString() + marketactionName + type + "初审未通过，请您知悉。" + "\r\n";
+                        content += "您在DMN填报的" + marketActionId.ToString() + marketactionName + type + "初审未通过，请您知悉。" + "\r\n";
                         content += "请您尽快登录DMN，查看审批意见，及时修改，重新提交。感谢支持！" + "\r\n";
                         content += "顺颂商祺" + "\r\n";
                         content += "DMN市场行动智能助理" + "\r\n";
                         content += "邮件由系统自动发送如有问题请联系区域负责同事。";
                     }
                 }
-                // 发送给经销商时抄送给自己，以备查看
-                SendEmail(userinfo_shop[0].Email, userinfo_area[0].Email+","+ WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
+                if (dttApproveCode == "2" || dttApproveCode == "3")
+                {
+                    // 发送给经销商时抄送给自己，以备查看
+                    SendEmail(userinfo_shop[0].Email, userinfo_area[0].Email + "," + WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
+                }
                 return new APIResult() { Status = true, Body = "" };
             }
             catch (Exception ex)
