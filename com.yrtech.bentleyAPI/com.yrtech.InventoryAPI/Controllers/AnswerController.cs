@@ -521,7 +521,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.StartDate).ToShortDateString());
                     DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.EndDate).ToShortDateString());
                     TimeSpan sp = end.Subtract(start);
-                    marketActionBefore4WeeksCoopFund.TotalDays = sp.Days;
+                    marketActionBefore4WeeksCoopFund.TotalDays = sp.Days+1;
                 }
                 if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.TotalDays != null && marketActionBefore4WeeksCoopFund.TotalDays != 0)
                 {
@@ -617,7 +617,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     {
                         area = masterService.AreaSearch(shop[0].AreaId.ToString(), "", "");
                     }
-                    userinfo = masterService.UserInfoSearch("", "", shop[0].ShopName.ToString(), "", "", "", "", "");
+                    //userinfo = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "");
                     //fileName = marketactionId + "-" + shop[0].ShopName + "-" + "市场活动-活动计划" + eventMode + "-" + marketactionName;
                     if (type == "MP") { type = "市场活动计划"; }
                     else if (type == "MR") { type = "市场活动报告"; }
@@ -661,8 +661,8 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketactionName = marketAction[0].ActionName;
                     marketactionId = marketAction[0].MarketActionId.ToString();
                     shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
-                    userinfo_shop = masterService.UserInfoSearch("", "", shop[0].ShopName.ToString(), "", "", "", "", "");
-                    userinfo_area = masterService.UserInfoSearch("", "", shop[0].ShopName.ToString(), "", "", "", "", shop[0].AreaId.ToString());
+                    userinfo_shop = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "");
+                    userinfo_area = masterService.UserInfoSearch("", "", "", "", "", "", "", shop[0].AreaId.ToString());
                     if (type == "MP") { type = "市场活动计划"; }
                     else if (type == "MR") { type = "市场活动报告"; }
                     else if (type == "HP") { type = "交车仪式计划"; }
@@ -689,7 +689,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     }
                 }
                 // 发送给经销商时抄送给自己，以备查看
-                SendEmail(userinfo_shop[0].Email, userinfo_area[0].Email, title, content, "", "");
+                SendEmail(userinfo_shop[0].Email, userinfo_area[0].Email+","+ WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
                 return new APIResult() { Status = true, Body = "" };
             }
             catch (Exception ex)
