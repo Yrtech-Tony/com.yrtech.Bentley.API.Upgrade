@@ -312,11 +312,11 @@ namespace com.yrtech.InventoryAPI.Service
             }
             if (!string.IsNullOrEmpty(shopId))
             {
-                sql += " AND A.ShopId = @ShopId";
+                sql += " AND A.ShopId = @ShopId AND A.RoleTypeCode = 'SHOP'";
             }
             if (!string.IsNullOrEmpty(areaId))
             {
-                sql += " AND A.AreaId = @AreaId";
+                sql += " AND A.AreaId = @AreaId AND A.RoleTypeCode = 'AREA'";
             }
             if (!string.IsNullOrEmpty(email))
             {
