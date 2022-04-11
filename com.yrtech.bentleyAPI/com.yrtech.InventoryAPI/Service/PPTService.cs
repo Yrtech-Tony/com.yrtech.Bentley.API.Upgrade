@@ -985,13 +985,8 @@ Catering 餐饮
                 {
                     int index = Array.IndexOf(ActionReportOnlineBudgetTypes, item.CoopFundCode);
                     if (index < 0) return;
-                    int row = 3 + index;
-                    helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));
-                    helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
-                    helper.SaveTableCell(table1, row, 5, DateTimeToString(item.StartDate));
-                    helper.SaveTableCell(table1, row, 6, DateTimeToString(item.EndDate));
-                    helper.SaveTableCell(table1, row, 7, IntNullabelToString(item.TotalDays));
-                    helper.SaveTableCell(table1, row, 9, DecimalNullabelToString(item.AmtPerDay));
+                    int row = 2 + index;
+                    helper.SaveTableCell(table1, row, 3, DecimalNullabelToString(item.CoopFundAmt));                   
                 });
             }
             List<MarketActionAfter7CoopFund> after7CoopFunds = actionService.MarketActionAfter7CoopFundSearch(marketActionId);
@@ -1005,6 +1000,11 @@ Catering 餐饮
                     if (index < 0) return;
                     int row = 3 + index;
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
+                    helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
+                    helper.SaveTableCell(table1, row, 5, DateTimeToString(item.StartDate));
+                    helper.SaveTableCell(table1, row, 6, DateTimeToString(item.EndDate));
+                    helper.SaveTableCell(table1, row, 7, IntNullabelToString(item.TotalDays));
+                    helper.SaveTableCell(table1, row, 9, DecimalNullabelToString(item.AmtPerDay));
                 });
             }
 
