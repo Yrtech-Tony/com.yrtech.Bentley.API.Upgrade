@@ -23,10 +23,10 @@ Hospitality 礼仪
 Others 其他
 Catering 餐饮
          * */
-        string[] ActionPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality" };
+        string[] ActionPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality", "Catering" };
         string[] ActionReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Performance", "MC", "Hospitality", "Catering", "Others" };
         string[] HandOverReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
-        string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "", "Catering_Drink", "" };
+        string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "", "Catering_Drink", "", "Catering" };
         string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
         string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
 
@@ -359,7 +359,7 @@ Catering 餐饮
             return path;
         }
         /// <summary>
-        /// 生成活动计划报告PPT
+        /// 生成活动报告PPT
         /// </summary>
         /// <param name="marketActionId"></param>
         /// <returns></returns>
@@ -487,6 +487,23 @@ Catering 餐饮
                 });
             }
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            // 活动计划的餐饮是分为餐费和酒水，活动报告只有餐饮。需要合并到一起
+            MarketActionBefore4WeeksCoopFund coopFundCatering = new MarketActionBefore4WeeksCoopFund();
+            decimal? cateringAmt = 0;
+            if (before4WeeksCoopFund != null && before4WeeksCoopFund.Count > 0)
+            {
+                foreach (MarketActionBefore4WeeksCoopFund coopFund in before4WeeksCoopFund)
+                {
+                    if (coopFund.CoopFundCode == "Catering_Drink" || coopFund.CoopFundCode == "Catering_Food")
+                    {
+                        cateringAmt += coopFund.CoopFundAmt == null ? 0 : coopFund.CoopFundAmt;
+                    }
+                }
+                coopFundCatering.CoopFundAmt = cateringAmt;
+                coopFundCatering.CoopFundCode = "Catering";
+                coopFundCatering.MarketActionId = before4WeeksCoopFund[0].MarketActionId;
+                before4WeeksCoopFund.Add(coopFundCatering);
+            }
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情  Plan Budget预算列
@@ -744,14 +761,14 @@ Catering 餐饮
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
                 date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
-                place = lst[0].ActionPlace; 
+                place = lst[0].ActionPlace;
             }
-    
+
             if (lst.Count > 0)
             {
                 ISlide firstSlide = helper.GetSlide(1);
                 IShape table1 = helper.GetShape(firstSlide, 2);
-                helper.SaveTableCell(table1, 2, 2, actionName);             
+                helper.SaveTableCell(table1, 2, 2, actionName);
 
             }
             //第1页 活动总览 Overview
@@ -990,7 +1007,7 @@ Catering 餐饮
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                 });
             }
-            
+
             //第3页 线索报告
             List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
@@ -1419,6 +1436,23 @@ Catering 餐饮
                 });
             }
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            // 活动计划的餐饮是分为餐费和酒水，活动报告只有餐饮。需要合并到一起
+            MarketActionBefore4WeeksCoopFund coopFundCatering = new MarketActionBefore4WeeksCoopFund();
+            decimal? cateringAmt = 0;
+            if (before4WeeksCoopFund != null && before4WeeksCoopFund.Count > 0)
+            {
+                foreach (MarketActionBefore4WeeksCoopFund coopFund in before4WeeksCoopFund)
+                {
+                    if (coopFund.CoopFundCode == "Catering_Drink" || coopFund.CoopFundCode == "Catering_Food")
+                    {
+                        cateringAmt += coopFund.CoopFundAmt == null ? 0 : coopFund.CoopFundAmt;
+                    }
+                }
+                coopFundCatering.CoopFundAmt = cateringAmt;
+                coopFundCatering.CoopFundCode = "Catering";
+                coopFundCatering.MarketActionId = before4WeeksCoopFund[0].MarketActionId;
+                before4WeeksCoopFund.Add(coopFundCatering);
+            }
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情  Plan Budget预算列
