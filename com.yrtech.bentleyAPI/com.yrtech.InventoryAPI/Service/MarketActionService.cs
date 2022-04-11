@@ -53,9 +53,9 @@ namespace com.yrtech.InventoryAPI.Service
 			                      THEN 'WaitForChange'
                                   WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=1) 
 			                      THEN 'Commited'
-			                      WHEN  DATEDIFF(DAY,GETDATE(),A.StartDate)<28 AND EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
+			                      WHEN  GETDATE()>DATEADD(DD,-28,A.StartDate) AND EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId) 
-                                  WHEN DATEDIFF(DAY,GETDATE(),A.StartDate)<28 AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
+                                  WHEN GETDATE()>DATEADD(DD,-28,A.StartDate)AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
                                   THEN '0.00'
 			                      ELSE 'UnCommit'
 	                        END AS 	Before4Weeks
@@ -63,7 +63,7 @@ namespace com.yrtech.InventoryAPI.Service
 	                        ,CASE WHEN EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId) 
 			                      THEN 'Commited'
 			                      WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId) 
-				                       AND DATEDIFF(DAY,A.StartDate,GETDATE())>2
+				                       AND GETDATE()>DATEADD(DD,7,A.StartDate)
 			                      THEN 'UnCommitTime'
 			                      ELSE 'UnCommit'
 	                        END AS 	After2Days
@@ -73,9 +73,9 @@ namespace com.yrtech.InventoryAPI.Service
 			                      THEN 'WaitForChange'
                                   WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=1) 
 			                      THEN 'Commited'
-			                      WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7 AND EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
+			                      WHEN  GETDATE()>DATEADD(DD,7,A.StartDate) AND EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId) 
-                                  WHEN  DATEDIFF(DAY,A.StartDate,GETDATE())>7 AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
+                                  WHEN  GETDATE()>DATEADD(DD,7,A.StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
                                   THEN '0.00 '
 			                      ELSE 'UnCommit'
 	                        END AS 	After7Days	
@@ -84,7 +84,7 @@ namespace com.yrtech.InventoryAPI.Service
 					                    LEFT JOIN EventType C ON A.EventTypeId = C.EventTypeId
 					                    LEFT JOIN HiddenCode D ON A.MarketActionStatusCode = D.HiddenCodeId AND D.HiddenCodeGroup = 'MarketActionStatus'
 					                    LEFT JOIN HiddenCode E ON A.MarketActionTargetModelCode  = E.HiddenCodeId AND E.HiddenCodeGroup = 'TargetModels'
-                    WHERE 1=1 ";
+                    WHERE 1=1  ";
             if (!string.IsNullOrEmpty(actionName))
             {
                 sql += " AND A.ActionName LIKE '%'+@ActionName+'%'";
@@ -843,7 +843,7 @@ namespace com.yrtech.InventoryAPI.Service
 				                            THEN 1
 				                            ELSE 0
 			                            END AS Before4WeeksWaitForChange -- 提交后还未通过(包括待审批和待修改)
-                            , CASE WHEN GETDATE()>DATEADD(DD,7,EndDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
+                            , CASE WHEN GETDATE()>DATEADD(DD,7,StartDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
 				                            THEN 1
 				                            ELSE 0
 			                            END AS After7NotCommit
@@ -907,16 +907,16 @@ namespace com.yrtech.InventoryAPI.Service
 				                            THEN 1
 				                            ELSE 0
 			                            END AS PlanCoopFundUnCommit -- 到时间还未填写市场基金金额合计
-                            , CASE WHEN  GETDATE()>DATEADD(DD,7,EndDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
+                            , CASE WHEN  GETDATE()>DATEADD(DD,7,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
 			                            END AS LeadsUnCommit --到时间还未填写线索报告
 			                            
-			                 ,CASE WHEN GETDATE()>DATEADD(DD,7,EndDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7CoopFund WHERE MarketActionId = A.MarketActionId )
+			                 ,CASE WHEN GETDATE()>DATEADD(DD,7,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7CoopFund WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
 			                            END AS ReportBugetUnCommit -- 到时间还填写预算费用
-                            , CASE WHEN GETDATE()>DATEADD(DD,7,EndDate) AND B.CoopFundSumAmt IS NULL
+                            , CASE WHEN GETDATE()>DATEADD(DD,7,StartDate) AND B.CoopFundSumAmt IS NULL
 				                            THEN 1
 				                            ELSE 0
 			                            END AS ReportCoopFundUnCommit -- 到时间还未填写市场基金金额合计
