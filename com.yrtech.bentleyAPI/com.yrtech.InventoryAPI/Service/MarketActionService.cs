@@ -834,20 +834,20 @@ namespace com.yrtech.InventoryAPI.Service
 	                       ,ISNULL(SUM(After7NotCommit),0) AS After7NotCommit
 	                       ,ISNULL(SUM(After7WaitForChange),0) AS After7WaitForChange
                     FROM (
-                            SELECT 
-                            CASE WHEN NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
+                             SELECT 
+                            CASE WHEN GETDATE()>DATEADD(DD,-28,StartDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
 				                            THEN 1
 				                            ELSE 0
-			                            END AS Before4WeeksNotCommit
-                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =1 AND DTTApproveCode='3')
+			                            END AS Before4WeeksNotCommit-- 到时间还未提交
+                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =1 AND DTTApproveCode<>'3')
 				                            THEN 1
 				                            ELSE 0
-			                            END AS Before4WeeksWaitForChange
-                            , CASE WHEN NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
+			                            END AS Before4WeeksWaitForChange -- 提交后还未通过(包括待审批和待修改)
+                            , CASE WHEN GETDATE()>DATEADD(DD,7,EndDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
 				                            THEN 1
 				                            ELSE 0
 			                            END AS After7NotCommit
-                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =2 AND DTTApproveCode='3')
+                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =2 AND DTTApproveCode<>'3')
 				                            THEN 1
 				                            ELSE 0
 			                            END AS After7WaitForChange
@@ -899,29 +899,30 @@ namespace com.yrtech.InventoryAPI.Service
 	                       ,ISNULL(SUM(ReportCoopFundUnCommit),0) AS ReportCoopFundUnCommit
                     FROM (
                             SELECT 
-                            CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksCoopFund WHERE MarketActionId = A.MarketActionId )
+                            CASE WHEN GETDATE()>DATEADD(DD,-28,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksCoopFund WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
-			                            END AS PlanBugetUnCommit
-                            , CASE WHEN B.CoopFundSumAmt IS NULL
+			                            END AS PlanBugetUnCommit -- 到时间还填写预算费用
+                            , CASE WHEN GETDATE()>DATEADD(DD,-28,StartDate) AND B.CoopFundSumAmt IS NULL
 				                            THEN 1
 				                            ELSE 0
-			                            END AS PlanCoopFundUnCommit
-                            , CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
+			                            END AS PlanCoopFundUnCommit -- 到时间还未填写市场基金金额合计
+                            , CASE WHEN  GETDATE()>DATEADD(DD,7,EndDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
-			                            END AS LeadsUnCommit
-			                 ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionAfter7CoopFund WHERE MarketActionId = A.MarketActionId )
+			                            END AS LeadsUnCommit --到时间还未填写线索报告
+			                            
+			                 ,CASE WHEN GETDATE()>DATEADD(DD,7,EndDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter7CoopFund WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
-			                            END AS ReportBugetUnCommit
-                            , CASE WHEN B.CoopFundSumAmt IS NULL
+			                            END AS ReportBugetUnCommit -- 到时间还填写预算费用
+                            , CASE WHEN GETDATE()>DATEADD(DD,7,EndDate) AND B.CoopFundSumAmt IS NULL
 				                            THEN 1
 				                            ELSE 0
-			                            END AS ReportCoopFundUnCommit
+			                            END AS ReportCoopFundUnCommit -- 到时间还未填写市场基金金额合计
                             FROM MarketAction A LEFT JOIN  MarketActionBefore4Weeks B ON  A.MarketActionId = B.MarketActionId
 												LEFT JOIN MarketActionAfter7 C  ON  A.MarketActionId = C.MarketActionId
-                            WHERE 1=1 AND A.MarketActionStatusCode<>2 AND Month(A.StartDate)=Month(GETDATE()) ";
+                            WHERE 1=1 AND A.MarketActionStatusCode<>2 ";
             if (!string.IsNullOrEmpty(year))
             {
                 sql += " AND Year(A.StartDate) = @Year";
