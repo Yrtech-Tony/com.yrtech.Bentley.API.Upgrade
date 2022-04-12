@@ -203,7 +203,7 @@ namespace com.yrtech.InventoryAPI.Service
         {
             List<MarketActionExportDto> list = new List<MarketActionExportDto>();
             List<MarketActionDto> marketActionList = new List<MarketActionDto>();
-
+            // 市场活动信息
             List<MarketActionDto> marketActionListTemp = marketActionService.MarketActionSearch(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk);
             List<Shop> roleTypeShopList = accountService.GetShopByRole(userId, roleTypeCode);
             foreach (MarketActionDto marketActionDto in marketActionListTemp)
@@ -221,55 +221,83 @@ namespace com.yrtech.InventoryAPI.Service
                 MarketActionExportDto exportDto = new MarketActionExportDto();
                 exportDto.ActionCode = marketActiondto.ActionCode;
                 exportDto.ActionName = marketActiondto.ActionName;
-                exportDto.ActionPlace = marketActiondto.ActionPlace;
+               // exportDto.ActionPlace = marketActiondto.ActionPlace;
                 exportDto.ActivityBudget = marketActiondto.ActivityBudget;
                 exportDto.ExpectLeadsCount = marketActiondto.ExpectLeadsCount;
                 exportDto.EndDate = marketActiondto.EndDate;
-                exportDto.EventTypeId = marketActiondto.EventTypeId;
+               // exportDto.EventTypeId = marketActiondto.EventTypeId;
                 exportDto.EventTypeName = marketActiondto.EventTypeName;
-                exportDto.EventTypeNameEn = marketActiondto.EventTypeNameEn;
-                exportDto.ExpenseAccount = marketActiondto.ExpenseAccount;
+                //exportDto.EventTypeNameEn = marketActiondto.EventTypeNameEn;
+                //exportDto.ExpenseAccount = marketActiondto.ExpenseAccount;
+                exportDto.EventModeName = marketActiondto.EventModeName;
                 exportDto.MarketActionId = marketActiondto.MarketActionId;
-                exportDto.MarketActionStatusCode = marketActiondto.MarketActionStatusCode;
+                if (marketActiondto.Before4Weeks == "Approved")
+                {
+                    exportDto.DTTApproveStatus_Plan = "通过";
+                }
+                else if (marketActiondto.Before4Weeks == "WaitForChange")
+                {
+                    exportDto.DTTApproveStatus_Plan = "修改";
+                }
+                else if (marketActiondto.Before4Weeks == "Commited")
+                {
+                    exportDto.DTTApproveStatus_Plan = "待审批";
+                }
+                else {
+                    exportDto.DTTApproveStatus_Plan = "未提交";
+                }
+
+                if (marketActiondto.After7Days == "Approved")
+                {
+                    exportDto.DTTApproveStatus_Report = "通过";
+                }
+                else if (marketActiondto.After7Days == "WaitForChange")
+                {
+                    exportDto.DTTApproveStatus_Report = "修改";
+                }
+                else if (marketActiondto.After7Days == "Commited")
+                {
+                    exportDto.DTTApproveStatus_Report = "待审批";
+                }
+                else
+                {
+                    exportDto.DTTApproveStatus_Report = "未提交";
+                }
+                //exportDto.MarketActionStatusCode = marketActiondto.MarketActionStatusCode;
                 exportDto.MarketActionStatusName = marketActiondto.MarketActionStatusName;
-                exportDto.MarketActionStatusNameEn = marketActiondto.MarketActionStatusNameEn;
-                exportDto.MarketActionTargetModelCode = marketActiondto.MarketActionTargetModelCode;
+               // exportDto.MarketActionStatusNameEn = marketActiondto.MarketActionStatusNameEn;
+                //exportDto.MarketActionTargetModelCode = marketActiondto.MarketActionTargetModelCode;
                 exportDto.MarketActionTargetModelName = marketActiondto.MarketActionTargetModelName;
-                exportDto.MarketActionTargetModelNameEn = marketActiondto.MarketActionTargetModelNameEn;
-                exportDto.ShopCode = marketActiondto.ShopCode;
-                exportDto.ShopId = marketActiondto.ShopId;
+                //exportDto.MarketActionTargetModelNameEn = marketActiondto.MarketActionTargetModelNameEn;
+                //exportDto.ShopCode = marketActiondto.ShopCode;
+               // exportDto.ShopId = marketActiondto.ShopId;
                 exportDto.ShopName = marketActiondto.ShopName;
-                exportDto.ShopNameEn = marketActiondto.ShopNameEn;
+               // exportDto.ShopNameEn = marketActiondto.ShopNameEn;
                 exportDto.StartDate = marketActiondto.StartDate;
                 List<MarketActionBefore4Weeks> Before4Weeks = marketActionService.MarketActionBefore4WeeksSearch(marketActiondto.MarketActionId.ToString());
                 if (Before4Weeks != null && Before4Weeks.Count > 0)
                 {
+                    Before4Weeks[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActiondto.MarketActionId.ToString());
                     exportDto.MarketActionBefore4Weeks = Before4Weeks[0];
                 }
-                decimal? actualExpenseSum = 0;
-                List<MarketActionAfter7ActualExpenseDto> expenseList = marketActionService.MarketActionAfter7ActualExpenseSearch(marketActiondto.MarketActionId.ToString());
-                foreach (MarketActionAfter7ActualExpenseDto expenseDto in expenseList)
-                {
-                    actualExpenseSum += expenseDto.Total;
-                }
-                exportDto.ActualExpenseSum = actualExpenseSum;
                 List<MarketActionAfter7> after7 = marketActionService.MarketActionAfter7Search(marketActiondto.MarketActionId.ToString());
                 if (after7 != null && after7.Count > 0)
                 {
+                    after7[0].TotalBudgetAmt = marketActionService.MarketActionAfter7TotalBudgetAmt(marketActiondto.MarketActionId.ToString());
                     exportDto.MarketActionAfter7 = after7[0];
                 }
-                List<MarketActionLeadsCountDto> leadsCount = marketActionService.MarketActionLeadsCountSearch(marketActiondto.MarketActionId.ToString());
-                if (leadsCount != null && leadsCount.Count > 0)
-                {
-                    exportDto.LeadsCount = leadsCount[0];
-                }
+                //List<MarketActionLeadsCountDto> leadsCount = marketActionService.MarketActionLeadsCountSearch(marketActiondto.MarketActionId.ToString());
+                //if (leadsCount != null && leadsCount.Count > 0)
+                //{
+                //    exportDto.LeadsCount = leadsCount[0];
+                //}
                 list.Add(exportDto);
 
             }
             Workbook book = Workbook.Load(basePath + @"Content\Excel\" + "MarketAction.xlsx", false);
             //填充数据
             Worksheet sheet = book.Worksheets[0];
-            int rowIndex = 2;
+            int rowIndex = 3;
 
             foreach (MarketActionExportDto item in list)
             {
@@ -279,68 +307,71 @@ namespace com.yrtech.InventoryAPI.Service
                 sheet.GetCell("B" + (rowIndex + 1)).Value = item.ShopName;
                 //活动状态
                 sheet.GetCell("C" + (rowIndex + 1)).Value = item.MarketActionStatusName;
+                //活动计划-DTT审批
+                sheet.GetCell("D" + (rowIndex + 1)).Value = item.DTTApproveStatus_Plan;
+                //活动报告DTT审批
+                sheet.GetCell("E" + (rowIndex + 1)).Value = item.DTTApproveStatus_Report ;
                 // 活动名称
-                sheet.GetCell("D" + (rowIndex + 1)).Value = item.ActionName;
+                sheet.GetCell("F" + (rowIndex + 1)).Value = item.ActionName;
                 // 活动Id
-                sheet.GetCell("E" + (rowIndex + 1)).Value = item.ActionCode;
+                sheet.GetCell("G" + (rowIndex + 1)).Value = item.ActionCode;
+                // 活动板块
+                sheet.GetCell("H" + (rowIndex + 1)).Value = item.EventModeName;
                 // 活动类型
-                sheet.GetCell("F" + (rowIndex + 1)).Value = item.EventTypeName;
+                sheet.GetCell("I" + (rowIndex + 1)).Value = item.EventTypeName;
                 // 活动预算
-                sheet.GetCell("G" + (rowIndex + 1)).Value = item.ActivityBudget;
+                sheet.GetCell("J" + (rowIndex + 1)).Value = item.ActivityBudget;
                 // 预计线索
-                sheet.GetCell("H" + (rowIndex + 1)).Value = item.ExpectLeadsCount;
+                sheet.GetCell("K" + (rowIndex + 1)).Value = item.ExpectLeadsCount;
                 //开始日期
-                sheet.GetCell("I" + (rowIndex + 1)).Value = item.StartDate;
+                sheet.GetCell("L" + (rowIndex + 1)).Value = item.StartDate;
                 //结束日期
-                sheet.GetCell("J" + (rowIndex + 1)).Value = item.EndDate;
+                sheet.GetCell("M" + (rowIndex + 1)).Value = item.EndDate;
                 // 主推车型
-                sheet.GetCell("K" + (rowIndex + 1)).Value = item.MarketActionTargetModelName;
+                sheet.GetCell("N" + (rowIndex + 1)).Value = item.MarketActionTargetModelName;
                 if (item.MarketActionBefore4Weeks != null)
                 {
-                    //// 活动预算
-                    //sheet.GetCell("L" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.Budget;
-                    //// 预计参加（车主)
-                    //sheet.GetCell("M" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetParticipationPCCount;
-                    //// 预计参加（潜客）
-                    //sheet.GetCell("N" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetParticipationPCCount;
-                    //// 预期线索（车主）
-                    //sheet.GetCell("O" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetLeadsOwnerCount;
-                    //// 预期线索（潜客）
-                    //sheet.GetCell("P" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetLeadsPCCount;
-                    //// 预计试驾（车主)
-                    //sheet.GetCell("Q" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetTestDriveOwnerCount;
-                    //// 预计试驾（潜客）
-                    //sheet.GetCell("R" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetTestDrivePCCount;
-                    //// 预计订单（车主）
-                    //sheet.GetCell("S" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetOrdersOwnerCount;
-                    //// 预计订单（潜客）
-                    //sheet.GetCell("T" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TargetOrdersPCCount;
+                    // 预算金额总计
+                    sheet.GetCell("O" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TotalBudgetAmt;
+                    // 市场基金金额总计
+                    sheet.GetCell("P" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.CoopFundSumAmt;
+                    // 参与人数
+                    sheet.GetCell("Q" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_ParticipantsCount;
+                    // DCPID客户数量
+                    sheet.GetCell("R" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_DCPIDCount;
+                    // 今年新增线索数量
+                    sheet.GetCell("S" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_NewLeadsThisYearCount;
                 }
-
-                // 实际花费
-                sheet.GetCell("U" + (rowIndex + 1)).Value = item.ActualExpenseSum;
                 if (item.MarketActionAfter7 != null)
                 {
-                    //// 到场人数（车主）
-                    //sheet.GetCell("V" + (rowIndex + 1)).Value = item.MarketActionAfter7.AttendenceOwnerCount;
-                    //// 预计试驾（潜客）
-                    //sheet.GetCell("W" + (rowIndex + 1)).Value = item.MarketActionAfter7.AttendencePCCount;
+                    // 活动实际花费
+                    sheet.GetCell("T" + (rowIndex + 1)).Value = item.MarketActionAfter7.TotalBudgetAmt;
+                    // 市场基金金额总计
+                    sheet.GetCell("U" + (rowIndex + 1)).Value = item.MarketActionAfter7.CoopFundSumAmt;
+                    // 实际参与人数
+                    sheet.GetCell("V" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_ParticipantsCount;
+                    // DCPID客户数量
+                    sheet.GetCell("W" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_DCPIDCount;
+                    // 今年新增线索数量
+                    sheet.GetCell("X" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_NewLeadsThsYearCount;
+                    // 新增订单
+                    sheet.GetCell("Y" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_NewOrderCount;
                 }
-                if (item.LeadsCount != null)
-                {
-                    // 线索数量（车主）
-                    sheet.GetCell("X" + (rowIndex + 1)).Value = item.LeadsCount.LeadOwnerCount;
-                    // 线索数量（潜客）
-                    sheet.GetCell("Y" + (rowIndex + 1)).Value = item.LeadsCount.LeadPCCount;
-                    // 试驾人数（车主）
-                    sheet.GetCell("Z" + (rowIndex + 1)).Value = item.LeadsCount.TestDriverOwnerCount;
-                    // 试驾人数（潜客）
-                    sheet.GetCell("AA" + (rowIndex + 1)).Value = item.LeadsCount.TestDriverPCCount;
-                    // 实际订单（车主）
-                    sheet.GetCell("AB" + (rowIndex + 1)).Value = item.LeadsCount.ActualOrderOwnerCount;
-                    // 实际订单（潜客）
-                    sheet.GetCell("AC" + (rowIndex + 1)).Value = item.LeadsCount.ActualOrderPCCount;
-                }
+                //if (item.LeadsCount != null)
+                //{
+                //    // 线索数量（车主）
+                //    sheet.GetCell("X" + (rowIndex + 1)).Value = item.LeadsCount.LeadOwnerCount;
+                //    // 线索数量（潜客）
+                //    sheet.GetCell("Y" + (rowIndex + 1)).Value = item.LeadsCount.LeadPCCount;
+                //    // 试驾人数（车主）
+                //    sheet.GetCell("Z" + (rowIndex + 1)).Value = item.LeadsCount.TestDriverOwnerCount;
+                //    // 试驾人数（潜客）
+                //    sheet.GetCell("AA" + (rowIndex + 1)).Value = item.LeadsCount.TestDriverPCCount;
+                //    // 实际订单（车主）
+                //    sheet.GetCell("AB" + (rowIndex + 1)).Value = item.LeadsCount.ActualOrderOwnerCount;
+                //    // 实际订单（潜客）
+                //    sheet.GetCell("AC" + (rowIndex + 1)).Value = item.LeadsCount.ActualOrderPCCount;
+                //}
                 rowIndex++;
             }
 
@@ -354,8 +385,6 @@ namespace com.yrtech.InventoryAPI.Service
             }
             string filePath = dirPath + fileName;
             book.Save(filePath);
-
-
             return filePath;
 
         }

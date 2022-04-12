@@ -647,6 +647,7 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.People_NewLeadsThsYearCount = marketActionAfter7.People_NewLeadsThsYearCount;
                 findOne.People_OthersCount = marketActionAfter7.People_OthersCount;
                 findOne.People_ParticipantsCount = marketActionAfter7.People_ParticipantsCount;
+                findOne.People_NewOrderCount = marketActionAfter7.People_NewOrderCount;
                 findOne.ProcessPercent = marketActionAfter7.ProcessPercent;
                 findOne.Platform_Media = marketActionAfter7.Platform_Media;
                 findOne.Platform_ExposuerForm = marketActionAfter7.Platform_ExposuerForm;

@@ -28,6 +28,9 @@ namespace com.yrtech.InventoryAPI.DTO
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public string ActionPlace { get; set; }
+        public string EventModeName { get; set; }
+        public string DTTApproveStatus_Plan { get; set; }
+        public string DTTApproveStatus_Report { get; set; }
         public Nullable<bool> ExpenseAccount { get; set; }
        public MarketActionBefore4Weeks MarketActionBefore4Weeks{ get; set; }
         public decimal? ActualExpenseSum { get; set; }
