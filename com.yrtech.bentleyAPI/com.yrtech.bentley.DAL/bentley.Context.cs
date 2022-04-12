@@ -35,7 +35,6 @@ namespace com.yrtech.bentley.DAL
         public virtual DbSet<HiddenCode> HiddenCode { get; set; }
         public virtual DbSet<MarketAction> MarketAction { get; set; }
         public virtual DbSet<MarketActionAfter2LeadsReport> MarketActionAfter2LeadsReport { get; set; }
-        public virtual DbSet<MarketActionAfter7> MarketActionAfter7 { get; set; }
         public virtual DbSet<MarketActionAfter7ActualExpense> MarketActionAfter7ActualExpense { get; set; }
         public virtual DbSet<MarketActionAfter7ActualProcess> MarketActionAfter7ActualProcess { get; set; }
         public virtual DbSet<MarketActionAfter7CoopFund> MarketActionAfter7CoopFund { get; set; }
@@ -52,5 +51,6 @@ namespace com.yrtech.bentley.DAL
         public virtual DbSet<UserInfo> UserInfo { get; set; }
         public virtual DbSet<Area> Area { get; set; }
         public virtual DbSet<CoopFundType> CoopFundType { get; set; }
+        public virtual DbSet<MarketActionAfter7> MarketActionAfter7 { get; set; }
     }
 }
