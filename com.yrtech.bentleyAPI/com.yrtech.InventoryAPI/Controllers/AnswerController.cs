@@ -521,7 +521,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.StartDate).ToShortDateString());
                     DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.EndDate).ToShortDateString());
                     TimeSpan sp = end.Subtract(start);
-                    marketActionBefore4WeeksCoopFund.TotalDays = sp.Days+1;
+                    marketActionBefore4WeeksCoopFund.TotalDays = sp.Days + 1;
                 }
                 if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.TotalDays != null && marketActionBefore4WeeksCoopFund.TotalDays != 0)
                 {
@@ -656,7 +656,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 else if (type == "MR") { type = "市场活动报告"; dttType = "2"; }
                 else if (type == "HP") { type = "交车仪式计划"; dttType = "1"; }
                 else if (type == "HR") { type = "交车仪式报告"; dttType = "2"; }
-               List<DTTApproveDto> dttAproveList = approveService.DTTApproveSearch("", marketActionId, dttType, "");
+                List<DTTApproveDto> dttAproveList = approveService.DTTApproveSearch("", marketActionId, dttType, "");
                 if (dttAproveList != null && dttAproveList.Count > 0)
                 {
                     dttApproveCode = dttAproveList[0].DTTApproveCode;
@@ -684,7 +684,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         content += "DMN市场行动智能助理" + "<br/>";
                         content += "邮件由系统自动发送如有问题请联系区域负责同事。";
                     }
-                    else if(dttApproveCode == "3")
+                    else if (dttApproveCode == "3")
                     {
                         title = "【DMN】请及时修改" + marketActionId.ToString() + "-" + marketactionName + "-" + type;
                         content = "尊敬的经销商市场经理，" + "<br/>";
@@ -810,7 +810,9 @@ namespace com.yrtech.SurveyAPI.Controllers
                     leadsReport.BPNO = leadsReportDto.BPNO;
                     leadsReport.CustomerName = leadsReportDto.CustomerName;
                     if (leadsReportDto.DealCheckName == "是")
-                    { leadsReport.DealCheck = true; }
+                    {
+                        leadsReport.DealCheck = true;
+                    }
                     else
                     {
                         leadsReport.DealCheck = false;
@@ -847,19 +849,6 @@ namespace com.yrtech.SurveyAPI.Controllers
                     {
                         leadsReport.DCPChk = false;
                     }
-                    //if (leadsReportDto.OwnerCheckName == "是")
-                    //{ leadsReport.OwnerCheck = true; }
-                    //else
-                    //{
-                    //    leadsReport.OwnerCheck = false;
-                    //}
-                    //leadsReport.TelNO = leadsReportDto.TelNO;
-                    //if (leadsReportDto.TestDriverCheckName == "是")
-                    //{ leadsReport.TestDriverCheck = true; }
-                    //else
-                    //{
-                    //    leadsReport.TestDriverCheck = false;
-                    //}
                     marketActionService.MarketActionAfter2LeadsReportSave(leadsReport);
                 }
                 return new APIResult() { Status = true, Body = "" };

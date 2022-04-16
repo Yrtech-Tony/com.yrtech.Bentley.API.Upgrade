@@ -50,22 +50,18 @@ namespace com.yrtech.InventoryAPI.Service
                 sheet.GetCell("B" + (rowIndex + 2)).Value = item.ActionName;
                 //客户姓名
                 sheet.GetCell("C" + (rowIndex + 2)).Value = item.CustomerName;
-                //联系方式
-                sheet.GetCell("D" + (rowIndex + 2)).Value = item.TelNO;
-                //BPNO
-                sheet.GetCell("E" + (rowIndex + 2)).Value = item.BPNO;
-                //是否车主
-                sheet.GetCell("F" + (rowIndex + 2)).Value = item.OwnerCheckName;
-                // 是否试驾
-                sheet.GetCell("G" + (rowIndex + 2)).Value = item.TestDriverCheckName;
+                //DCPID
+                sheet.GetCell("D" + (rowIndex + 2)).Value = item.BPNO;
+                //活动前是否已有DCP
+                sheet.GetCell("E" + (rowIndex + 2)).Value = item.DCPCheckName;
                 // 是否线索
-                sheet.GetCell("H" + (rowIndex + 2)).Value = item.LeadsCheckName;
+                sheet.GetCell("F" + (rowIndex + 2)).Value = item.LeadsCheckName;
                 //感兴趣车型
-                sheet.GetCell("I" + (rowIndex + 2)).Value = item.InterestedModelName;
+                sheet.GetCell("G" + (rowIndex + 2)).Value = item.InterestedModelName;
                 //是否成交
-                sheet.GetCell("J" + (rowIndex + 2)).Value = item.DealCheckName;
+                sheet.GetCell("H" + (rowIndex + 2)).Value = item.DealCheckName;
                 // 成交车型
-                sheet.GetCell("K" + (rowIndex + 2)).Value = item.DealModelName;
+                sheet.GetCell("I" + (rowIndex + 2)).Value = item.DealModelName;
                 rowIndex++;
             }
 
@@ -168,18 +164,16 @@ namespace com.yrtech.InventoryAPI.Service
                 sheet.GetCell("A" + (rowIndex + 1)).Value = item.CustomerName;
                 //BPNO
                 sheet.GetCell("B" + (rowIndex + 1)).Value = item.BPNO;
-                //是否车主
-                sheet.GetCell("C" + (rowIndex + 1)).Value = item.OwnerCheckName;
-                // 是否试驾
-                sheet.GetCell("D" + (rowIndex + 1)).Value = item.TestDriverCheckName;
+                //活动前是否已有DCP
+                sheet.GetCell("C" + (rowIndex + 1)).Value = item.DCPCheckName;
                 // 是否线索
-                sheet.GetCell("E" + (rowIndex + 1)).Value = item.LeadsCheckName;
+                sheet.GetCell("D" + (rowIndex + 1)).Value = item.LeadsCheckName;
                 //感兴趣车型
-                sheet.GetCell("F" + (rowIndex + 1)).Value = item.InterestedModelName;
+                sheet.GetCell("E" + (rowIndex + 1)).Value = item.InterestedModelName;
                 //是否成交
-                sheet.GetCell("G" + (rowIndex + 1)).Value = item.DealCheckName;
+                sheet.GetCell("F" + (rowIndex + 1)).Value = item.DealCheckName;
                 // 成交车型
-                sheet.GetCell("H" + (rowIndex + 1)).Value = item.DealModelName;
+                sheet.GetCell("G" + (rowIndex + 1)).Value = item.DealModelName;
                 rowIndex++;
             }
 
@@ -575,7 +569,7 @@ namespace com.yrtech.InventoryAPI.Service
                 report.CustomerName = customerName;
                 report.DCPCheckName = sheet.GetCell("C" + (i + 3)).Value == null ? "" : sheet.GetCell("C" + (i + 3)).Value.ToString();
                 report.DealCheckName = sheet.GetCell("F" + (i + 3)).Value==null?"":sheet.GetCell("F" + (i + 3)).Value.ToString();
-                report.DealModelName = sheet.GetCell("H" + (i + 3)).Value==null?"":sheet.GetCell("H" + (i + 3)).Value.ToString();
+                report.DealModelName = sheet.GetCell("G" + (i + 3)).Value==null?"":sheet.GetCell("G" + (i + 3)).Value.ToString();
                 report.InterestedModelName = sheet.GetCell("E" + (i + 3)).Value==null?"":sheet.GetCell("E" + (i + 3)).Value.ToString();
                 report.LeadsCheckName = sheet.GetCell("D" + (i + 3)).Value==null?"":sheet.GetCell("D" + (i + 3)).Value.ToString();
                // report.OwnerCheckName = sheet.GetCell("C" + (i + 3)).Value==null?"":sheet.GetCell("C" + (i + 3)).Value.ToString();
