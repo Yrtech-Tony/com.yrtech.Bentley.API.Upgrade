@@ -23,7 +23,7 @@ Hospitality 礼仪
 Others 其他
 Catering 餐饮
          * */
-        string[] ActionPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality", "Catering" };
+        string[] ActionPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Performance", "Catering_Food", "MC", "Catering_Drink", "MC", "Others", "Hospitality"};
         string[] ActionReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Performance", "MC", "Hospitality", "Catering", "Others" };
         string[] HandOverReportUnderBudgetTypes = { "VenueRetal", "Setup", "PhotoGraphy", "Catering", "Others" };
         string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "", "Catering_Drink", "", "Catering" };
@@ -84,7 +84,7 @@ Catering 餐饮
                 shopName = lst[0].ShopName;
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
-                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                date = DateTimeToString(lst[0].StartDate) + "-"+ DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
             if (lst.Count > 0)
@@ -244,20 +244,27 @@ Catering 餐饮
             }
 
             //第8页 Performance 表演
-            List<MarketActionPic> MPF07Pics = actionService.MarketActionPicSearch(marketActionId, "MPF07");
-            if (MPF07Pics.Count > 0)
+            //List<MarketActionPic> MPF07Pics = actionService.MarketActionPicSearch(marketActionId, "MPF07");
+            //if (MPF07Pics.Count > 0)
+            //{
+            //    //绑定表演计划 照片
+            //    PicturePPTObject pic = new PicturePPTObject();
+            //    pic.Paths = new List<string>();
+            //    MPF07Pics.ForEach(item =>
+            //    {
+            //        int index = MPF07Pics.IndexOf(item);
+            //        pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+            //    });
+            //    pic.Width = 400;
+            //    helper.AddPictureToSlide(helper.GetSlide(8), pic);
+            //}
+            if (before4Weeks.Count > 0)
             {
-                //绑定表演计划 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF07Pics.ForEach(item =>
-                {
-                    int index = MPF07Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(8), pic);
+                ISlide slide = helper.GetSlide(8);
+                IShape shape = helper.GetShape(slide, 3);
+                helper.WriteTextFrame((AutoShape)shape, before4Weeks[0].PerformPlan);
             }
+
             List<MarketActionPic> MPF08Pics = actionService.MarketActionPicSearch(marketActionId, "MPF08");
             if (MPF08Pics.Count > 0)
             {
@@ -275,20 +282,27 @@ Catering 餐饮
             }
 
             //第9页 Photography 摄影摄像
-            List<MarketActionPic> MPF09Pics = actionService.MarketActionPicSearch(marketActionId, "MPF09");
-            if (MPF09Pics.Count > 0)
+            //List<MarketActionPic> MPF09Pics = actionService.MarketActionPicSearch(marketActionId, "MPF09");
+            //if (MPF09Pics.Count > 0)
+            //{
+            //    //绑定摄影师介绍 照片
+            //    PicturePPTObject pic = new PicturePPTObject();
+            //    pic.Paths = new List<string>();
+            //    MPF09Pics.ForEach(item =>
+            //    {
+            //        int index = MPF09Pics.IndexOf(item);
+            //        pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+            //    });
+            //    pic.Width = 400;
+            //    helper.AddPictureToSlide(helper.GetSlide(9), pic);
+            //}
+            if (before4Weeks.Count > 0)
             {
-                //绑定摄影师介绍 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPF09Pics.ForEach(item =>
-                {
-                    int index = MPF09Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(9), pic);
+                ISlide slide = helper.GetSlide(9);
+                IShape shape = helper.GetShape(slide, 3);
+                helper.WriteTextFrame((AutoShape)shape, before4Weeks[0].PhotographerIntro);
             }
+
             List<MarketActionPic> MPF10Pics = actionService.MarketActionPicSearch(marketActionId, "MPF10");
             if (MPF10Pics.Count > 0)
             {
@@ -383,7 +397,7 @@ Catering 餐饮
                 shopName = lst[0].ShopName;
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
-                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                date = DateTimeToString(lst[0].StartDate) + "-"+ DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
             //第2页 Overview 概述
@@ -761,7 +775,7 @@ Catering 餐饮
                 shopName = lst[0].ShopName;
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
-                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                date = DateTimeToString(lst[0].StartDate) +"-"+ DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
 
@@ -915,7 +929,7 @@ Catering 餐饮
                 shopName = lst[0].ShopName;
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
-                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                date = DateTimeToString(lst[0].StartDate) +"-"+ DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
             //第1页 活动总览 Overview
@@ -1142,7 +1156,7 @@ Catering 餐饮
                 shopName = lst[0].ShopName;
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
-                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                date = DateTimeToString(lst[0].StartDate) +"-"+ DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
             //Overview 概述 第二页
@@ -1355,7 +1369,7 @@ Catering 餐饮
                 shopName = lst[0].ShopName;
                 eventModeName = lst[0].EventModeName;
                 actionName = lst[0].ActionName;
-                date = DateTimeToString(lst[0].StartDate) + DateTimeToString(lst[0].EndDate);
+                date = DateTimeToString(lst[0].StartDate) +"-"+ DateTimeToString(lst[0].EndDate);
                 place = lst[0].ActionPlace;
             }
 
