@@ -18,6 +18,8 @@ namespace com.yrtech.InventoryAPI.DTO
         public string BPNO { get; set; }//BPNO
         public Nullable<bool> OwnerCheck { get; set; }//是否车主
         public string OwnerCheckName { get; set; }//是否车主显示:是或者否
+        public Nullable<bool> DCPCheck { get; set; }//活动前是否已有DCP
+        public string DCPCheckName { get; set; }//活动前是否已有DCP:是或者否
         public Nullable<bool> TestDriverCheck { get; set; }//是否试驾
         public string TestDriverCheckName { get; set; }//显示是否
         public Nullable<bool> LeadsCheck { get; set; }//是否为线索

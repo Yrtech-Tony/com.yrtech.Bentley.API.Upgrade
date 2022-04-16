@@ -191,7 +191,8 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = "";
             sql += @"SELECT *
                     FROM MarketAction A 
-                    WHERE A.MarketActionStatusCode<>2 AND  A.ExpenseAccount=1";
+                    WHERE A.MarketActionStatusCode<>2 AND  A.ExpenseAccount=1
+                    AND EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode = 2)";
 
             if (!string.IsNullOrEmpty(eventTypeId))
             {
@@ -362,6 +363,8 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.Vehide_Usage = marketActionBefore4Weeks.Vehide_Usage;
                 findOne.Platform_ExposureForm = marketActionBefore4Weeks.Platform_ExposureForm;
                 findOne.Platform_Media = marketActionBefore4Weeks.Platform_Media;
+                findOne.PerformPlan = marketActionBefore4Weeks.PerformPlan;
+                findOne.PhotographerIntro = marketActionBefore4Weeks.PhotographerIntro;
                 findOne.KeyVisionApprovalCode = marketActionBefore4Weeks.KeyVisionApprovalCode;
                 findOne.KeyVisionApprovalDesc = marketActionBefore4Weeks.KeyVisionApprovalDesc;
                 findOne.KeyVisionDesc = marketActionBefore4Weeks.KeyVisionDesc;
@@ -512,8 +515,7 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = "";
             sql += @"SELECT A.*,B.ActionName,B.ShopId,C.ShopName,C.ShopNameEn,D.HiddenCodeName AS InterestedModelName,D.HiddenCodeNameEn AS InterestedModelNameEn
                     ,E.HiddenCodeName AS DealModelName,E.HiddenCodeNameEn AS DealModelNameEn
-                   , CASE WHEN OwnerCheck=1 THEN '是' ELSE '否' END AS OwnerCheckName
-                    ,CASE WHEN TestDriverCheck=1 THEN '是' ELSE '否' END AS TestDriverCheckName
+                   , CASE WHEN DCPChk=1 THEN '是' ELSE '否' END AS DCPCheckName
                     ,CASE WHEN LeadsCheck=1 THEN '是' ELSE '否' END AS LeadsCheckName
                     ,CASE WHEN DealCheck=1 THEN '是' ELSE '否' END AS DealCheckName
                     FROM [MarketActionAfter2LeadsReport] A  INNER JOIN MarketAction B ON A.MarketActionId = B.MarketActionId
@@ -564,15 +566,16 @@ namespace com.yrtech.InventoryAPI.Service
                 {
                     findOne.BPNO = marketActionAfter2LeadsReport.BPNO;
                     findOne.CustomerName = marketActionAfter2LeadsReport.CustomerName;
-                    findOne.TelNO = marketActionAfter2LeadsReport.TelNO;
+                    //findOne.TelNO = marketActionAfter2LeadsReport.TelNO;
                     findOne.DealCheck = marketActionAfter2LeadsReport.DealCheck;
                     findOne.DealModel = marketActionAfter2LeadsReport.DealModel;
                     findOne.InterestedModel = marketActionAfter2LeadsReport.InterestedModel;
                     findOne.LeadsCheck = marketActionAfter2LeadsReport.LeadsCheck;
                     findOne.ModifyDateTime = DateTime.Now;
                     findOne.ModifyUserId = marketActionAfter2LeadsReport.ModifyUserId;
-                    findOne.OwnerCheck = marketActionAfter2LeadsReport.OwnerCheck;
-                    findOne.TestDriverCheck = marketActionAfter2LeadsReport.TestDriverCheck;
+                    findOne.DCPChk = marketActionAfter2LeadsReport.DCPChk;
+                   // findOne.OwnerCheck = marketActionAfter2LeadsReport.OwnerCheck;
+                   // findOne.TestDriverCheck = marketActionAfter2LeadsReport.TestDriverCheck;
                 }
             }
             db.SaveChanges();

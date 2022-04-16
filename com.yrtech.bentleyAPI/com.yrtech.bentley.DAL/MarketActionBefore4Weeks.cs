@@ -38,6 +38,8 @@ namespace com.yrtech.bentley.DAL
         public string KeyVisionApprovalCode { get; set; }
         public string KeyVisionApprovalDesc { get; set; }
         public string PlatformReason { get; set; }
+        public string PerformPlan { get; set; }
+        public string PhotographerIntro { get; set; }
         public Nullable<decimal> ProcessPercent { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }

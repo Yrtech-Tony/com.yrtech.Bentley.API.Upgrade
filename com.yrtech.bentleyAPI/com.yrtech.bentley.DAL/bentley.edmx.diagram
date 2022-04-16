@@ -14,13 +14,10 @@
         <EntityTypeShape EntityType="BentleyModel.ExpenseAccountFile" Width="1.5" PointX="8.75" PointY="0.75" />
         <EntityTypeShape EntityType="BentleyModel.HiddenCode" Width="1.5" PointX="0.75" PointY="8.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketAction" Width="1.5" PointX="2.75" PointY="8.75" />
-        <EntityTypeShape EntityType="BentleyModel.MarketActionAfter2LeadsReport" Width="1.5" PointX="8.75" PointY="4.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionAfter7ActualExpense" Width="1.5" PointX="6.75" PointY="9.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionAfter7ActualProcess" Width="1.5" PointX="8.75" PointY="9.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionAfter7CoopFund" Width="1.875" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionAfter7HandOverArrangement" Width="1.5" PointX="10.75" PointY="5.75" />
-        <EntityTypeShape EntityType="BentleyModel.MarketActionBefore4Weeks" Width="1.5" PointX="9.375" PointY="13.75" />
-        <EntityTypeShape EntityType="BentleyModel.MarketActionBefore4WeeksActivityProcess" Width="1.5" PointX="12.75" PointY="0.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionBefore4WeeksCoopFund" Width="1.5" PointX="12.75" PointY="4.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionBefore4WeeksHandOverArrangement" Width="1.5" PointX="12.75" PointY="9.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionPic" Width="1.5" PointX="0.75" PointY="13.75" />
@@ -32,6 +29,9 @@
         <EntityTypeShape EntityType="BentleyModel.Area" Width="1.5" PointX="3.375" PointY="15.75" />
         <EntityTypeShape EntityType="BentleyModel.CoopFundType" Width="1.5" PointX="15.375" PointY="13.75" />
         <EntityTypeShape EntityType="BentleyModel.MarketActionAfter7" Width="1.5" PointX="11.375" PointY="16.75" />
+        <EntityTypeShape EntityType="BentleyModel.MarketActionAfter2LeadsReport" Width="1.5" PointX="17.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BentleyModel.MarketActionBefore4Weeks" Width="1.5" PointX="0.75" PointY="17.75" />
+        <EntityTypeShape EntityType="BentleyModel.MarketActionBefore4WeeksActivityProcess" Width="1.5" PointX="17.75" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

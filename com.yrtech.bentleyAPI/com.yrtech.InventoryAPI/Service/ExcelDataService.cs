@@ -573,12 +573,13 @@ namespace com.yrtech.InventoryAPI.Service
                 MarketActionAfter2LeadsReportDto report = new MarketActionAfter2LeadsReportDto();
                 report.BPNO = sheet.GetCell("B" + (i + 3)).Value==null?"":sheet.GetCell("B" + (i + 3)).Value.ToString();
                 report.CustomerName = customerName;
-                report.DealCheckName = sheet.GetCell("G" + (i + 3)).Value==null?"":sheet.GetCell("G" + (i + 3)).Value.ToString();
+                report.DCPCheckName = sheet.GetCell("C" + (i + 3)).Value == null ? "" : sheet.GetCell("C" + (i + 3)).Value.ToString();
+                report.DealCheckName = sheet.GetCell("F" + (i + 3)).Value==null?"":sheet.GetCell("F" + (i + 3)).Value.ToString();
                 report.DealModelName = sheet.GetCell("H" + (i + 3)).Value==null?"":sheet.GetCell("H" + (i + 3)).Value.ToString();
-                report.InterestedModelName = sheet.GetCell("F" + (i + 3)).Value==null?"":sheet.GetCell("F" + (i + 3)).Value.ToString();
-                report.LeadsCheckName = sheet.GetCell("E" + (i + 3)).Value==null?"":sheet.GetCell("E" + (i + 3)).Value.ToString();
-                report.OwnerCheckName = sheet.GetCell("C" + (i + 3)).Value==null?"":sheet.GetCell("C" + (i + 3)).Value.ToString();
-                report.TestDriverCheckName = sheet.GetCell("D" + (i + 3)).Value==null?"":sheet.GetCell("D" + (i + 3)).Value.ToString();
+                report.InterestedModelName = sheet.GetCell("E" + (i + 3)).Value==null?"":sheet.GetCell("E" + (i + 3)).Value.ToString();
+                report.LeadsCheckName = sheet.GetCell("D" + (i + 3)).Value==null?"":sheet.GetCell("D" + (i + 3)).Value.ToString();
+               // report.OwnerCheckName = sheet.GetCell("C" + (i + 3)).Value==null?"":sheet.GetCell("C" + (i + 3)).Value.ToString();
+                //report.TestDriverCheckName = sheet.GetCell("D" + (i + 3)).Value==null?"":sheet.GetCell("D" + (i + 3)).Value.ToString();
                 list.Add(report);
             }
             return list;

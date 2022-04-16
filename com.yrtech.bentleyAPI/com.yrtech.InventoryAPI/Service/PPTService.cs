@@ -346,9 +346,10 @@ Catering 餐饮
                 {
                     int index = before4WeeksActivitys.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTime);
-                    helper.SaveTableCell(table2, row, 2, item.Contents);
-                    helper.SaveTableCell(table2, row, 3, item.Responsible);
+                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTimeStart);
+                    helper.SaveTableCell(table2, row, 2, item.ActivityDateTimeEnd);
+                    helper.SaveTableCell(table2, row, 3, item.Contents);
+                    helper.SaveTableCell(table2, row, 4, item.Responsible);
                 });
             }
 
@@ -442,12 +443,12 @@ Catering 餐饮
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
                     helper.SaveTableCell(table2, row, 2, item.BPNO);
-                    helper.SaveTableCell(table2, row, 3, item.OwnerCheckName);
-                    helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
-                    helper.SaveTableCell(table2, row, 5, item.LeadsCheckName);
-                    helper.SaveTableCell(table2, row, 6, item.InterestedModelName);
-                    helper.SaveTableCell(table2, row, 7, item.DealCheckName);
-                    helper.SaveTableCell(table2, row, 8, item.DealModelName);
+                    helper.SaveTableCell(table2, row, 3, item.DCPCheckName);
+                    //helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
+                    helper.SaveTableCell(table2, row, 4, item.LeadsCheckName);
+                    helper.SaveTableCell(table2, row, 5, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 7, item.DealModelName);
                 });
             }
 
@@ -1021,12 +1022,12 @@ Catering 餐饮
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 1, item.CustomerName);
                     helper.SaveTableCell(table2, row, 2, item.BPNO);
-                    helper.SaveTableCell(table2, row, 3, item.OwnerCheckName);
-                    helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
-                    helper.SaveTableCell(table2, row, 5, item.LeadsCheckName);
-                    helper.SaveTableCell(table2, row, 6, item.InterestedModelName);
-                    helper.SaveTableCell(table2, row, 7, item.DealCheckName);
-                    helper.SaveTableCell(table2, row, 8, item.DealModelName);
+                    helper.SaveTableCell(table2, row, 3, item.DCPCheckName);
+                    //helper.SaveTableCell(table2, row, 4, item.TestDriverCheckName);
+                    helper.SaveTableCell(table2, row, 4, item.LeadsCheckName);
+                    helper.SaveTableCell(table2, row, 5, item.InterestedModelName);
+                    helper.SaveTableCell(table2, row, 6, item.DealCheckName);
+                    helper.SaveTableCell(table2, row, 7, item.DealModelName);
                 });
             }
 
