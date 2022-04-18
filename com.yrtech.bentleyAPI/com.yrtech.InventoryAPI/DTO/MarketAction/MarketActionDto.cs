@@ -14,6 +14,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string ActionCode { get; set; }// 活动代码
         public int? ExpectLeadsCount { get; set; }// 预期线索数量
         public decimal? ActivityBudget { get; set; }// 活动预算
+       // public decimal? ActivityBudgetMax{ get; set; }// 活动预算
         public Nullable<int> EventTypeId { get; set; }// 活动类型Id
         public string EventTypeName { get; set; }// 活动类型名称
         public string EventTypeNameEn { get; set; }// 活动类型名称-英文

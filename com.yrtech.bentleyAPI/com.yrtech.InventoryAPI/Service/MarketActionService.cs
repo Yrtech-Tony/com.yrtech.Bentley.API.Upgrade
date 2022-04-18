@@ -201,6 +201,17 @@ namespace com.yrtech.InventoryAPI.Service
             sql += " ORDER BY A.StartDate DESC";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketAction>().ToList();
         }
+        // 查询所有市场活动预算金额最大值
+        public decimal MarketActionBudgetMaxSearch()
+        {
+            SqlParameter[] para = new SqlParameter[] { };
+            Type t = typeof(decimal);
+            string sql = "";
+            sql += @"SELECT ISNULL(Max(ActivityBudget),0) 
+                    FROM MarketAction A 
+                    WHERE A.MarketActionStatusCode<>2";
+            return db.Database.SqlQuery(t, sql, para).Cast<decimal>().FirstOrDefault();
+        }
         public List<MarketActionDto> MarketActionSearchById(string marketActionId)
         {
             if (marketActionId == null) marketActionId = "";
@@ -354,8 +365,12 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.People_InvitationDepositorCount = marketActionBefore4Weeks.People_InvitationDepositorCount;
                 findOne.People_InvitationOtherCount = marketActionBefore4Weeks.People_InvitationOtherCount;
                 findOne.People_InvitationPotentialCount = marketActionBefore4Weeks.People_InvitationPotentialCount;
-                findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationTotalCount;
+                //findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationTotalCount;
                 findOne.People_NewLeadsThisYearCount = marketActionBefore4Weeks.People_NewLeadsThisYearCount;
+                findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationCarOwnerCount == null ? 0 : marketActionBefore4Weeks.People_InvitationCarOwnerCount
+                                                       + marketActionBefore4Weeks.People_InvitationDepositorCount == null ? 0 : marketActionBefore4Weeks.People_InvitationDepositorCount
+                                                       + marketActionBefore4Weeks.People_InvitationPotentialCount == null ? 0 : marketActionBefore4Weeks.People_InvitationPotentialCount
+                                                       + marketActionBefore4Weeks.People_InvitationOtherCount == null ? 0 : marketActionBefore4Weeks.People_InvitationOtherCount;
                 findOne.People_ParticipantsCount = marketActionBefore4Weeks.People_ParticipantsCount;
                 findOne.ProcessPercent = marketActionBefore4Weeks.ProcessPercent;
                 findOne.Vehide_Model = marketActionBefore4Weeks.Vehide_Model;

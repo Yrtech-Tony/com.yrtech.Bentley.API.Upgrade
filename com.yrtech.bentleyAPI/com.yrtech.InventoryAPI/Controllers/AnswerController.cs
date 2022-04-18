@@ -231,6 +231,22 @@ namespace com.yrtech.SurveyAPI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("MarketAction/MarketActionBudgetMaxSearch")]
+        public APIResult MarketActionBudgetMaxSearch()
+        {
+            try
+            {
+                decimal maxBugdet = marketActionService.MarketActionBudgetMaxSearch();
+
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(maxBugdet) };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+
+        }
         [HttpPost]
         [Route("MarketAction/MarketActionDelete")]
         public APIResult MarketActionDelete(UploadData upload)
@@ -397,6 +413,23 @@ namespace com.yrtech.SurveyAPI.Controllers
                 // 需要绑定的输入信息
                 List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
                 List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+                //if (marketActionBefore4WeeksCoopFundList != null && marketActionBefore4WeeksCoopFundList.Count > 0)
+                //{
+                //    foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
+
+                //        if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.StartDate != null && marketActionBefore4WeeksCoopFund.EndDate != null)
+                //        {
+                //            DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.StartDate).ToShortDateString());
+                //            DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.EndDate).ToShortDateString());
+                //            TimeSpan sp = end.Subtract(start);
+                //            marketActionBefore4WeeksCoopFund.TotalDays = sp.Days + 1;
+                //        }
+                //    if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.TotalDays != null && marketActionBefore4WeeksCoopFund.TotalDays != 0)
+                //    {
+                //        marketActionBefore4WeeksCoopFund.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0 : marketActionBefore4WeeksCoopFund.CoopFundAmt;
+                //        marketActionBefore4WeeksCoopFund.AmtPerDay = marketActionBefore4WeeksCoopFund.CoopFundAmt / marketActionBefore4WeeksCoopFund.TotalDays;
+                //    }
+                //}
                 if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
                 {
                     marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
