@@ -1019,7 +1019,7 @@ Catering 餐饮
                     helper.SaveTableCell(table1, row, 5, DateTimeToString(item.StartDate));
                     helper.SaveTableCell(table1, row, 6, DateTimeToString(item.EndDate));
                     helper.SaveTableCell(table1, row, 7, IntNullabelToString(item.TotalDays));
-                    helper.SaveTableCell(table1, row, 8, DecimalNullabelToString(item.AmtPerDay));
+                    helper.SaveTableCell(table1, row, 9, DecimalNullabelToString(item.AmtPerDay));
                 });
             }
 
