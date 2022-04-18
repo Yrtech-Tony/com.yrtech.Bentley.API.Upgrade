@@ -185,7 +185,7 @@
           <Property Name="SeqNO" Type="int" Nullable="false" />
           <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
           <Property Name="BPNO" Type="nvarchar" MaxLength="500" />
-          <Property Name="DCPChk" Type="bit" />
+          <Property Name="DCPCheck" Type="bit" />
           <Property Name="LeadsCheck" Type="bit" />
           <Property Name="InterestedModel" Type="nvarchar" MaxLength="200" />
           <Property Name="DealCheck" Type="bit" />
@@ -525,9 +525,9 @@
           <EntitySet Name="Area" EntityType="BentleyModel.Area" />
           <EntitySet Name="CoopFundType" EntityType="BentleyModel.CoopFundType" />
           <EntitySet Name="MarketActionAfter7" EntityType="BentleyModel.MarketActionAfter7" />
-          <EntitySet Name="MarketActionAfter2LeadsReport" EntityType="BentleyModel.MarketActionAfter2LeadsReport" />
           <EntitySet Name="MarketActionBefore4Weeks" EntityType="BentleyModel.MarketActionBefore4Weeks" />
           <EntitySet Name="MarketActionBefore4WeeksActivityProcess" EntityType="BentleyModel.MarketActionBefore4WeeksActivityProcess" />
+          <EntitySet Name="MarketActionAfter2LeadsReport" EntityType="BentleyModel.MarketActionAfter2LeadsReport" />
         </EntityContainer>
         <EntityType Name="CommitFile">
           <Key>
@@ -920,25 +920,6 @@
           <Property Name="ModifyUserId" Type="Int32" />
           <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="MarketActionAfter2LeadsReport">
-          <Key>
-            <PropertyRef Name="MarketActionId" />
-            <PropertyRef Name="SeqNO" />
-          </Key>
-          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
-          <Property Name="SeqNO" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BPNO" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="DCPChk" Type="Boolean" />
-          <Property Name="LeadsCheck" Type="Boolean" />
-          <Property Name="InterestedModel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="DealCheck" Type="Boolean" />
-          <Property Name="DealModel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="InUserId" Type="Int32" />
-          <Property Name="InDateTime" Type="DateTime" Precision="3" />
-          <Property Name="ModifyUserId" Type="Int32" />
-          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="MarketActionBefore4Weeks">
           <Key>
             <PropertyRef Name="MarketActionId" />
@@ -986,6 +967,25 @@
           <Property Name="ActivityDateTimeEnd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Contents" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Responsible" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="InUserId" Type="Int32" />
+          <Property Name="InDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MarketActionAfter2LeadsReport">
+          <Key>
+            <PropertyRef Name="MarketActionId" />
+            <PropertyRef Name="SeqNO" />
+          </Key>
+          <Property Name="MarketActionId" Type="Int32" Nullable="false" />
+          <Property Name="SeqNO" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BPNO" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DCPCheck" Type="Boolean" />
+          <Property Name="LeadsCheck" Type="Boolean" />
+          <Property Name="InterestedModel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DealCheck" Type="Boolean" />
+          <Property Name="DealModel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="InUserId" Type="Int32" />
           <Property Name="InDateTime" Type="DateTime" Precision="3" />
           <Property Name="ModifyUserId" Type="Int32" />
@@ -1400,25 +1400,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MarketActionAfter2LeadsReport">
-            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter2LeadsReport">
-              <MappingFragment StoreEntitySet="MarketActionAfter2LeadsReport">
-                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
-                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
-                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
-                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
-                <ScalarProperty Name="DealModel" ColumnName="DealModel" />
-                <ScalarProperty Name="DealCheck" ColumnName="DealCheck" />
-                <ScalarProperty Name="InterestedModel" ColumnName="InterestedModel" />
-                <ScalarProperty Name="LeadsCheck" ColumnName="LeadsCheck" />
-                <ScalarProperty Name="DCPChk" ColumnName="DCPChk" />
-                <ScalarProperty Name="BPNO" ColumnName="BPNO" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
-                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MarketActionBefore4Weeks">
             <EntityTypeMapping TypeName="BentleyModel.MarketActionBefore4Weeks">
               <MappingFragment StoreEntitySet="MarketActionBefore4Weeks">
@@ -1467,6 +1448,25 @@
                 <ScalarProperty Name="Contents" ColumnName="Contents" />
                 <ScalarProperty Name="ActivityDateTimeEnd" ColumnName="ActivityDateTimeEnd" />
                 <ScalarProperty Name="ActivityDateTimeStart" ColumnName="ActivityDateTimeStart" />
+                <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
+                <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketActionAfter2LeadsReport">
+            <EntityTypeMapping TypeName="BentleyModel.MarketActionAfter2LeadsReport">
+              <MappingFragment StoreEntitySet="MarketActionAfter2LeadsReport">
+                <ScalarProperty Name="ModifyDateTime" ColumnName="ModifyDateTime" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="InDateTime" ColumnName="InDateTime" />
+                <ScalarProperty Name="InUserId" ColumnName="InUserId" />
+                <ScalarProperty Name="DealModel" ColumnName="DealModel" />
+                <ScalarProperty Name="DealCheck" ColumnName="DealCheck" />
+                <ScalarProperty Name="InterestedModel" ColumnName="InterestedModel" />
+                <ScalarProperty Name="LeadsCheck" ColumnName="LeadsCheck" />
+                <ScalarProperty Name="DCPCheck" ColumnName="DCPCheck" />
+                <ScalarProperty Name="BPNO" ColumnName="BPNO" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="SeqNO" ColumnName="SeqNO" />
                 <ScalarProperty Name="MarketActionId" ColumnName="MarketActionId" />
               </MappingFragment>

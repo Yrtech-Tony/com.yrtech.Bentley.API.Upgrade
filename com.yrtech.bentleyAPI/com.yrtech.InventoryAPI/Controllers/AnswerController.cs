@@ -802,10 +802,10 @@ namespace com.yrtech.SurveyAPI.Controllers
                     leadsReport.ModifyDateTime = DateTime.Now;
                     leadsReport.ModifyUserId = leadsReportDto.ModifyUserId;
                     if (leadsReportDto.DCPCheckName == "是")
-                    { leadsReport.DCPChk = true; }
+                    { leadsReport.DCPCheck = true; }
                     else
                     {
-                        leadsReport.DCPChk = false;
+                        leadsReport.DCPCheck = false;
                     }
                     //if (leadsReportDto.OwnerCheckName == "是")
                     //{ leadsReport.OwnerCheck = true; }
@@ -877,10 +877,10 @@ namespace com.yrtech.SurveyAPI.Controllers
                     leadsReport.ModifyDateTime = DateTime.Now;
                     leadsReport.ModifyUserId = Convert.ToInt32(userId);
                     if (leadsReportDto.DCPCheckName == "是")
-                    { leadsReport.DCPChk = true; }
+                    { leadsReport.DCPCheck = true; }
                     else
                     {
-                        leadsReport.DCPChk = false;
+                        leadsReport.DCPCheck = false;
                     }
                     marketActionService.MarketActionAfter2LeadsReportSave(leadsReport);
                 }

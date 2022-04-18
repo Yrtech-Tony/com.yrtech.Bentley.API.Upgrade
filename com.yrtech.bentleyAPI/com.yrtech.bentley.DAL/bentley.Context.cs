@@ -49,8 +49,8 @@ namespace com.yrtech.bentley.DAL
         public virtual DbSet<Area> Area { get; set; }
         public virtual DbSet<CoopFundType> CoopFundType { get; set; }
         public virtual DbSet<MarketActionAfter7> MarketActionAfter7 { get; set; }
-        public virtual DbSet<MarketActionAfter2LeadsReport> MarketActionAfter2LeadsReport { get; set; }
         public virtual DbSet<MarketActionBefore4Weeks> MarketActionBefore4Weeks { get; set; }
         public virtual DbSet<MarketActionBefore4WeeksActivityProcess> MarketActionBefore4WeeksActivityProcess { get; set; }
+        public virtual DbSet<MarketActionAfter2LeadsReport> MarketActionAfter2LeadsReport { get; set; }
     }
 }
