@@ -202,14 +202,19 @@ namespace com.yrtech.InventoryAPI.Service
             return db.Database.SqlQuery(t, sql, para).Cast<MarketAction>().ToList();
         }
         // 查询所有市场活动预算金额最大值
-        public decimal MarketActionBudgetMaxSearch()
+        public decimal MarketActionBudgetMaxSearch(string shopId)
         {
-            SqlParameter[] para = new SqlParameter[] { };
+            if (shopId == null) shopId = "";
+             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ShopId", shopId) };
             Type t = typeof(decimal);
             string sql = "";
             sql += @"SELECT ISNULL(Max(ActivityBudget),0) 
                     FROM MarketAction A 
-                    WHERE A.MarketActionStatusCode<>2";
+                    WHERE A.MarketActionStatusCode<>2 ";
+            if (!string.IsNullOrEmpty(shopId))
+            {
+                sql += " AND ShopId = @ShopId";
+            }
             return db.Database.SqlQuery(t, sql, para).Cast<decimal>().FirstOrDefault();
         }
         public List<MarketActionDto> MarketActionSearchById(string marketActionId)

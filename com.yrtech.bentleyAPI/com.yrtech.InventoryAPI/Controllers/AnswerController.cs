@@ -233,11 +233,11 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("MarketAction/MarketActionBudgetMaxSearch")]
-        public APIResult MarketActionBudgetMaxSearch()
+        public APIResult MarketActionBudgetMaxSearch(string shopId="")
         {
             try
             {
-                decimal maxBugdet = marketActionService.MarketActionBudgetMaxSearch();
+                decimal maxBugdet = marketActionService.MarketActionBudgetMaxSearch(shopId);
 
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(maxBugdet) };
             }
