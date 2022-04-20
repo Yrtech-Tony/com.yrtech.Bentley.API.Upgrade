@@ -14,6 +14,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string ShopNameEn { get; set; }
         public string ActionName { get; set; }
         public string ActionCode { get; set; }
+        public string AreaName { get; set; }
         public int? ExpectLeadsCount { get; set; }
         public decimal? ActivityBudget { get; set; }
         public Nullable<int> EventTypeId { get; set; }

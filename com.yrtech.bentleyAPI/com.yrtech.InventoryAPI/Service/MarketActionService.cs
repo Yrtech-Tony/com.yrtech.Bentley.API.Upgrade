@@ -37,6 +37,7 @@ namespace com.yrtech.InventoryAPI.Service
             string sql = "";
             sql += @"SELECT A.MarketActionId,A.ShopId,B.ShopCode,B.ShopName,B.ShopNameEn,A.ActionCode,A.ActionName
 		                    ,A.EventTypeId,C.EventTypeName,C.EventTypeNameEn
+                            ,(SELECT AreaName FROM Area WHERE AreaId = B.AreaId) AS AreaName
 		                    ,(SELECT CAST(EventMode AS INT) FROM EventType WHERE EventTypeId = A.EventTypeId) AS EventModeId
 		                    ,(SELECT HiddenCodeName FROM EventType X INNER JOIN HiddenCode Y ON  Y.HiddenCodeGroup='EventMode' AND X.EventMode = Y.HiddenCodeId 
 											        WHERE X.EventTypeId =A.EventTypeId ) AS EventModeName
@@ -537,13 +538,14 @@ namespace com.yrtech.InventoryAPI.Service
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId),new SqlParameter("@Year", year) };
             Type t = typeof(MarketActionAfter2LeadsReportDto);
             string sql = "";
-            sql += @"SELECT A.*,B.ActionName,B.ShopId,C.ShopName,C.ShopNameEn,D.HiddenCodeName AS InterestedModelName,D.HiddenCodeNameEn AS InterestedModelNameEn
+            sql += @"SELECT A.*,B.ActionName,B.ShopId,C.ShopName,C.ShopNameEn,F.AreaName,D.HiddenCodeName AS InterestedModelName,D.HiddenCodeNameEn AS InterestedModelNameEn
                     ,E.HiddenCodeName AS DealModelName,E.HiddenCodeNameEn AS DealModelNameEn
                    , CASE WHEN DCPCheck=1 THEN '是' ELSE '否' END AS DCPCheckName
                     ,CASE WHEN LeadsCheck=1 THEN '是' ELSE '否' END AS LeadsCheckName
                     ,CASE WHEN DealCheck=1 THEN '是' ELSE '否' END AS DealCheckName
                     FROM [MarketActionAfter2LeadsReport] A  INNER JOIN MarketAction B ON A.MarketActionId = B.MarketActionId
                                                             INNER JOIN Shop C ON B.ShopId = C.ShopId
+                                                            INNER JOIN Area F ON C.AreaId = F.AreaId
                                                             LEFT JOIN HiddenCode D ON A.InterestedModel = D.HiddenCodeId AND D.HiddenCodeGroup = 'TargetModels'
                                                             LEFT JOIN HiddenCode E ON A.DealModel = E.HiddenCodeId AND E.HiddenCodeGroup = 'TargetModels'
                     WHERE 1=1";

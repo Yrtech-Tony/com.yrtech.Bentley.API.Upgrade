@@ -9,9 +9,11 @@ namespace com.yrtech.InventoryAPI.DTO
     {
         public int MarketActionId { get; set; }
         public string ActionName { get; set; }//活动名称
+
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ShopNameEn { get; set; }
+        public string AreaName { get; set; }
         public int SeqNO { get; set; }
         public string CustomerName { get; set; }//顾客姓名
         public string TelNO { get; set; } //顾客电话

@@ -10,6 +10,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string ShopCode { get; set; }//经销商代码
         public string ShopName { get; set; }//经销商名称
         public string ShopNameEn { get; set; }//经销商名称-英文
+        public string AreaName { get; set; }
         public string ActionName { get; set; }// 活动名称
         public string ActionCode { get; set; }// 活动代码
         public int? ExpectLeadsCount { get; set; }// 预期线索数量
