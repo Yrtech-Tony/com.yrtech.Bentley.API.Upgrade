@@ -367,10 +367,14 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.People_InvitationPotentialCount = marketActionBefore4Weeks.People_InvitationPotentialCount;
                 //findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationTotalCount;
                 findOne.People_NewLeadsThisYearCount = marketActionBefore4Weeks.People_NewLeadsThisYearCount;
-                findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationCarOwnerCount == null ? 0 : marketActionBefore4Weeks.People_InvitationCarOwnerCount
-                                                       + marketActionBefore4Weeks.People_InvitationDepositorCount == null ? 0 : marketActionBefore4Weeks.People_InvitationDepositorCount
-                                                       + marketActionBefore4Weeks.People_InvitationPotentialCount == null ? 0 : marketActionBefore4Weeks.People_InvitationPotentialCount
-                                                       + marketActionBefore4Weeks.People_InvitationOtherCount == null ? 0 : marketActionBefore4Weeks.People_InvitationOtherCount;
+                if (marketActionBefore4Weeks.People_InvitationCarOwnerCount == null) marketActionBefore4Weeks.People_InvitationCarOwnerCount = 0;
+                if (marketActionBefore4Weeks.People_InvitationDepositorCount == null) marketActionBefore4Weeks.People_InvitationDepositorCount = 0;
+                if (marketActionBefore4Weeks.People_InvitationPotentialCount == null) marketActionBefore4Weeks.People_InvitationPotentialCount = 0;
+                if (marketActionBefore4Weeks.People_InvitationOtherCount == null) marketActionBefore4Weeks.People_InvitationOtherCount = 0;
+                findOne.People_InvitationTotalCount = marketActionBefore4Weeks.People_InvitationCarOwnerCount
+                                                       + marketActionBefore4Weeks.People_InvitationDepositorCount
+                                                       + marketActionBefore4Weeks.People_InvitationPotentialCount
+                                                       + marketActionBefore4Weeks.People_InvitationOtherCount;
                 findOne.People_ParticipantsCount = marketActionBefore4Weeks.People_ParticipantsCount;
                 findOne.ProcessPercent = marketActionBefore4Weeks.ProcessPercent;
                 findOne.Vehide_Model = marketActionBefore4Weeks.Vehide_Model;

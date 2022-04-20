@@ -610,10 +610,15 @@ namespace com.yrtech.InventoryAPI.Service
         }
         public void ExpenseAccountFileDelete(string expenseAccountId, string seqNO)
         {
-            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ExpenseAccountId", expenseAccountId),
+            if (seqNO == null) seqNO = "";
+             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ExpenseAccountId", expenseAccountId),
                                                         new SqlParameter("@SeqNO", seqNO)};
-            string sql = @"DELETE ExpenseAccountFile WHERE ExpenseAccountId = @ExpenseAccountId AND SeqNO = @SeqNO
+            string sql = @"DELETE ExpenseAccountFile WHERE ExpenseAccountId = @ExpenseAccountId 
                         ";
+            if (!string.IsNullOrEmpty(seqNO))
+            {
+                sql += " AND SeqNO = @SeqNO ";
+            }
             db.Database.ExecuteSqlCommand(sql, para);
         }
         #endregion
