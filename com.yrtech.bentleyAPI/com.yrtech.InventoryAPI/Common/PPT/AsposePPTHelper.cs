@@ -128,12 +128,11 @@ namespace com.yrtech.InventoryAPI.Common
                     }
                     else
                     {
-                        int count = pic.Paths.Count;//Math.Min(pic.Paths.Count, 6);
+                        int count = Math.Min(pic.Paths.Count, 4);
                         pic.Cols = 2;
                         pic.Rows = count / 2 + (count % 2 == 0 ? 0 : 1);
                     }
                 }
-
 
                 float height = pic.Height / pic.Rows;
                 float width = pic.Width / pic.Cols;

@@ -705,6 +705,7 @@ Catering 餐饮
                 //绑定合同照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
+                if (MRF02Pics.Count > 2) MRF02Pics = MRF02Pics.Take(2).ToList();
                 MRF02Pics.ForEach(item =>
                 {
                     int index = MRF02Pics.IndexOf(item);
@@ -720,6 +721,7 @@ Catering 餐饮
                 //绑定报价单照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
+                if (MRF01Pics.Count > 2) MRF01Pics = MRF01Pics.Take(2).ToList();
                 MRF01Pics.ForEach(item =>
                 {
                     int index = MRF01Pics.IndexOf(item);
@@ -735,6 +737,7 @@ Catering 餐饮
                 //绑定发票照片
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
+                if (MRF03Pics.Count > 2) MRF03Pics = MRF03Pics.Take(2).ToList();
                 MRF03Pics.ForEach(item =>
                 {
                     int index = MRF03Pics.IndexOf(item);
