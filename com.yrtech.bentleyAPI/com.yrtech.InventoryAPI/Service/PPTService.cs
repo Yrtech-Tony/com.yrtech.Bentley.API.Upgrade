@@ -868,20 +868,15 @@ Catering 餐饮
 
             }
 
-            //第4页  物料设计
-            List<MarketActionPic> MPN05Pics = actionService.MarketActionPicSearch(marketActionId, "MPN05");
-            if (MPN05Pics.Count > 0)
+            //第4页  物料设计/活动主视觉或背板设计
+            if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
-                //绑定物料设计
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                MPN05Pics.ForEach(item =>
-                {
-                    int index = MPN05Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
+                pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
                 helper.AddPictureToSlide(helper.GetSlide(4), pic);
             }
+
 
             //第5页 媒体投放示例
             List<MarketActionPic> MPN06Pics = actionService.MarketActionPicSearch(marketActionId, "MPN06");
@@ -1254,7 +1249,6 @@ Catering 餐饮
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
                 pic.Width = 400;
-                pic.X = pic.X + 450;
                 helper.AddPictureToSlide(helper.GetSlide(5), pic);
             }
             if (before4Weeks.Count > 0)
@@ -1270,7 +1264,7 @@ Catering 餐饮
                 ISlide sixSlide = helper.GetSlide(6);
                 PicturePPTObject pic = new PicturePPTObject();
                 pic.Paths = new List<string>();
-                pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionApprovalCode);
+                pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
                 pic.Y = 90;
                 helper.AddPictureToSlide(sixSlide, pic);
             }
@@ -1307,20 +1301,28 @@ Catering 餐饮
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
             // 第8页 Photography 摄影摄像
-            List<MarketActionPic> MPH08Pics = actionService.MarketActionPicSearch(marketActionId, "MPH08");
-            if (MPH08Pics.Count > 0)
+            //绑定摄影师介绍
+            if (before4Weeks.Count > 0)
             {
-                //绑定摄影师介绍 照片
-                PicturePPTObject pic = new PicturePPTObject();
-                pic.Paths = new List<string>();
-                MPH08Pics.ForEach(item =>
-                {
-                    int index = MPH08Pics.IndexOf(item);
-                    pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
-                });
-                pic.Width = 400;
-                helper.AddPictureToSlide(helper.GetSlide(8), pic);
+                ISlide slide = helper.GetSlide(8);
+                IShape shape = helper.GetShape(slide, 3);
+                helper.WriteTextFrame((AutoShape)shape, before4Weeks[0].PhotographerIntro);
             }
+            //List<MarketActionPic> MPH08Pics = actionService.MarketActionPicSearch(marketActionId, "MPH08");
+            //if (MPH08Pics.Count > 0)
+            //{
+            //    //绑定摄影师介绍 照片
+            //    PicturePPTObject pic = new PicturePPTObject();
+            //    pic.Paths = new List<string>();
+            //    MPH08Pics.ForEach(item =>
+            //    {
+            //        int index = MPH08Pics.IndexOf(item);
+            //        pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
+            //    });
+            //    pic.Width = 400;
+            //    helper.AddPictureToSlide(helper.GetSlide(8), pic);
+            //}
+
             List<MarketActionPic> MPH09Pics = actionService.MarketActionPicSearch(marketActionId, "MPH09");
             if (MPH09Pics.Count > 0)
             {
