@@ -1223,6 +1223,7 @@ Catering 餐饮
             List<MarketActionBefore4WeeksHandOverArrangement> before4WeeksHandOvers = actionService.MarketActionBefore4WeeksHandOverArrangementSearch(marketActionId);
             if (before4WeeksHandOvers.Count > 0)
             {
+                MasterService masterService = new MasterService();
                 //绑定
                 ISlide elevenSlide = helper.GetSlide(4);
                 IShape table2 = helper.GetShape(elevenSlide, 2);
@@ -1231,7 +1232,11 @@ Catering 餐饮
                     int index = before4WeeksHandOvers.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 2, DateTimeToString(item.HandOverDate));
-                    helper.SaveTableCell(table2, row, 3, item.Model);
+                    List<HiddenCode> list = masterService.HiddenCodeSearch("TargetModels", item.Model, "");
+                    if (list != null && list.Count > 0)
+                    {
+                        helper.SaveTableCell(table2, row, 3, list[0].HiddenCodeName);
+                    }
                     helper.SaveTableCell(table2, row, 4, item.MainProcess);
                 });
             }
@@ -1506,6 +1511,7 @@ Catering 餐饮
             List<MarketActionAfter7HandOverArrangement> after7HandOverArrangement = actionService.MarketActionAfter7HandOverArrangementSearch(marketActionId);
             if (after7HandOverArrangement.Count > 0)
             {
+                MasterService masterService = new MasterService();
                 ISlide fourSlide = helper.GetSlide(4);
                 IShape table2 = helper.GetShape(fourSlide, 2);
                 after7HandOverArrangement.ForEach(item =>
@@ -1513,7 +1519,12 @@ Catering 餐饮
                     int index = after7HandOverArrangement.IndexOf(item);
                     int row = 2 + index;
                     helper.SaveTableCell(table2, row, 2, DateTimeToString(item.HandOverDate));
-                    helper.SaveTableCell(table2, row, 3, item.Model);
+                    List<HiddenCode> list = masterService.HiddenCodeSearch("TargetModels", item.Model, "");
+                    if (list != null && list.Count > 0)
+                    {
+                        helper.SaveTableCell(table2, row, 3, list[0].HiddenCodeName);
+                    }
+                    //helper.SaveTableCell(table2, row, 3, item.Model);
                     helper.SaveTableCell(table2, row, 4, item.MainProcess);
                 });
             }
