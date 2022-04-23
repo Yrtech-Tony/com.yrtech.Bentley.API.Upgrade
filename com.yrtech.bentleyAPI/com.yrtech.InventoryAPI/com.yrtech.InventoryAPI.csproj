@@ -217,6 +217,8 @@
     <Compile Include="DTO\MarketAction\MarketActionBefore3BugetDetailDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionAfter7ActualExpenseDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionAfter30MainDto.cs" />
+    <Compile Include="DTO\MarketAction\MarketActionAfter7CoopFundDto.cs" />
+    <Compile Include="DTO\MarketAction\MarketActionBefore4WeeksCoopFundDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionPlanDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionExportDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionReportCountDto.cs" />

@@ -233,7 +233,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("MarketAction/MarketActionBudgetMaxSearch")]
-        public APIResult MarketActionBudgetMaxSearch(string shopId="")
+        public APIResult MarketActionBudgetMaxSearch(string shopId = "")
         {
             try
             {
@@ -412,24 +412,36 @@ namespace com.yrtech.SurveyAPI.Controllers
                 MarketActionBefore4WeeksMainDto marketActionBefore4WeeksMainDto = new MarketActionBefore4WeeksMainDto();
                 // 需要绑定的输入信息
                 List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
-                List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
-                //if (marketActionBefore4WeeksCoopFundList != null && marketActionBefore4WeeksCoopFundList.Count > 0)
-                //{
-                //    foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
-
-                //        if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.StartDate != null && marketActionBefore4WeeksCoopFund.EndDate != null)
-                //        {
-                //            DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.StartDate).ToShortDateString());
-                //            DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.EndDate).ToShortDateString());
-                //            TimeSpan sp = end.Subtract(start);
-                //            marketActionBefore4WeeksCoopFund.TotalDays = sp.Days + 1;
-                //        }
-                //    if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.TotalDays != null && marketActionBefore4WeeksCoopFund.TotalDays != 0)
-                //    {
-                //        marketActionBefore4WeeksCoopFund.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0 : marketActionBefore4WeeksCoopFund.CoopFundAmt;
-                //        marketActionBefore4WeeksCoopFund.AmtPerDay = marketActionBefore4WeeksCoopFund.CoopFundAmt / marketActionBefore4WeeksCoopFund.TotalDays;
-                //    }
-                //}
+                List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId, "");
+                List<MarketActionBefore4WeeksCoopFundDto> marketActionBefore4WeeksCoopFundDtoList = new List<MarketActionBefore4WeeksCoopFundDto>();
+                if (marketActionBefore4WeeksCoopFundList != null && marketActionBefore4WeeksCoopFundList.Count > 0)
+                {
+                    foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
+                    {
+                        MarketActionBefore4WeeksCoopFundDto marketActionBefore4WeeksCoopFundDto = new MarketActionBefore4WeeksCoopFundDto();
+                        marketActionBefore4WeeksCoopFundDto.AmtPerDay = marketActionBefore4WeeksCoopFund.AmtPerDay;
+                        marketActionBefore4WeeksCoopFundDto.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt;
+                        marketActionBefore4WeeksCoopFundDto.CoopFundCode = marketActionBefore4WeeksCoopFund.CoopFundCode;
+                        marketActionBefore4WeeksCoopFundDto.CoopFundDesc = marketActionBefore4WeeksCoopFund.CoopFundDesc;
+                        List<CoopFundType> coopFundType = new List<CoopFundType>();
+                        coopFundType = masterService.CoopFundTypeSearch("", marketActionBefore4WeeksCoopFund.CoopFundCode, "", "", null, "");
+                        if (coopFundType != null && coopFundType.Count > 0)
+                        {
+                            marketActionBefore4WeeksCoopFundDto.CoopFundTypeDesc = coopFundType[0].CoopFundTypeDesc;
+                        }
+                        marketActionBefore4WeeksCoopFundDto.CoopFund_DMFChk = marketActionBefore4WeeksCoopFund.CoopFund_DMFChk;
+                        marketActionBefore4WeeksCoopFundDto.EndDate = marketActionBefore4WeeksCoopFund.EndDate;
+                        marketActionBefore4WeeksCoopFundDto.InDateTime = marketActionBefore4WeeksCoopFund.InDateTime;
+                        marketActionBefore4WeeksCoopFundDto.InUserId = marketActionBefore4WeeksCoopFund.InUserId;
+                        marketActionBefore4WeeksCoopFundDto.MarketActionId = marketActionBefore4WeeksCoopFund.MarketActionId;
+                        marketActionBefore4WeeksCoopFundDto.ModifyDateTime = marketActionBefore4WeeksCoopFund.ModifyDateTime;
+                        marketActionBefore4WeeksCoopFundDto.ModifyUserId = marketActionBefore4WeeksCoopFund.ModifyUserId;
+                        marketActionBefore4WeeksCoopFundDto.SeqNO = marketActionBefore4WeeksCoopFund.SeqNO;
+                        marketActionBefore4WeeksCoopFundDto.StartDate = marketActionBefore4WeeksCoopFund.StartDate;
+                        marketActionBefore4WeeksCoopFundDto.TotalDays = marketActionBefore4WeeksCoopFund.TotalDays;
+                        marketActionBefore4WeeksCoopFundDtoList.Add(marketActionBefore4WeeksCoopFundDto);
+                    }
+                }
                 if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
                 {
                     marketActionBefore4WeeksList[0].TotalBudgetAmt = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketActionId);
@@ -437,7 +449,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 }
                 marketActionBefore4WeeksMainDto.ActivityProcess = marketActionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksHandOverArrangement = marketActionService.MarketActionBefore4WeeksHandOverArrangementSearch(marketActionId);
-                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund = marketActionBefore4WeeksCoopFundList;
+                marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund = marketActionBefore4WeeksCoopFundDtoList;
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId, "MPF");
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_OnLine = marketActionService.MarketActionPicSearch(marketActionId, "MPN");
                 marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksPicList_Handover = marketActionService.MarketActionPicSearch(marketActionId, "MPH");
@@ -466,13 +478,28 @@ namespace com.yrtech.SurveyAPI.Controllers
                         marketActionService.MarketActionBefore4WeeksActivityProcessSave(process);
                     }
                 }
-                // 先全部删除市场基金申请，然后统一再保存,同时计算预算合计
+                // 先全部删除市场基金申请，然后统一再保存,
 
                 marketActionService.MarketActionBefore4WeeksCoopFundDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
                 if (marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund.Count > 0)
                 {
-                    foreach (MarketActionBefore4WeeksCoopFund coopFund in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund)
+                    foreach (MarketActionBefore4WeeksCoopFundDto coopFundDto in marketActionBefore4WeeksMainDto.MarketActionBefore4WeeksCoopFund)
                     {
+                        MarketActionBefore4WeeksCoopFund coopFund = new MarketActionBefore4WeeksCoopFund();
+                        coopFund.AmtPerDay = coopFundDto.AmtPerDay;
+                        coopFund.CoopFundAmt = coopFundDto.CoopFundAmt;
+                        coopFund.CoopFundCode = coopFundDto.CoopFundCode;
+                        coopFund.CoopFundDesc = coopFundDto.CoopFundDesc;
+                        coopFund.CoopFund_DMFChk = coopFundDto.CoopFund_DMFChk;
+                        coopFund.EndDate = coopFundDto.EndDate;
+                        coopFund.InDateTime = coopFundDto.InDateTime;
+                        coopFund.InUserId = coopFundDto.InUserId;
+                        coopFund.MarketActionId = coopFundDto.MarketActionId;
+                        coopFund.ModifyDateTime = coopFundDto.ModifyDateTime;
+                        coopFund.ModifyUserId = coopFundDto.ModifyUserId;
+                        coopFund.SeqNO = coopFundDto.SeqNO;
+                        coopFund.StartDate = coopFundDto.StartDate;
+                        coopFund.TotalDays = coopFundDto.TotalDays;
                         marketActionService.MarketActionBefore4WeeksCoopFundSave(coopFund);
                     }
                 }
@@ -562,7 +589,29 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketActionBefore4WeeksCoopFund.AmtPerDay = marketActionBefore4WeeksCoopFund.CoopFundAmt / marketActionBefore4WeeksCoopFund.TotalDays;
                 }
                 marketActionBefore4WeeksCoopFund = marketActionService.MarketActionBefore4WeeksCoopFundSave(marketActionBefore4WeeksCoopFund);
-                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionBefore4WeeksCoopFund) };
+                MarketActionBefore4WeeksCoopFundDto marketActionBefore4WeeksCoopFundDto = new MarketActionBefore4WeeksCoopFundDto();
+                marketActionBefore4WeeksCoopFundDto.AmtPerDay = marketActionBefore4WeeksCoopFund.AmtPerDay;
+                marketActionBefore4WeeksCoopFundDto.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt;
+                marketActionBefore4WeeksCoopFundDto.CoopFundCode = marketActionBefore4WeeksCoopFund.CoopFundCode;
+                marketActionBefore4WeeksCoopFundDto.CoopFundDesc = marketActionBefore4WeeksCoopFund.CoopFundDesc;
+                List<CoopFundType> coopFundType = new List<CoopFundType>();
+                coopFundType = masterService.CoopFundTypeSearch("", marketActionBefore4WeeksCoopFund.CoopFundCode, "", "", null, "");
+                if (coopFundType != null && coopFundType.Count > 0)
+                {
+                    marketActionBefore4WeeksCoopFundDto.CoopFundTypeDesc = coopFundType[0].CoopFundTypeDesc;
+                }
+                marketActionBefore4WeeksCoopFundDto.CoopFund_DMFChk = marketActionBefore4WeeksCoopFund.CoopFund_DMFChk;
+                marketActionBefore4WeeksCoopFundDto.EndDate = marketActionBefore4WeeksCoopFund.EndDate;
+                marketActionBefore4WeeksCoopFundDto.InDateTime = marketActionBefore4WeeksCoopFund.InDateTime;
+                marketActionBefore4WeeksCoopFundDto.InUserId = marketActionBefore4WeeksCoopFund.InUserId;
+                marketActionBefore4WeeksCoopFundDto.MarketActionId = marketActionBefore4WeeksCoopFund.MarketActionId;
+                marketActionBefore4WeeksCoopFundDto.ModifyDateTime = marketActionBefore4WeeksCoopFund.ModifyDateTime;
+                marketActionBefore4WeeksCoopFundDto.ModifyUserId = marketActionBefore4WeeksCoopFund.ModifyUserId;
+                marketActionBefore4WeeksCoopFundDto.SeqNO = marketActionBefore4WeeksCoopFund.SeqNO;
+                marketActionBefore4WeeksCoopFundDto.StartDate = marketActionBefore4WeeksCoopFund.StartDate;
+                marketActionBefore4WeeksCoopFundDto.TotalDays = marketActionBefore4WeeksCoopFund.TotalDays;
+
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionBefore4WeeksCoopFundDto) };
             }
             catch (Exception ex)
             {
@@ -837,6 +886,42 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 List<MarketActionAfter2LeadsReportDto> list = excelDataService.LeadsReportImport(path);
+                if (list == null && list.Count == 0)
+                {
+                    return new APIResult() { Status = false, Body = "无数据，请填写完整再上传" };
+                }
+                foreach (MarketActionAfter2LeadsReportDto leadsReportDto in list)
+                {
+                    if (string.IsNullOrEmpty(leadsReportDto.CustomerName))
+                    {
+                        return new APIResult() { Status = false, Body = "客户姓名不能为空，请填写完整" };
+                    }
+                    if (string.IsNullOrEmpty(leadsReportDto.BPNO))
+                    {
+                        return new APIResult() { Status = false, Body = "DCPID不能为空，请填写完整" };
+                    }
+                    if (string.IsNullOrEmpty(leadsReportDto.DCPCheckName))
+                    {
+                        return new APIResult() { Status = false, Body = "活动前是否已有DCPID不能为空，请填写完整" };
+                    }
+                    if (string.IsNullOrEmpty(leadsReportDto.LeadsCheckName))
+                    {
+                        return new APIResult() { Status = false, Body = "是否为线索不能为空，请填写完整" };
+                    }
+                    if (string.IsNullOrEmpty(leadsReportDto.DealCheckName))
+                    {
+                        return new APIResult() { Status = false, Body = "是否成交不能为空，请填写完整" };
+                    }
+                    List<HiddenCode> hiddenCodeList_InterestedMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.InterestedModelName.Trim());
+                    List<HiddenCode> hiddenCodeList_DealMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.InterestedModelName.Trim());
+                    if (hiddenCodeList_InterestedMode == null
+                        || hiddenCodeList_DealMode == null
+                        || hiddenCodeList_InterestedMode.Count == 0
+                        || hiddenCodeList_DealMode.Count == 0)
+                    {
+                        return new APIResult() { Status = false, Body = "请填写正确车型" };
+                    }
+                }
                 foreach (MarketActionAfter2LeadsReportDto leadsReportDto in list)
                 {
                     MarketActionAfter2LeadsReport leadsReport = new MarketActionAfter2LeadsReport();
@@ -963,8 +1048,66 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketActionAfter7List[0].TotalBudgetAmt = marketActionService.MarketActionAfter7TotalBudgetAmt(marketActionId.ToString());
                     marketActionAfter7MainDto.MarketActionAfter7 = marketActionAfter7List[0];
                 }
+                // 转换为DTO，需要显示填写指引和活动计划的信息
+                List<MarketActionAfter7CoopFund> marketActionAfter7CoopFundList = marketActionService.MarketActionAfter7CoopFundSearch(marketActionId);
+                List<MarketActionAfter7CoopFundDto> marketActionAfterCoopFundDtoList = new List<MarketActionAfter7CoopFundDto>();
+                decimal coopFundAmt_Catering = 0;
+                if (marketActionAfter7CoopFundList != null && marketActionAfter7CoopFundList.Count > 0)
+                {
+                    foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7CoopFundList)
+                    {
+                        MarketActionAfter7CoopFundDto marketActionAfter7CoopFundDto = new MarketActionAfter7CoopFundDto();
+                        marketActionAfter7CoopFundDto.AmtPerDay = marketActionAfter7CoopFund.AmtPerDay;
+                        marketActionAfter7CoopFundDto.CoopFundAmt = marketActionAfter7CoopFund.CoopFundAmt;
+                        marketActionAfter7CoopFundDto.CoopFundCode = marketActionAfter7CoopFund.CoopFundCode;
+                        marketActionAfter7CoopFundDto.CoopFundDesc = marketActionAfter7CoopFund.CoopFundDesc;
+                        // 绑定指引说明
+                        List<CoopFundType> coopFundType = new List<CoopFundType>();
+                        coopFundType = masterService.CoopFundTypeSearch("", marketActionAfter7CoopFund.CoopFundCode, "", "", null, "");
+                        if (coopFundType != null && coopFundType.Count > 0)
+                        {
+                            marketActionAfter7CoopFundDto.CoopFundTypeDesc = coopFundType[0].CoopFundTypeDesc;
+                        }
+                        // 绑定预算金额
+                        if (marketActionAfter7CoopFund.CoopFundCode == "Catering")
+                        {
+                            List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFund_Food = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionAfter7CoopFund.MarketActionId.ToString(), "Catering_Food");
+                            List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFund_Drink = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionAfter7CoopFund.MarketActionId.ToString(), "Catering_Drink");
+                            if (marketActionBefore4WeeksCoopFund_Food != null && marketActionBefore4WeeksCoopFund_Food.Count > 0)
+                            {
+                                if (marketActionBefore4WeeksCoopFund_Food[0].CoopFundAmt != null)
+                                    coopFundAmt_Catering += Convert.ToDecimal(marketActionBefore4WeeksCoopFund_Food[0].CoopFundAmt);
+                            }
+                            if (marketActionBefore4WeeksCoopFund_Drink != null && marketActionBefore4WeeksCoopFund_Drink.Count > 0)
+                            {
+                                if (marketActionBefore4WeeksCoopFund_Drink[0].CoopFundAmt != null)
+                                    coopFundAmt_Catering += Convert.ToDecimal(marketActionBefore4WeeksCoopFund_Drink[0].CoopFundAmt);
+                            }
+                            marketActionAfter7CoopFundDto.CoopFundAmt_Budget = coopFundAmt_Catering;
+                        }
+                        else
+                        {
+                            List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionAfter7CoopFund.MarketActionId.ToString(), marketActionAfter7CoopFund.CoopFundCode);
+                            if (marketActionBefore4WeeksCoopFundList != null && marketActionBefore4WeeksCoopFundList.Count > 0)
+                            {
+                                marketActionAfter7CoopFundDto.CoopFundAmt_Budget = marketActionBefore4WeeksCoopFundList[0].CoopFundAmt;
+                            }
+                        }
+                        marketActionAfter7CoopFundDto.CoopFund_DMFChk = marketActionAfter7CoopFund.CoopFund_DMFChk;
+                        marketActionAfter7CoopFundDto.EndDate = marketActionAfter7CoopFund.EndDate;
+                        marketActionAfter7CoopFundDto.InDateTime = marketActionAfter7CoopFund.InDateTime;
+                        marketActionAfter7CoopFundDto.InUserId = marketActionAfter7CoopFund.InUserId;
+                        marketActionAfter7CoopFundDto.MarketActionId = marketActionAfter7CoopFund.MarketActionId;
+                        marketActionAfter7CoopFundDto.ModifyDateTime = marketActionAfter7CoopFund.ModifyDateTime;
+                        marketActionAfter7CoopFundDto.ModifyUserId = marketActionAfter7CoopFund.ModifyUserId;
+                        marketActionAfter7CoopFundDto.SeqNO = marketActionAfter7CoopFund.SeqNO;
+                        marketActionAfter7CoopFundDto.StartDate = marketActionAfter7CoopFund.StartDate;
+                        marketActionAfter7CoopFundDto.TotalDays = marketActionAfter7CoopFund.TotalDays;
+                        marketActionAfterCoopFundDtoList.Add(marketActionAfter7CoopFundDto);
+                    }
+                }
                 marketActionAfter7MainDto.ActualProcess = marketActionService.MarketActionAfter7ActualProcessSearch(marketActionId);
-                marketActionAfter7MainDto.MarketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSearch(marketActionId);
+                marketActionAfter7MainDto.MarketActionAfter7CoopFund = marketActionAfterCoopFundDtoList;
                 marketActionAfter7MainDto.MarketActionAfter7HandOverArrangement = marketActionService.MarketActionAfter7HandOverArrangementSearch(marketActionId);
                 marketActionAfter7MainDto.MarketActionAfter7PicList_OffLine = marketActionService.MarketActionPicSearch(marketActionId, "MRF");
                 marketActionAfter7MainDto.MarketActionAfter7PicList_OnLine = marketActionService.MarketActionPicSearch(marketActionId, "MRN");
@@ -998,9 +1141,24 @@ namespace com.yrtech.SurveyAPI.Controllers
                 marketActionService.MarketActionAfter7CoopFundDelete(marketActionAfter7MainDto.MarketActionId.ToString());
                 if (marketActionAfter7MainDto.MarketActionAfter7CoopFund != null && marketActionAfter7MainDto.MarketActionAfter7CoopFund.Count > 0)
                 {
-                    foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7MainDto.MarketActionAfter7CoopFund)
+                    foreach (MarketActionAfter7CoopFundDto coopFundDto in marketActionAfter7MainDto.MarketActionAfter7CoopFund)
                     {
-                        marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
+                        MarketActionAfter7CoopFund coopFund = new MarketActionAfter7CoopFund();
+                        coopFund.AmtPerDay = coopFundDto.AmtPerDay;
+                        coopFund.CoopFundAmt = coopFundDto.CoopFundAmt;
+                        coopFund.CoopFundCode = coopFundDto.CoopFundCode;
+                        coopFund.CoopFundDesc = coopFundDto.CoopFundDesc;
+                        coopFund.CoopFund_DMFChk = coopFundDto.CoopFund_DMFChk;
+                        coopFund.EndDate = coopFundDto.EndDate;
+                        coopFund.InDateTime = coopFundDto.InDateTime;
+                        coopFund.InUserId = coopFundDto.InUserId;
+                        coopFund.MarketActionId = coopFundDto.MarketActionId;
+                        coopFund.ModifyDateTime = coopFundDto.ModifyDateTime;
+                        coopFund.ModifyUserId = coopFundDto.ModifyUserId;
+                        coopFund.SeqNO = coopFundDto.SeqNO;
+                        coopFund.StartDate = coopFundDto.StartDate;
+                        coopFund.TotalDays = coopFundDto.TotalDays;
+                        marketActionService.MarketActionAfter7CoopFundSave(coopFund);
                     }
                 }
                 // 先删除再全部保存
@@ -1066,7 +1224,57 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketActionAfter7CoopFund.AmtPerDay = marketActionAfter7CoopFund.CoopFundAmt / marketActionAfter7CoopFund.TotalDays;
                 }
                 marketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
-                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionAfter7CoopFund) };
+                MarketActionAfter7CoopFundDto marketActionAfter7CoopFundDto = new MarketActionAfter7CoopFundDto();
+                marketActionAfter7CoopFundDto.AmtPerDay = marketActionAfter7CoopFund.AmtPerDay;
+                marketActionAfter7CoopFundDto.CoopFundAmt = marketActionAfter7CoopFund.CoopFundAmt;
+                marketActionAfter7CoopFundDto.CoopFundCode = marketActionAfter7CoopFund.CoopFundCode;
+                marketActionAfter7CoopFundDto.CoopFundDesc = marketActionAfter7CoopFund.CoopFundDesc;
+                // 费用填写指引
+                List<CoopFundType> coopFundType = new List<CoopFundType>();
+                coopFundType = masterService.CoopFundTypeSearch("", marketActionAfter7CoopFund.CoopFundCode, "", "", null, "");
+                if (coopFundType != null && coopFundType.Count > 0)
+                {
+                    marketActionAfter7CoopFundDto.CoopFundTypeDesc = coopFundType[0].CoopFundTypeDesc;
+                }
+                // 预算金额
+                decimal coopFundAmt_Catering = 0;
+                // 绑定预算金额
+                if (marketActionAfter7CoopFund.CoopFundCode == "Catering")
+                {
+                    List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFund_Food = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionAfter7CoopFund.MarketActionId.ToString(), "Catering_Food");
+                    List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFund_Drink = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionAfter7CoopFund.MarketActionId.ToString(), "Catering_Drink");
+                    if (marketActionBefore4WeeksCoopFund_Food != null && marketActionBefore4WeeksCoopFund_Food.Count > 0)
+                    {
+                        if (marketActionBefore4WeeksCoopFund_Food[0].CoopFundAmt != null)
+                            coopFundAmt_Catering += Convert.ToDecimal(marketActionBefore4WeeksCoopFund_Food[0].CoopFundAmt);
+                    }
+                    if (marketActionBefore4WeeksCoopFund_Drink != null && marketActionBefore4WeeksCoopFund_Drink.Count > 0)
+                    {
+                        if (marketActionBefore4WeeksCoopFund_Drink[0].CoopFundAmt != null)
+                            coopFundAmt_Catering += Convert.ToDecimal(marketActionBefore4WeeksCoopFund_Drink[0].CoopFundAmt);
+                    }
+                    marketActionAfter7CoopFundDto.CoopFundAmt_Budget = coopFundAmt_Catering;
+                }
+                else
+                {
+                    List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = marketActionService.MarketActionBefore4WeeksCoopFundSearch(marketActionAfter7CoopFund.MarketActionId.ToString(), marketActionAfter7CoopFund.CoopFundCode);
+                    if (marketActionBefore4WeeksCoopFundList != null && marketActionBefore4WeeksCoopFundList.Count > 0)
+                    {
+                        marketActionAfter7CoopFundDto.CoopFundAmt_Budget = marketActionBefore4WeeksCoopFundList[0].CoopFundAmt;
+                    }
+                }
+                marketActionAfter7CoopFundDto.CoopFund_DMFChk = marketActionAfter7CoopFund.CoopFund_DMFChk;
+                marketActionAfter7CoopFundDto.EndDate = marketActionAfter7CoopFund.EndDate;
+                marketActionAfter7CoopFundDto.InDateTime = marketActionAfter7CoopFund.InDateTime;
+                marketActionAfter7CoopFundDto.InUserId = marketActionAfter7CoopFund.InUserId;
+                marketActionAfter7CoopFundDto.MarketActionId = marketActionAfter7CoopFund.MarketActionId;
+                marketActionAfter7CoopFundDto.ModifyDateTime = marketActionAfter7CoopFund.ModifyDateTime;
+                marketActionAfter7CoopFundDto.ModifyUserId = marketActionAfter7CoopFund.ModifyUserId;
+                marketActionAfter7CoopFundDto.SeqNO = marketActionAfter7CoopFund.SeqNO;
+                marketActionAfter7CoopFundDto.StartDate = marketActionAfter7CoopFund.StartDate;
+                marketActionAfter7CoopFundDto.TotalDays = marketActionAfter7CoopFund.TotalDays;
+
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionAfter7CoopFundDto) };
             }
             catch (Exception ex)
             {
@@ -1649,14 +1857,16 @@ namespace com.yrtech.SurveyAPI.Controllers
                         }
                     }
                     // 3种情况以外，直接保存
-                    else {
-                        dmfService.ExpenseAccountSave(expenseAccount);
+                    else
+                    {
+                        expenseAccount = dmfService.ExpenseAccountSave(expenseAccount);
                     }
                 }
                 #endregion
                 // 如果没有选择市场活动，直接保存
-                else {
-                    dmfService.ExpenseAccountSave(expenseAccount);
+                else
+                {
+                    expenseAccount = dmfService.ExpenseAccountSave(expenseAccount);
                 }
 
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(expenseAccount) };

@@ -379,14 +379,16 @@ namespace com.yrtech.InventoryAPI.Service
         }
         #endregion
         #region CoopFundType
-        public List<CoopFundType> CoopFundTypeSearch(string coopFundTypeId, string coopFundTypeName, string coopFundTypeNameEn, bool? showChk,string modeType)
+        public List<CoopFundType> CoopFundTypeSearch(string coopFundTypeId, string coopFundTypeCode,string coopFundTypeName, string coopFundTypeNameEn, bool? showChk,string modeType)
         {
             if (coopFundTypeId == null) coopFundTypeId = "";
+            if (coopFundTypeCode == null) coopFundTypeCode = "";
             if (coopFundTypeName == null) coopFundTypeName = "";
             if (coopFundTypeNameEn == null) coopFundTypeNameEn = "";
             if (modeType == null) modeType = "";
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@CoopFundTypeId", coopFundTypeId),
                                                     new SqlParameter("@CoopFundTypeName", coopFundTypeName),
+                                                    new SqlParameter("@CoopFundTypeCode", coopFundTypeCode),
                                                     new SqlParameter("@CoopFundTypeNameEn", coopFundTypeNameEn),
                                                     new SqlParameter("@ModeType", modeType)};
             Type t = typeof(CoopFundType);
@@ -397,6 +399,10 @@ namespace com.yrtech.InventoryAPI.Service
             if (!string.IsNullOrEmpty(coopFundTypeId))
             {
                 sql += " AND CoopFundTypeId = @CoopFundTypeId";
+            }
+            if (!string.IsNullOrEmpty(coopFundTypeCode))
+            {
+                sql += " AND CoopFundTypeCode = @CoopFundTypeCode";
             }
             if (!string.IsNullOrEmpty(coopFundTypeName))
             {

@@ -449,14 +449,18 @@ namespace com.yrtech.InventoryAPI.Service
                         ";
             db.Database.ExecuteSqlCommand(sql, para);
         }
-        public List<MarketActionBefore4WeeksCoopFund> MarketActionBefore4WeeksCoopFundSearch(string marketActionId)
+        public List<MarketActionBefore4WeeksCoopFund> MarketActionBefore4WeeksCoopFundSearch(string marketActionId,string coopFundTypeCode)
         {
             if (marketActionId == null) marketActionId = "";
-
-            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId) };
+            if (coopFundTypeCode == null) coopFundTypeCode = "";
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@MarketActionId", marketActionId), new SqlParameter("@CoopFundCode", coopFundTypeCode) };
             Type t = typeof(MarketActionBefore4WeeksCoopFund);
             string sql = "";
             sql += @"SELECT *  FROM [MarketActionBefore4WeeksCoopFund] WHERE MarketActionId = @MarketActionId";
+            if (!string.IsNullOrEmpty(coopFundTypeCode))
+            {
+                sql += " AND CoopFundCode = @CoopFundCode";
+            }
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionBefore4WeeksCoopFund>().ToList();
         }
         public MarketActionBefore4WeeksCoopFund MarketActionBefore4WeeksCoopFundSave(MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund)
@@ -522,7 +526,7 @@ namespace com.yrtech.InventoryAPI.Service
         public decimal? MarketActionBefore4WeeksTotalBudgetAmt(string marketActionId)
         {
             decimal? totalBudgetAmt = 0;
-            List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> marketActionBefore4WeeksCoopFundList = MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             foreach (MarketActionBefore4WeeksCoopFund marketActionBefore4WeeksCoopFund in marketActionBefore4WeeksCoopFundList)
             {
                 totalBudgetAmt += marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0 : marketActionBefore4WeeksCoopFund.CoopFundAmt;

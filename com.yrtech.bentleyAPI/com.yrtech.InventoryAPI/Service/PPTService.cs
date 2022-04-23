@@ -129,7 +129,7 @@ Catering 餐饮
                 helper.SaveTableCell(table3, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
 
-            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情
@@ -501,7 +501,7 @@ Catering 餐饮
                     helper.SaveTableCell(table1, row, 5, item.CoopFundDesc);
                 });
             }
-            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             // 活动计划的餐饮是分为餐费和酒水，活动报告只有餐饮。需要合并到一起
             MarketActionBefore4WeeksCoopFund coopFundCatering = new MarketActionBefore4WeeksCoopFund();
             decimal? cateringAmt = 0;
@@ -807,7 +807,7 @@ Catering 餐饮
 
             }
             //第1页 Event Budget 费用总览
-            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             if (before4WeeksCoopFund.Count > 0)
             {
 
@@ -990,7 +990,7 @@ Catering 餐饮
                 helper.SaveTableCell(table1, 2, 2, DecimalNullabelToString(actionAfter7[0].TotalBudgetAmt));
                 helper.SaveTableCell(table1, 3, 2, DecimalNullabelToString(actionAfter7[0].CoopFundSumAmt));
             }
-            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             if (before4WeeksCoopFund.Count > 0)
             {
 
@@ -1204,7 +1204,7 @@ Catering 餐饮
                 helper.SaveTableCell(table3, 2, 3, DecimalNullabelToString(before4Weeks[0].TotalBudgetAmt));
                 helper.SaveTableCell(table3, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
-            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情
@@ -1450,7 +1450,7 @@ Catering 餐饮
                     helper.SaveTableCell(table1, row, 5, item.CoopFundDesc);
                 });
             }
-            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId);
+            List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
             // 活动计划的餐饮是分为餐费和酒水，活动报告只有餐饮。需要合并到一起
             MarketActionBefore4WeeksCoopFund coopFundCatering = new MarketActionBefore4WeeksCoopFund();
             decimal? cateringAmt = 0;

@@ -324,7 +324,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<CoopFundType> coopFundTypeList = masterService.CoopFundTypeSearch(coopFundId, coopFundName, coopFundNameEn, showChk, modeType);
+                List<CoopFundType> coopFundTypeList = masterService.CoopFundTypeSearch(coopFundId, "",coopFundName, coopFundNameEn, showChk, modeType);
 
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(coopFundTypeList) };
             }
@@ -339,7 +339,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<CoopFundType> coopFundTypeList = masterService.CoopFundTypeSearch("", coopFundType.CoopFundTypeName, "", null,"");
+                List<CoopFundType> coopFundTypeList = masterService.CoopFundTypeSearch("","",coopFundType.CoopFundTypeName, "", null,"");
                 if (coopFundTypeList != null && coopFundTypeList.Count != 0 && coopFundTypeList[0].CoopFundTypeId != coopFundType.CoopFundTypeId)
                 {
                     return new APIResult() { Status = false, Body = "保存失败,市场基金申请费用类型名称重复" };
