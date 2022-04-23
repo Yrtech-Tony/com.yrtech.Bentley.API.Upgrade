@@ -639,7 +639,6 @@ namespace com.yrtech.InventoryAPI.Service
                     FROM MarketActionAfter7ActualExpense A WHERE A.MarketActionId = @MarketActionId) Y ON 1=1";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketActionLeadsCountDto>().ToList();
         }
-
         #endregion
         #region Seven days after
         public List<MarketActionAfter7> MarketActionAfter7Search(string marketActionId)
@@ -873,7 +872,7 @@ namespace com.yrtech.InventoryAPI.Service
 				                            THEN 1
 				                            ELSE 0
 			                            END AS Before4WeeksNotCommit-- 到时间还未提交
-                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =1 AND DTTApproveCode<>'3')
+                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =1 AND DTTApproveCode<>'2')
 				                            THEN 1
 				                            ELSE 0
 			                            END AS Before4WeeksWaitForChange -- 提交后还未通过(包括待审批和待修改)
@@ -881,7 +880,7 @@ namespace com.yrtech.InventoryAPI.Service
 				                            THEN 1
 				                            ELSE 0
 			                            END AS After7NotCommit
-                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =2 AND DTTApproveCode<>'3')
+                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =2 AND DTTApproveCode<>'2')
 				                            THEN 1
 				                            ELSE 0
 			                            END AS After7WaitForChange

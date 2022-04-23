@@ -544,8 +544,9 @@ Catering 餐饮
                 {
                     int index = after7ActualProcess.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTime);
-                    helper.SaveTableCell(table2, row, 2, item.Process);
+                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTimeStart);
+                    helper.SaveTableCell(table2, row, 2, item.ActivityDateTimeEnd);
+                    helper.SaveTableCell(table2, row, 3, item.Process);
                 });
             }
 
@@ -1428,8 +1429,9 @@ Catering 餐饮
                 {
                     int index = after7ActualProcess.IndexOf(item);
                     int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTime);
-                    helper.SaveTableCell(table2, row, 2, item.Process);
+                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTimeStart);
+                    helper.SaveTableCell(table2, row, 2, item.ActivityDateTimeStart);
+                    helper.SaveTableCell(table2, row, 3, item.Process);
                 });
             }
 
