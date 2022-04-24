@@ -595,6 +595,7 @@ Catering 餐饮
                 });
                 helper.AddPictureToSlide(helper.GetSlide(7), pic);
             }
+
             //第8页 Brand Representation – KV 活动主视觉或背板设计
             if (before4Weeks.Count > 0 && !string.IsNullOrEmpty(before4Weeks[0].KeyVisionPic))
             {
@@ -603,6 +604,7 @@ Catering 餐饮
                 pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + before4Weeks[0].KeyVisionPic);
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
+
             //第9页
             List<MarketActionPic> MRF09Pics = actionService.MarketActionPicSearch(marketActionId, "MRF09");
             if (MRF09Pics.Count > 0)
@@ -615,7 +617,6 @@ Catering 餐饮
                     int index = MRF09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
 
@@ -694,7 +695,6 @@ Catering 餐饮
                     int index = MRF14Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(12), pic);
             }
 
