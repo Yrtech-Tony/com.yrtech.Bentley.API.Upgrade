@@ -711,7 +711,7 @@ Catering 餐饮
                     int index = MRF02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 250;
+                pic.Width = 270;
 
                 helper.AddPictureToSlide(helper.GetSlide(13), pic);
             }
@@ -727,8 +727,8 @@ Catering 餐饮
                     int index = MRF01Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 250;
-                pic.X += 290;
+                pic.Width = 270;
+                pic.X += 295;
                 helper.AddPictureToSlide(helper.GetSlide(13), pic);
             }
             List<MarketActionPic> MRF03Pics = actionService.MarketActionPicSearch(marketActionId, "MRF03");
@@ -743,8 +743,8 @@ Catering 餐饮
                     int index = MRF03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 250;
-                pic.X += 580;
+                pic.Width = 265;
+                pic.X += 595;
                 helper.AddPictureToSlide(helper.GetSlide(13), pic);
             }
 
@@ -1575,7 +1575,6 @@ Catering 餐饮
                     int index = MRH07Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(6), pic);
             }
             //ppt 第7页
@@ -1599,7 +1598,6 @@ Catering 餐饮
                     int index = MRH08Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(8), pic);
             }
 
@@ -1615,7 +1613,6 @@ Catering 餐饮
                     int index = MRH09Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
                 helper.AddPictureToSlide(helper.GetSlide(9), pic);
             }
 
@@ -1631,8 +1628,7 @@ Catering 餐饮
                     int index = MRH02Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
-
+                pic.Width = 270;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
 
             }
@@ -1648,8 +1644,8 @@ Catering 餐饮
                     int index = MRH01Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
-                pic.X += 300;
+                pic.Width = 270;
+                pic.X += 295;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
 
@@ -1665,8 +1661,8 @@ Catering 餐饮
                     int index = MRH03Pics.IndexOf(item);
                     pic.Paths.Add(OSSClientHelper.OSS_BASE_URL + item.PicPath);
                 });
-                pic.Width = 400;
-                pic.X += 600;
+                pic.Width = 270;
+                pic.X += 590;
                 helper.AddPictureToSlide(helper.GetSlide(10), pic);
             }
 
