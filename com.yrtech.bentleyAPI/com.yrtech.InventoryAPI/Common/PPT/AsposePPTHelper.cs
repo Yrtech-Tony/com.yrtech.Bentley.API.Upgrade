@@ -155,6 +155,12 @@ namespace com.yrtech.InventoryAPI.Common
             if (shape.GetType().Name == "Table")
             {
                 Table table = (Table)shape;
+                table[col - 1, row - 1].TextFrame.Paragraphs[0].Portions[0].PortionFormat.FontHeight = 12f;
+                //float FontHeight = table[col - 1, row - 1].TextFrame.Paragraphs[0].Portions[0].PortionFormat.FontHeight;
+                //if (!float.IsNaN(FontHeight))
+                //{
+                //    table[col - 1, row - 1].TextFrame.Paragraphs[0].Portions[0].PortionFormat.FontHeight = FontHeight;
+                //}
                 table[col-1, row-1].TextFrame.Text = cell == null?"":cell;
             }            
         }
