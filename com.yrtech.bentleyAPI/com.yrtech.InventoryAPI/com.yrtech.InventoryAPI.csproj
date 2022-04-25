@@ -222,6 +222,7 @@
     <Compile Include="DTO\MarketAction\MarketActionPlanDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionExportDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionReportCountDto.cs" />
+    <Compile Include="DTO\MarketAction\MarketActionMaxAmtDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionStatusCountDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionLeadsCountDto.cs" />
     <Compile Include="DTO\MarketAction\MarketActionAfter2LeadsReportDto.cs" />

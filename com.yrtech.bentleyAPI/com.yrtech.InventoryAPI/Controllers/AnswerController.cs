@@ -237,9 +237,13 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
-                decimal maxBugdet = marketActionService.MarketActionBudgetMaxSearch(shopId);
-
-                return new APIResult() { Status = true, Body = CommonHelper.Encode(maxBugdet) };
+                MarketActionMaxAmtDto max = new MarketActionMaxAmtDto();
+                List<MarketActionMaxAmtDto>  maxList = marketActionService.MarketActionMaxSearch(shopId);
+                if (maxList != null && maxList.Count > 0)
+                {
+                    max = maxList[0];
+                }
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(max) };
             }
             catch (Exception ex)
             {
