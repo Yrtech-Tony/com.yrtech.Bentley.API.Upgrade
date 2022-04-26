@@ -29,7 +29,6 @@ Catering 餐饮
         string[] HandOverPlanUnderBudgetTypes = { "VenueRetal", "PhotoGraphy", "Setup", "Others", "Catering_Food", "", "Catering_Drink", "", "Catering" };
         string[] ActionPlanOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
         string[] ActionReportOnlineBudgetTypes = { "BaiduKeyWords", "OnLineLeads", "MediaBuy" };
-        MasterService masterService = new MasterService();
 
         public string GetContent(string file, string slide)
         {
@@ -131,7 +130,6 @@ Catering 餐饮
             }
 
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
-            List<CoopFundType> coopFundTypes = masterService.CoopFundTypeSearch("", "", "", "", null, "");
             if (before4WeeksCoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情
@@ -143,10 +141,9 @@ Catering 餐饮
                     if (index < 0) return;
                     int row = 7 + index / 2;
                     int col = 3 + (index % 2) * 4;
-                    string CoopFundTypeDesc = coopFundTypes.First(t => t.CoopFundTypeCode == item.CoopFundCode).CoopFundTypeDesc;
                     helper.SaveTableCell(table3, row, col, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table3, row, col + 1, BoolNullabelToString(item.CoopFund_DMFChk));
-                    helper.SaveTableCell(table3, row, col + 2, CoopFundTypeDesc);
+                    helper.SaveTableCell(table3, row, col + 2, item.CoopFundDesc);
                 });
             }
 
@@ -356,6 +353,10 @@ Catering 餐饮
             List<MarketActionBefore4WeeksActivityProcess> before4WeeksActivitys = actionService.MarketActionBefore4WeeksActivityProcessSearch(marketActionId);
             if (before4WeeksActivitys.Count > 0)
             {
+                if (before4WeeksActivitys.Count > 10)
+                {
+                    before4WeeksActivitys = before4WeeksActivitys.Take(10).ToList();
+                }
                 //绑定活动流程
                 ISlide elevenSlide = helper.GetSlide(11);
                 IShape table2 = helper.GetShape(elevenSlide, 2);
@@ -452,6 +453,10 @@ Catering 餐饮
             List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
             {
+                if (after2LeadsReport.Count > 10)
+                {
+                    after2LeadsReport = after2LeadsReport.Take(10).ToList();
+                }
                 //绑定线索报告
                 ISlide fiveSlide = helper.GetSlide(3);
                 IShape table2 = helper.GetShape(fiveSlide, 5);
@@ -490,7 +495,6 @@ Catering 餐饮
                 helper.SaveTableCell(table2, 3, 3, DecimalNullabelToString(before4Weeks[0].CoopFundSumAmt));
             }
             List<MarketActionAfter7CoopFund> after7CoopFund = actionService.MarketActionAfter7CoopFundSearch(marketActionId);
-            List<CoopFundType> coopFundTypes = masterService.CoopFundTypeSearch("", "", "", "", null, "");            
             if (after7CoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情 Actual Cost
@@ -501,10 +505,9 @@ Catering 餐饮
                     int index = Array.IndexOf(ActionReportUnderBudgetTypes, item.CoopFundCode);
                     if (index < 0) return;
                     int row = 2 + index;
-                    string CoopFundTypeDesc = coopFundTypes.First(t => t.CoopFundTypeCode == item.CoopFundCode).CoopFundTypeDesc;
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
-                    helper.SaveTableCell(table1, row, 5, CoopFundTypeDesc);
+                    helper.SaveTableCell(table1, row, 5, item.CoopFundDesc);
                 });
             }
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
@@ -543,6 +546,10 @@ Catering 餐饮
             List<MarketActionAfter7ActualProcess> after7ActualProcess = actionService.MarketActionAfter7ActualProcessSearch(marketActionId);
             if (after7ActualProcess.Count > 0)
             {
+                if (after7ActualProcess.Count > 10)
+                {
+                    after7ActualProcess = after7ActualProcess.Take(10).ToList();
+                }
                 //绑定活动流程
                 ISlide fiveSlide = helper.GetSlide(5);
                 IShape table2 = helper.GetShape(fiveSlide, 2);
@@ -1032,6 +1039,10 @@ Catering 餐饮
             List<MarketActionAfter2LeadsReportDto> after2LeadsReport = actionService.MarketActionAfter2LeadsReportSearch(marketActionId, "");
             if (after2LeadsReport.Count > 0)
             {
+                if (after2LeadsReport.Count > 10)
+                {
+                    after2LeadsReport = after2LeadsReport.Take(10).ToList();
+                }
                 //绑定线索报告
                 ISlide slide = helper.GetSlide(3);
                 IShape table2 = helper.GetShape(slide, 5);
@@ -1404,7 +1415,7 @@ Catering 餐饮
             if (actionAfter7.Count > 0)
             {
                 actionAfter7[0].TotalBudgetAmt = actionService.MarketActionAfter7TotalBudgetAmt(marketActionId);
-                //活动总览 Overview
+                //活动总览 Overview 实际
                 ISlide secSlide = helper.GetSlide(2);
                 IShape table1 = helper.GetShape(secSlide, 6);
                 helper.SaveTableCell(table1, 5, 3, IntNullabelToString(actionAfter7[0].People_ParticipantsCount));
@@ -1437,27 +1448,8 @@ Catering 餐饮
                 helper.SaveTableCell(table2, 2, 5, IntNullabelToString(actionAfter7[0].People_OthersCount));
             }
 
-
-            //第二页  活动概述 actual实际情况
-            List<MarketActionAfter7ActualProcess> after7ActualProcess = actionService.MarketActionAfter7ActualProcessSearch(marketActionId);
-            if (after7ActualProcess.Count > 0)
-            {
-                //绑定活动流程
-                ISlide sevenSlide = helper.GetSlide(7);
-                IShape table2 = helper.GetShape(sevenSlide, 2);
-                after7ActualProcess.ForEach(item =>
-                {
-                    int index = after7ActualProcess.IndexOf(item);
-                    int row = 2 + index;
-                    helper.SaveTableCell(table2, row, 1, item.ActivityDateTimeStart);
-                    helper.SaveTableCell(table2, row, 2, item.ActivityDateTimeStart);
-                    helper.SaveTableCell(table2, row, 3, item.Process);
-                });
-            }
-
             //第3页 Event Budget 费用总览
             List<MarketActionAfter7CoopFund> after7CoopFund = actionService.MarketActionAfter7CoopFundSearch(marketActionId);
-            List<CoopFundType> coopFundTypes = masterService.CoopFundTypeSearch("", "", "", "", null, "");
             if (after7CoopFund.Count > 0)
             {
                 //Event Budget 费用总览 Budget Detail 费用详情 Actual Cost
@@ -1469,10 +1461,9 @@ Catering 餐饮
                     if (index < 0) return;
                     int row = 2 + index;
 
-                    string CoopFundTypeDesc = coopFundTypes.First(t => t.CoopFundTypeCode == item.CoopFundCode).CoopFundTypeDesc;
                     helper.SaveTableCell(table1, row, 2, DecimalNullabelToString(item.CoopFundAmt));
                     helper.SaveTableCell(table1, row, 4, BoolNullabelToString(item.CoopFund_DMFChk));
-                    helper.SaveTableCell(table1, row, 5, CoopFundTypeDesc);
+                    helper.SaveTableCell(table1, row, 5, item.CoopFundDesc);
                 });
             }
             List<MarketActionBefore4WeeksCoopFund> before4WeeksCoopFund = actionService.MarketActionBefore4WeeksCoopFundSearch(marketActionId,"");
@@ -1527,6 +1518,11 @@ Catering 餐饮
             List<MarketActionAfter7HandOverArrangement> after7HandOverArrangement = actionService.MarketActionAfter7HandOverArrangementSearch(marketActionId);
             if (after7HandOverArrangement.Count > 0)
             {
+                if (after7HandOverArrangement.Count > 10)
+                {
+                    after7HandOverArrangement = after7HandOverArrangement.Take(10).ToList();
+                }
+                MasterService masterService = new MasterService();
                 ISlide fourSlide = helper.GetSlide(4);
                 IShape table2 = helper.GetShape(fourSlide, 2);
                 after7HandOverArrangement.ForEach(item =>
