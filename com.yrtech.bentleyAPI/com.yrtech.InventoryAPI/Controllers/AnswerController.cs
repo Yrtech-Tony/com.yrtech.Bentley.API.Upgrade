@@ -890,7 +890,7 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 List<MarketActionAfter2LeadsReportDto> list = excelDataService.LeadsReportImport(path);
-                if (list == null && list.Count == 0)
+                if (list == null || list.Count == 0)
                 {
                     return new APIResult() { Status = false, Body = "无数据，请填写完整再上传" };
                 }
