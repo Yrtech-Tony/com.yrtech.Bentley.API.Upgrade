@@ -1243,6 +1243,11 @@ Catering 餐饮
             List<MarketActionBefore4WeeksHandOverArrangement> before4WeeksHandOvers = actionService.MarketActionBefore4WeeksHandOverArrangementSearch(marketActionId);
             if (before4WeeksHandOvers.Count > 0)
             {
+                if (before4WeeksHandOvers.Count > 10)
+                {
+                    before4WeeksHandOvers = before4WeeksHandOvers.Take(10).ToList();
+                }
+
                 MasterService masterService = new MasterService();
                 //绑定
                 ISlide elevenSlide = helper.GetSlide(4);
