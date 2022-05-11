@@ -194,12 +194,12 @@ namespace com.yrtech.InventoryAPI.Service
         }
 
         // MarketAction Export
-        public string MarketActionExport(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode)
+        public string MarketActionExport(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId)
         {
             List<MarketActionExportDto> list = new List<MarketActionExportDto>();
             List<MarketActionDto> marketActionList = new List<MarketActionDto>();
             // 市场活动信息
-            List<MarketActionDto> marketActionListTemp = marketActionService.MarketActionSearch(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk);
+            List<MarketActionDto> marketActionListTemp = marketActionService.MarketActionSearch(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk, areaId);
             List<Shop> roleTypeShopList = accountService.GetShopByRole(userId, roleTypeCode);
             foreach (MarketActionDto marketActionDto in marketActionListTemp)
             {
@@ -518,9 +518,9 @@ namespace com.yrtech.InventoryAPI.Service
         }
 
         // UserInfo Export
-        public string UserInfoExport()
+        public string UserInfoExport(string areaId,string roleTypeCode)
         {
-            List<UserInfoDto> list = masterService.UserInfoSearch("","","","","","","","");
+            List<UserInfoDto> list = masterService.UserInfoSearch("","","","","","","",areaId,roleTypeCode);
             Workbook book = Workbook.Load(basePath + @"Content\Excel\" + "UserInfo.xlsx", false);
             //填充数据
             Worksheet sheet = book.Worksheets[0];

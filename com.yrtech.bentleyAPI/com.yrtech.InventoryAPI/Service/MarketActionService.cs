@@ -18,7 +18,7 @@ namespace com.yrtech.InventoryAPI.Service
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
-        public List<MarketActionDto> MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk)
+        public List<MarketActionDto> MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk,string areaId)
         {
             if (actionName == null) actionName = "";
             if (year == null) year = "";
@@ -26,12 +26,14 @@ namespace com.yrtech.InventoryAPI.Service
             if (marketActionStatusCode == null) marketActionStatusCode = "";
             if (shopId == null) shopId = "";
             if (eventTypeId == null) eventTypeId = "";
+            if (areaId == null) areaId = "";
 
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ActionName", actionName),
                                                         new SqlParameter("@Year", year),
                                                         new SqlParameter("@Month", month),
                                                         new SqlParameter("@MarketActionStatusCode", marketActionStatusCode),
                                                         new SqlParameter("@ShopId", shopId),
+                                                        new SqlParameter("@AreaId", areaId),
                                                         new SqlParameter("@EventTypeId", eventTypeId)};
             Type t = typeof(MarketActionDto);
             string sql = "";
@@ -105,6 +107,10 @@ namespace com.yrtech.InventoryAPI.Service
             if (!string.IsNullOrEmpty(shopId))
             {
                 sql += " AND A.ShopId =@ShopId";
+            }
+            if (!string.IsNullOrEmpty(areaId))
+            {
+                sql += " AND B.AreaId=@AreaId";
             }
             if (!string.IsNullOrEmpty(eventTypeId))
             {
