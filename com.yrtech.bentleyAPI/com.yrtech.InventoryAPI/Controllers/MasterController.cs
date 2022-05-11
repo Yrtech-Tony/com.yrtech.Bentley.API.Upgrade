@@ -131,7 +131,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         #region EventType
         [HttpGet]
         [Route("Master/EventTypeSearch")]
-        public APIResult EventTypeSearch(string eventTypeId, string eventTypeName, string eventTypeNameEn, bool? showStatus,string eventMode)
+        public APIResult EventTypeSearch(string eventTypeId, string eventTypeName, string eventTypeNameEn, bool? showStatus,string eventMode="")
         {
             try
             {
@@ -205,7 +205,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         #region UserInfo
         [HttpGet]
         [Route("Master/UserInfoSearch")]
-        public APIResult UserInfoSearch(string userId, string accountId, string accountName, string shopCode, string shopName, string email,string areaId,string roleTypeCode)
+        public APIResult UserInfoSearch(string userId, string accountId, string accountName, string shopCode, string shopName, string email,string areaId,string roleTypeCode="")
         {
             try
             {

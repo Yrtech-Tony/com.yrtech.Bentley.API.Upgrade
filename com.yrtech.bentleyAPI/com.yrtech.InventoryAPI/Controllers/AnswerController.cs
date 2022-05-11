@@ -114,7 +114,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region MarketAction
         [HttpGet]
         [Route("MarketAction/MarketActionSearch")]
-        public APIResult MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId)
+        public APIResult MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId="")
         {
             try
             {
@@ -186,7 +186,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("MarketAction/MarketActionExport")]
-        public APIResult MarketActionExportSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId)
+        public APIResult MarketActionExportSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId="")
         {
             try
             {
@@ -1979,7 +1979,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region MonthSale
         [HttpGet]
         [Route("DMF/MonthSaleSearch")]
-        public APIResult MonthSaleSearch(string monthSaleId, string shopId,string yearMonth)
+        public APIResult MonthSaleSearch(string monthSaleId, string shopId,string yearMonth="")
         {
             try
             {
