@@ -18,7 +18,7 @@ namespace com.yrtech.InventoryAPI.Service
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
-        public List<MarketActionDto> MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk)
+        public List<MarketActionDto> MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk,string areaId)
         {
             if (actionName == null) actionName = "";
             if (year == null) year = "";
@@ -26,12 +26,14 @@ namespace com.yrtech.InventoryAPI.Service
             if (marketActionStatusCode == null) marketActionStatusCode = "";
             if (shopId == null) shopId = "";
             if (eventTypeId == null) eventTypeId = "";
+            if (areaId == null) areaId = "";
 
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ActionName", actionName),
                                                         new SqlParameter("@Year", year),
                                                         new SqlParameter("@Month", month),
                                                         new SqlParameter("@MarketActionStatusCode", marketActionStatusCode),
                                                         new SqlParameter("@ShopId", shopId),
+                                                        new SqlParameter("@AreaId", areaId),
                                                         new SqlParameter("@EventTypeId", eventTypeId)};
             Type t = typeof(MarketActionDto);
             string sql = "";
@@ -105,6 +107,10 @@ namespace com.yrtech.InventoryAPI.Service
             if (!string.IsNullOrEmpty(shopId))
             {
                 sql += " AND A.ShopId =@ShopId";
+            }
+            if (!string.IsNullOrEmpty(areaId))
+            {
+                sql += " AND B.AreaId=@AreaId";
             }
             if (!string.IsNullOrEmpty(eventTypeId))
             {
@@ -202,21 +208,28 @@ namespace com.yrtech.InventoryAPI.Service
             sql += " ORDER BY A.StartDate DESC";
             return db.Database.SqlQuery(t, sql, para).Cast<MarketAction>().ToList();
         }
-        // 查询所有市场活动预算金额最大值
-        public decimal MarketActionBudgetMaxSearch(string shopId)
+        // 查询所有市场活动历史最大值
+        public List<MarketActionMaxAmtDto> MarketActionMaxSearch(string shopId)
         {
             if (shopId == null) shopId = "";
              SqlParameter[] para = new SqlParameter[] { new SqlParameter("@ShopId", shopId) };
-            Type t = typeof(decimal);
+            Type t = typeof(MarketActionMaxAmtDto);
             string sql = "";
-            sql += @"SELECT ISNULL(Max(ActivityBudget),0) 
-                    FROM MarketAction A 
+            sql += @"SELECT ShopId,ISNULL(Max(A.ActivityBudget),0) AS MarketActionBudgetMax,
+	                       ISNULL(Max(B.TotalBudgetAmt),0) AS Before4WeeksBudgetMax,
+	                       ISNULL(Max(B.CoopFundSumAmt),0) AS Before4WeeksDMFSumMax,
+	                       ISNULL(Max(C.TotalBudgetAmt),0) AS After7BudgetMax,
+	                       ISNULL(Max(C.TotalBudgetAmt),0) AS After7DMFSumMax
+                    FROM MarketAction A LEFT JOIN dbo.MarketActionBefore4Weeks B ON A.MarketActionId = B.MarketActionId
+					                    LEFT JOIN dbo.MarketActionAfter7 C ON A.MarketActionId = C.MarketActionId
+
                     WHERE A.MarketActionStatusCode<>2 ";
             if (!string.IsNullOrEmpty(shopId))
             {
                 sql += " AND ShopId = @ShopId";
             }
-            return db.Database.SqlQuery(t, sql, para).Cast<decimal>().FirstOrDefault();
+            sql += " GROUP BY A.ShopId";
+            return db.Database.SqlQuery(t, sql, para).Cast<MarketActionMaxAmtDto>().ToList();
         }
         public List<MarketActionDto> MarketActionSearchById(string marketActionId)
         {
@@ -671,7 +684,15 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.MarketSaleTeamAdvice = marketActionAfter7.MarketSaleTeamAdvice;
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = marketActionAfter7.ModifyUserId;
-                findOne.People_ActualArrivalCount = marketActionAfter7.People_ActualArrivalCount;
+               // findOne.People_ActualArrivalCount = marketActionAfter7.People_ActualArrivalCount;
+                if (marketActionAfter7.People_ActualCarOwnerCount == null) marketActionAfter7.People_ActualCarOwnerCount = 0;
+                if (marketActionAfter7.People_ActualDepositorCount == null) marketActionAfter7.People_ActualDepositorCount = 0;
+                if (marketActionAfter7.People_ActualPotentialCount == null) marketActionAfter7.People_ActualPotentialCount = 0;
+                if (marketActionAfter7.People_OthersCount == null) marketActionAfter7.People_OthersCount = 0;
+                findOne.People_ActualArrivalCount = marketActionAfter7.People_ActualCarOwnerCount
+                                                       + marketActionAfter7.People_ActualDepositorCount
+                                                       + marketActionAfter7.People_ActualPotentialCount
+                                                       + marketActionAfter7.People_OthersCount;
                 findOne.People_ActualCarOwnerCount = marketActionAfter7.People_ActualCarOwnerCount;
                 findOne.People_ActualDepositorCount = marketActionAfter7.People_ActualDepositorCount;
                 findOne.People_ActualPotentialCount = marketActionAfter7.People_ActualPotentialCount;
@@ -679,6 +700,7 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.People_NewLeadsThsYearCount = marketActionAfter7.People_NewLeadsThsYearCount;
                 findOne.People_OthersCount = marketActionAfter7.People_OthersCount;
                 findOne.People_ParticipantsCount = marketActionAfter7.People_ParticipantsCount;
+               
                 findOne.People_NewOrderCount = marketActionAfter7.People_NewOrderCount;
                 findOne.ProcessPercent = marketActionAfter7.ProcessPercent;
                 findOne.Platform_Media = marketActionAfter7.Platform_Media;

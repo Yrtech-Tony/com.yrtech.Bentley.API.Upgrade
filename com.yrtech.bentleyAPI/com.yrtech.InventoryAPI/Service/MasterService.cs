@@ -163,13 +163,15 @@ namespace com.yrtech.InventoryAPI.Service
         }
         #endregion
         #region EventType
-        public List<EventTypeDto> EventTypeSearch(string eventTypeId, string eventTypeName,string eventTypeNameEn,bool? showStatus)
+        public List<EventTypeDto> EventTypeSearch(string eventTypeId, string eventTypeName,string eventTypeNameEn,bool? showStatus,string eventMode)
         {
             if (eventTypeId == null) eventTypeId = "";
             if (eventTypeName == null) eventTypeName = "";
             if (eventTypeNameEn == null) eventTypeNameEn = "";
+            if (eventMode == null) eventMode = "";
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@EventTypeId", eventTypeId),
                                                     new SqlParameter("@EventTypeName", eventTypeName),
+                                                    new SqlParameter("@EventMode", eventMode),
                                                     new SqlParameter("@EventTypeNameEn", eventTypeNameEn)};
             Type t = typeof(EventTypeDto);
             string sql = "";
@@ -189,11 +191,16 @@ namespace com.yrtech.InventoryAPI.Service
             {
                 sql += " AND EventTypeNameEn = @EventTypeNameEn";
             }
+            if (!string.IsNullOrEmpty(eventMode))
+            {
+                sql += " AND EventMode = @EventMode";
+            }
             if (showStatus.HasValue)
             {
                 para = para.Concat(new SqlParameter[] { new SqlParameter("@ShowStatus", showStatus) }).ToArray();
                 sql += " AND ShowStatus = @ShowStatus";
             }
+            sql += "ORDER BY A. EventTypeName";
             return db.Database.SqlQuery(t, sql, para).Cast<EventTypeDto>().ToList();
         }
         public EventType EventTypeSave(EventType eventType)
@@ -230,7 +237,7 @@ namespace com.yrtech.InventoryAPI.Service
         }
         #endregion
         #region UserInfo
-        public List<UserInfoDto> UserInfoSearch(string userId, string accountId, string accountName,string shopCode,string shopName,string email,string shopId,string areaId)
+        public List<UserInfoDto> UserInfoSearch(string userId, string accountId, string accountName,string shopCode,string shopName,string email,string shopId,string areaId,string roleTypeCode)
         {
             if (userId == null) userId = "";
             if (accountId == null) accountId = "";
@@ -240,6 +247,7 @@ namespace com.yrtech.InventoryAPI.Service
             if (email == null) email = "";
             if (shopId == null) shopId = "";
             if (areaId == null) areaId = "";
+            if (roleTypeCode == null) roleTypeCode = "";
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@UserId", userId),
                                                     new SqlParameter("@AccountId", accountId),
                                                     new SqlParameter("@AccountName", accountName),
@@ -247,7 +255,8 @@ namespace com.yrtech.InventoryAPI.Service
                                                     new SqlParameter("@ShopName", shopName),
                                                     new SqlParameter("@Email", email),
                                                     new SqlParameter("@ShopId", shopId),
-                                                    new SqlParameter("@AreaId", areaId)};
+                                                    new SqlParameter("@AreaId", areaId),
+                                                    new SqlParameter("@RoleTypeCode", roleTypeCode)};
             Type t = typeof(UserInfoDto);
             string sql = "";
             sql = @"SELECT [UserId]
@@ -262,22 +271,23 @@ namespace com.yrtech.InventoryAPI.Service
 			            WHEN [RoleTypeCode] = 'AREA' THEN '区域经理'
 			            WHEN [RoleTypeCode] = 'BMC' THEN 'BMC'
 			            WHEN [RoleTypeCode] = 'Shop' THEN '经销商'
+                        WHEN [RoleTypeCode] = 'BMC-FI' THEN 'BMC财务'
 			            ELSE '' END AS RoleTypeName
-                     ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','AREA') THEN 0
+                     ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','BMC-FI','AREA') THEN 0
 		                WHEN [RoleTypeCode] IN ('Shop') THEN A.ShopId
 		                ELSE '' END AS ShopId
-                    ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','AREA') THEN ''
+                    ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','BMC-FI','AREA') THEN ''
 		                WHEN [RoleTypeCode] IN ('Shop') THEN B.ShopName
 		                ELSE '' END AS ShopName
-                    ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','AREA') THEN ''
+                    ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','BMC-FI','AREA') THEN ''
 		                WHEN [RoleTypeCode] IN ('Shop') THEN B.ShopNameEn
 		                ELSE '' END AS ShopNameEn
-	                ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC') THEN ''
+	                ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','BMC-FI') THEN ''
 		                WHEN [RoleTypeCode] IN ('Shop') 
 		                THEN (SELECT TOP 1 AreaName FROM Shop X INNER JOIN Area Y ON X.AreaId = Y.AreaId AND X.ShopId = B.ShopId) 
 		                WHEN [RoleTypeCode] IN ('AREA') THEN C.AreaName
 		                ELSE '' END AS AreaName
-		            ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC') THEN ''
+		            ,CASE WHEN [RoleTypeCode] IN ('SYSADMIN','BMC','BMC-FI') THEN ''
 		                WHEN [RoleTypeCode] IN ('Shop') 
 		                THEN (SELECT TOP 1 AreaNameEn FROM Shop X INNER JOIN Area Y ON X.AreaId = Y.AreaId AND X.ShopId = B.ShopId) 
 		                WHEN [RoleTypeCode] IN ('AREA') THEN C.AreaNameEn
@@ -321,6 +331,10 @@ namespace com.yrtech.InventoryAPI.Service
             if (!string.IsNullOrEmpty(email))
             {
                 sql += " AND Email  LIKE '%'+@Email+'%'";
+            }
+            if (!string.IsNullOrEmpty(roleTypeCode))
+            {
+                sql += " AND A.RoleTypeCode =@RoleTypeCode ";
             }
             sql += " ORDER BY AccountId";
             return db.Database.SqlQuery(t, sql, para).Cast<UserInfoDto>().ToList();

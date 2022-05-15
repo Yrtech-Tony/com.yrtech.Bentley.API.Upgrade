@@ -131,11 +131,11 @@ namespace com.yrtech.InventoryAPI.Controllers
         #region EventType
         [HttpGet]
         [Route("Master/EventTypeSearch")]
-        public APIResult EventTypeSearch(string eventTypeId, string eventTypeName, string eventTypeNameEn, bool? showStatus)
+        public APIResult EventTypeSearch(string eventTypeId, string eventTypeName, string eventTypeNameEn, bool? showStatus,string eventMode="")
         {
             try
             {
-                List<EventTypeDto> eventTypeList = masterService.EventTypeSearch(eventTypeId, eventTypeName, eventTypeNameEn, showStatus);
+                List<EventTypeDto> eventTypeList = masterService.EventTypeSearch(eventTypeId, eventTypeName, eventTypeNameEn, showStatus,eventMode);
 
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(eventTypeList) };
             }
@@ -150,7 +150,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<EventTypeDto> eventTypeList = masterService.EventTypeSearch("", eventType.EventTypeName, "", null);
+                List<EventTypeDto> eventTypeList = masterService.EventTypeSearch("", eventType.EventTypeName, "", null,"");
                 if (eventTypeList != null && eventTypeList.Count != 0 && eventTypeList[0].EventTypeId != eventType.EventTypeId)
                 {
                     return new APIResult() { Status = false, Body = "保存失败,活动类型名称重复" };
@@ -205,11 +205,11 @@ namespace com.yrtech.InventoryAPI.Controllers
         #region UserInfo
         [HttpGet]
         [Route("Master/UserInfoSearch")]
-        public APIResult UserInfoSearch(string userId, string accountId, string accountName, string shopCode, string shopName, string email)
+        public APIResult UserInfoSearch(string userId, string accountId, string accountName, string shopCode, string shopName, string email,string areaId,string roleTypeCode="")
         {
             try
             {
-                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userId, accountId, accountName, shopCode, shopName, email,"","");
+                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userId, accountId, accountName, shopCode, shopName, email,"", areaId, roleTypeCode);
                 foreach (UserInfoDto userinfo in userInfoList)
                 {
                     userinfo.Password = TokenHelper.DecryptDES(userinfo.Password);
@@ -224,11 +224,11 @@ namespace com.yrtech.InventoryAPI.Controllers
         }
         [HttpGet]
         [Route("Master/UserInfoExport")]
-        public APIResult UserInfoExport()
+        public APIResult UserInfoExport(string areaId,string roleTypeCode)
         {
             try
             {
-                string filePath = excelDataService.UserInfoExport();
+                string filePath = excelDataService.UserInfoExport(areaId, roleTypeCode);
 
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(new { FilePath = filePath }) };
 
@@ -244,7 +244,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<UserInfoDto> userInfoList = masterService.UserInfoSearch("", userInfo.AccountId, "", "", "", "","","");
+                List<UserInfoDto> userInfoList = masterService.UserInfoSearch("", userInfo.AccountId, "", "", "", "","","","");
 
                 if (userInfoList != null && userInfoList.Count != 0 && userInfoList[0].UserId != userInfo.UserId)
                 {
@@ -271,7 +271,7 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userInfo.UserId.ToString(), "", "", "", "", "","","");
+                List<UserInfoDto> userInfoList = masterService.UserInfoSearch(userInfo.UserId.ToString(), "", "", "", "", "","","","");
                 if (userInfoList == null || userInfoList.Count == 0)
                 {
                     return new APIResult() { Status = false, Body = "该账号不存在，请确认账号" };

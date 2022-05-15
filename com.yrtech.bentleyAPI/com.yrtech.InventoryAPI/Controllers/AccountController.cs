@@ -5,6 +5,7 @@ using com.yrtech.InventoryAPI.Common;
 using com.yrtech.InventoryAPI.Service;
 using com.yrtech.InventoryAPI.DTO;
 using com.yrtech.bentley;
+using com.yrtech.bentley.DAL;
 
 namespace com.yrtech.InventoryAPI.Controllers
 {
@@ -25,7 +26,11 @@ namespace com.yrtech.InventoryAPI.Controllers
                     string roleTypeCode = accountlist[0].RoleTypeCode;
                     string userId = accountlist[0].UserId.ToString();
                     accountlist[0].AreaList = accountService.GetAreaByRole(userId, roleTypeCode);
-                    accountlist[0].ShopList = accountService.GetShopByRole(userId, roleTypeCode);
+                    List<Shop> shopList = accountService.GetShopByRole(userId, roleTypeCode);
+                    //List<ShopDto> shopDtoList = new List<ShopDto>();
+                    //foreach (Shop shop in shopList)
+                    //{
+                    //}
                     return new APIResult() { Status = true, Body = CommonHelper.Encode(accountlist) };
                 }
                 else

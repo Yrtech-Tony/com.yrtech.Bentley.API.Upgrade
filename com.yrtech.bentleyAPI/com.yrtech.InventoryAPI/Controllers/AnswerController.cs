@@ -114,12 +114,12 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region MarketAction
         [HttpGet]
         [Route("MarketAction/MarketActionSearch")]
-        public APIResult MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode)
+        public APIResult MarketActionSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId="")
         {
             try
             {
 
-                List<MarketActionDto> marketActionListTemp = marketActionService.MarketActionSearch(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk);
+                List<MarketActionDto> marketActionListTemp = marketActionService.MarketActionSearch(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk, areaId);
                 List<Shop> roleTypeShopList = accountService.GetShopByRole(userId, roleTypeCode);
                 List<MarketActionDto> marketActionList = new List<MarketActionDto>();
 
@@ -186,11 +186,11 @@ namespace com.yrtech.SurveyAPI.Controllers
         }
         [HttpGet]
         [Route("MarketAction/MarketActionExport")]
-        public APIResult MarketActionExportSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode)
+        public APIResult MarketActionExportSearch(string actionName, string year, string month, string marketActionStatusCode, string shopId, string eventTypeId, bool? expenseAccountChk, string userId, string roleTypeCode,string areaId="")
         {
             try
             {
-                string filePath = excelDataService.MarketActionExport(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk, userId, roleTypeCode);
+                string filePath = excelDataService.MarketActionExport(actionName, year, month, marketActionStatusCode, shopId, eventTypeId, expenseAccountChk, userId, roleTypeCode,areaId);
 
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(new { FilePath = filePath }) };
 
@@ -237,9 +237,13 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
-                decimal maxBugdet = marketActionService.MarketActionBudgetMaxSearch(shopId);
-
-                return new APIResult() { Status = true, Body = CommonHelper.Encode(maxBugdet) };
+                MarketActionMaxAmtDto max = new MarketActionMaxAmtDto();
+                List<MarketActionMaxAmtDto>  maxList = marketActionService.MarketActionMaxSearch(shopId);
+                if (maxList != null && maxList.Count > 0)
+                {
+                    max = maxList[0];
+                }
+                return new APIResult() { Status = true, Body = CommonHelper.Encode(max) };
             }
             catch (Exception ex)
             {
@@ -660,7 +664,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 {
                     marketactionName = marketAction[0].ActionName;
                     shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
-                    userinfo = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "");
+                    userinfo = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "","");
                 }
                 // 发送给经销商时抄送给自己，以备查看
                 SendEmail(userinfo[0].Email, "keyvisionApproval@163.com", "主视觉审批修改意见", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的画面审核意见已更新,请登陆DMN系统查看，并按要求完成更新", "", "");
@@ -754,8 +758,8 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketactionName = marketAction[0].ActionName;
                     marketActionId = marketAction[0].MarketActionId.ToString();
                     shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
-                    userinfo_shop = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "");
-                    userinfo_area = masterService.UserInfoSearch("", "", "", "", "", "", "", shop[0].AreaId.ToString());
+                    userinfo_shop = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "","");
+                    userinfo_area = masterService.UserInfoSearch("", "", "", "", "", "", "", shop[0].AreaId.ToString(),"");
                     if (dttApproveCode == "2")
                     {
                         title = "【DMN】" + marketActionId.ToString() + "-" + marketactionName + "-" + type;
@@ -886,7 +890,7 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 List<MarketActionAfter2LeadsReportDto> list = excelDataService.LeadsReportImport(path);
-                if (list == null && list.Count == 0)
+                if (list == null || list.Count == 0)
                 {
                     return new APIResult() { Status = false, Body = "无数据，请填写完整再上传" };
                 }
@@ -912,8 +916,16 @@ namespace com.yrtech.SurveyAPI.Controllers
                     {
                         return new APIResult() { Status = false, Body = "是否成交不能为空，请填写完整" };
                     }
+                    if (string.IsNullOrEmpty(leadsReportDto.InterestedModelName))
+                    {
+                        return new APIResult() { Status = false, Body = "感兴趣车型不能为空，请填写完整" };
+                    }
+                    if (string.IsNullOrEmpty(leadsReportDto.DealCheckName))
+                    {
+                        return new APIResult() { Status = false, Body = "成交车型不能为空，请填写完整" };
+                    }
                     List<HiddenCode> hiddenCodeList_InterestedMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.InterestedModelName.Trim());
-                    List<HiddenCode> hiddenCodeList_DealMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.InterestedModelName.Trim());
+                    List<HiddenCode> hiddenCodeList_DealMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.DealModelName.Trim());
                     if (hiddenCodeList_InterestedMode == null
                         || hiddenCodeList_DealMode == null
                         || hiddenCodeList_InterestedMode.Count == 0
@@ -1967,11 +1979,11 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region MonthSale
         [HttpGet]
         [Route("DMF/MonthSaleSearch")]
-        public APIResult MonthSaleSearch(string monthSaleId, string shopId)
+        public APIResult MonthSaleSearch(string monthSaleId, string shopId,string yearMonth="")
         {
             try
             {
-                List<MonthSaleDto> monthSaleList = dmfService.MonthSaleSearch(monthSaleId, shopId, "");
+                List<MonthSaleDto> monthSaleList = dmfService.MonthSaleSearch(monthSaleId, shopId, yearMonth);
                 foreach (MonthSaleDto monthSale in monthSaleList)
                 {
                     monthSale.ActualSaleAmt = TokenHelper.DecryptDES(monthSale.ActualSaleAmt);
