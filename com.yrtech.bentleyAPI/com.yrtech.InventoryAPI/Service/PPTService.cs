@@ -4,6 +4,7 @@ using com.yrtech.InventoryAPI.Common;
 using com.yrtech.InventoryAPI.DTO;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
@@ -1708,8 +1709,8 @@ Catering 餐饮
         }
 
         private string DecimalNullabelToString(decimal? count)
-        {
-            return count.HasValue ? count.Value.ToString() : "";
+        {            
+            return count.HasValue ? count.Value.ToString("C3", CultureInfo.CurrentCulture) : "";
         }
 
         private string BoolNullabelToString(bool? check)
