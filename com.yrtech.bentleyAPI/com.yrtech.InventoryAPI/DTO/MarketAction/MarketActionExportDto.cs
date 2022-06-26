@@ -32,6 +32,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string EventModeName { get; set; }
         public string DTTApproveStatus_Plan { get; set; }
         public string DTTApproveStatus_Report { get; set; }
+        public string KeyVisionApprovalName { get; set; }
         public Nullable<bool> ExpenseAccount { get; set; }
        public MarketActionBefore4Weeks MarketActionBefore4Weeks{ get; set; }
         public decimal? ActualExpenseSum { get; set; }

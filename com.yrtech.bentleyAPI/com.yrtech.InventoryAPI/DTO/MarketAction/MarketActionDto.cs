@@ -37,6 +37,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string Before4Weeks { get; set; }// 活动计划状态
         public string After2Days { get; set; }// 线索报告状态
         public string After7Days { get; set; }// 活动报告状态
+        public string KeyVisionApprovalName { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }
         public Nullable<int> ModifyUserId { get; set; }

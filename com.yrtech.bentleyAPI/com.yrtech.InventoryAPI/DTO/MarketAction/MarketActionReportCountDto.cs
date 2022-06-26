@@ -8,6 +8,7 @@ namespace com.yrtech.InventoryAPI.DTO
     public class MarketActionReportCountDto
     {
 
+        public Nullable<int> MarketActionCount { get; set; }//总数
         public Nullable<int> PlanBugetUnCommit { get; set; }//未提交活动计划市场花费
         public Nullable<int> PlanCoopFundUnCommit { get; set; }// 未提交活动计划市场基金
         public Nullable<int> LeadsUnCommit { get; set; }//未提交线索报告

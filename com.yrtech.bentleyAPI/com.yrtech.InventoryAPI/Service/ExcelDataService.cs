@@ -227,6 +227,7 @@ namespace com.yrtech.InventoryAPI.Service
                 //exportDto.ExpenseAccount = marketActiondto.ExpenseAccount;
                 exportDto.EventModeName = marketActiondto.EventModeName;
                 exportDto.MarketActionId = marketActiondto.MarketActionId;
+                exportDto.KeyVisionApprovalName = marketActiondto.KeyVisionApprovalName;
                 if (marketActiondto.Before4Weeks == "Approved")
                 {
                     exportDto.DTTApproveStatus_Plan = "通过";
@@ -305,55 +306,57 @@ namespace com.yrtech.InventoryAPI.Service
                 sheet.GetCell("C" + (rowIndex + 1)).Value = item.ShopName;
                 //活动状态
                 sheet.GetCell("D" + (rowIndex + 1)).Value = item.MarketActionStatusName;
+                //主视觉审批状态
+                sheet.GetCell("E" + (rowIndex + 1)).Value = item.KeyVisionApprovalName;
                 //活动计划-DTT审批
-                sheet.GetCell("E" + (rowIndex + 1)).Value = item.DTTApproveStatus_Plan;
+                sheet.GetCell("F" + (rowIndex + 1)).Value = item.DTTApproveStatus_Plan;
                 //活动报告DTT审批
-                sheet.GetCell("F" + (rowIndex + 1)).Value = item.DTTApproveStatus_Report ;
+                sheet.GetCell("G" + (rowIndex + 1)).Value = item.DTTApproveStatus_Report ;
                 // 活动名称
-                sheet.GetCell("G" + (rowIndex + 1)).Value = item.ActionName;
+                sheet.GetCell("H" + (rowIndex + 1)).Value = item.ActionName;
                 // 活动Id
-                sheet.GetCell("H" + (rowIndex + 1)).Value = item.ActionCode;
+                sheet.GetCell("I" + (rowIndex + 1)).Value = item.ActionCode;
                 // 活动板块
-                sheet.GetCell("I" + (rowIndex + 1)).Value = item.EventModeName;
+                sheet.GetCell("J" + (rowIndex + 1)).Value = item.EventModeName;
                 // 活动类型
-                sheet.GetCell("J" + (rowIndex + 1)).Value = item.EventTypeName;
+                sheet.GetCell("K" + (rowIndex + 1)).Value = item.EventTypeName;
                 // 活动预算
-                sheet.GetCell("K" + (rowIndex + 1)).Value = item.ActivityBudget;
+                sheet.GetCell("L" + (rowIndex + 1)).Value = item.ActivityBudget;
                 // 预计线索
-                sheet.GetCell("L" + (rowIndex + 1)).Value = item.ExpectLeadsCount;
+                sheet.GetCell("M" + (rowIndex + 1)).Value = item.ExpectLeadsCount;
                 //开始日期
-                sheet.GetCell("M" + (rowIndex + 1)).Value = item.StartDate;
+                sheet.GetCell("N" + (rowIndex + 1)).Value = item.StartDate;
                 //结束日期
-                sheet.GetCell("N" + (rowIndex + 1)).Value = item.EndDate;
+                sheet.GetCell("O" + (rowIndex + 1)).Value = item.EndDate;
                 // 主推车型
-                sheet.GetCell("O" + (rowIndex + 1)).Value = item.MarketActionTargetModelName;
+                sheet.GetCell("P" + (rowIndex + 1)).Value = item.MarketActionTargetModelName;
                 if (item.MarketActionBefore4Weeks != null)
                 {
                     // 预算金额总计
-                    sheet.GetCell("P" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TotalBudgetAmt;
+                    sheet.GetCell("Q" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.TotalBudgetAmt;
                     // 市场基金金额总计
-                    sheet.GetCell("Q" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.CoopFundSumAmt;
+                    sheet.GetCell("R" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.CoopFundSumAmt;
                     // 参与人数
-                    sheet.GetCell("R" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_ParticipantsCount;
+                    sheet.GetCell("S" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_ParticipantsCount;
                     // DCPID客户数量
-                    sheet.GetCell("S" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_DCPIDCount;
+                    sheet.GetCell("T" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_DCPIDCount;
                     // 今年新增线索数量
-                    sheet.GetCell("T" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_NewLeadsThisYearCount;
+                    sheet.GetCell("U" + (rowIndex + 1)).Value = item.MarketActionBefore4Weeks.People_NewLeadsThisYearCount;
                 }
                 if (item.MarketActionAfter7 != null)
                 {
                     // 活动实际花费
-                    sheet.GetCell("U" + (rowIndex + 1)).Value = item.MarketActionAfter7.TotalBudgetAmt;
+                    sheet.GetCell("V" + (rowIndex + 1)).Value = item.MarketActionAfter7.TotalBudgetAmt;
                     // 市场基金金额总计
-                    sheet.GetCell("V" + (rowIndex + 1)).Value = item.MarketActionAfter7.CoopFundSumAmt;
+                    sheet.GetCell("W" + (rowIndex + 1)).Value = item.MarketActionAfter7.CoopFundSumAmt;
                     // 实际参与人数
-                    sheet.GetCell("W" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_ParticipantsCount;
+                    sheet.GetCell("X" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_ParticipantsCount;
                     // DCPID客户数量
-                    sheet.GetCell("X" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_DCPIDCount;
+                    sheet.GetCell("Y" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_DCPIDCount;
                     // 今年新增线索数量
-                    sheet.GetCell("Y" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_NewLeadsThsYearCount;
+                    sheet.GetCell("Z" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_NewLeadsThsYearCount;
                     // 新增订单
-                    sheet.GetCell("Z" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_NewOrderCount;
+                    sheet.GetCell("AA" + (rowIndex + 1)).Value = item.MarketActionAfter7.People_NewOrderCount;
                 }
                 //if (item.LeadsCount != null)
                 //{

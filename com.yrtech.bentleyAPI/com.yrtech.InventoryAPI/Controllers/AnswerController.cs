@@ -1336,11 +1336,11 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region 总览
         [HttpGet]
         [Route("MarketAction/MarketActionStatusCountSearch")]
-        public APIResult MarketActionStatusCountSearch(string year, string eventTypeId, string userId, string roleTypeCode)
+        public APIResult MarketActionStatusCountSearch(string year, string eventModeId, string userId, string roleTypeCode)
         {
             try
             {
-                List<MarketActionStatusCountDto> marketActionStatusCountListDto = marketActionService.MarketActionStatusCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
+                List<MarketActionStatusCountDto> marketActionStatusCountListDto = marketActionService.MarketActionStatusCountSearch(year, eventModeId, accountService.GetShopByRole(userId, roleTypeCode));
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionStatusCountListDto) };
             }
             catch (Exception ex)
@@ -1354,8 +1354,8 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
-                List<MarketActionReportCountDto> marketActionStatusCountListDto = marketActionService.MarketActionReportCountSearch(year, "", accountService.GetShopByRole(userId, roleTypeCode));
-                marketActionStatusCountListDto.AddRange(marketActionService.MarketActionReportCountSearch(year, "99", accountService.GetShopByRole(userId, roleTypeCode)));
+                List<MarketActionReportCountDto> marketActionStatusCountListDto = marketActionService.MarketActionReportCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
+                
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(marketActionStatusCountListDto) };
             }
             catch (Exception ex)
@@ -1369,8 +1369,8 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
-                List<ExpenseAccountStatusCountDto> expenseAccountStatusCountList = dmfService.ExpenseAccountStatusCountSearch(year, "", accountService.GetShopByRole(userId, roleTypeCode));
-                expenseAccountStatusCountList.AddRange(dmfService.ExpenseAccountStatusCountSearch(year, "99", accountService.GetShopByRole(userId, roleTypeCode)));
+                List<ExpenseAccountStatusCountDto> expenseAccountStatusCountList = dmfService.ExpenseAccountStatusCountSearch(year, eventTypeId, accountService.GetShopByRole(userId, roleTypeCode));
+                
                 return new APIResult() { Status = true, Body = CommonHelper.Encode(expenseAccountStatusCountList) };
             }
             catch (Exception ex)
@@ -1791,7 +1791,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF01"));//活动计划报价单-线下
                         marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPN01"));//活动计划报价单-线上
                         marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPH01"));//活动计划报价单-交车仪式
-                                                                                                                                                   // 活动计划-邮件截图
+                                                                                                                                                  
                         marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPF20"));
                         marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPN02"));
                         marketActionPicList.AddRange(marketActionService.MarketActionPicSearch(expenseAccount.MarketActionId.ToString(), "MPH02"));
@@ -1842,15 +1842,15 @@ namespace com.yrtech.SurveyAPI.Controllers
                             }
                             else if (marketActionPic.PicType == "MRF01" || marketActionPic.PicType == "MRN01" || marketActionPic.PicType == "MRH01")
                             {
-                                expenseAccountFile.FileTypeCode = "3";
+                                expenseAccountFile.FileTypeCode = "5";
                             }
                             else if (marketActionPic.PicType == "MRF02" || marketActionPic.PicType == "MRN02" || marketActionPic.PicType == "MRH02")
                             {
-                                expenseAccountFile.FileTypeCode = "4";
+                                expenseAccountFile.FileTypeCode = "3";
                             }
                             else if (marketActionPic.PicType == "MRF03" || marketActionPic.PicType == "MRN03" || marketActionPic.PicType == "MRH03")
                             {
-                                expenseAccountFile.FileTypeCode = "5";
+                                expenseAccountFile.FileTypeCode = "4";
                             }
                             else if (marketActionPic.PicType == "MRF04" || marketActionPic.PicType == "MRN04" || marketActionPic.PicType == "MRH04")
                             {
@@ -2150,6 +2150,33 @@ namespace com.yrtech.SurveyAPI.Controllers
 
         }
         #endregion
+
+        // 手动删除数据使用
+        [HttpGet]
+        [Route("MarketAction/DeleteMarketFile")]
+        public APIResult DeleteMarketFile()
+        {
+            try
+            {
+                List<MarketActionDto> marketList = marketActionService.MarketActionSearch("", "", "", "", "", "", null, "");
+                List<MarketActionPic> picList = new List<MarketActionPic>();
+                foreach (MarketActionDto marketAction in marketList)
+                {
+                    if(marketAction.MarketActionId<2854&& marketAction.MarketActionId>2774)
+                    picList.AddRange(marketActionService.MarketActionPicSearch(marketAction.MarketActionId.ToString(), ""));
+                }
+                foreach (MarketActionPic pic in picList)
+                {
+                    OSSClientHelper.DeleteObject(pic.PicPath);
+                    marketActionService.MarketActionPicDelete(pic.MarketActionId.ToString(),pic.PicType,pic.SeqNO.ToString());
+                }
+                return new APIResult() { Status = true, Body = "" };
+            }
+            catch (Exception ex)
+            {
+                return new APIResult() { Status = false, Body = ex.Message.ToString() };
+            }
+        }
 
     }
 }

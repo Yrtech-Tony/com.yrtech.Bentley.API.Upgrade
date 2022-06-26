@@ -27,6 +27,7 @@ namespace com.yrtech.InventoryAPI.Controllers
                     string userId = accountlist[0].UserId.ToString();
                     accountlist[0].AreaList = accountService.GetAreaByRole(userId, roleTypeCode);
                     List<Shop> shopList = accountService.GetShopByRole(userId, roleTypeCode);
+                    accountlist[0].ShopList = shopList;
                     //List<ShopDto> shopDtoList = new List<ShopDto>();
                     //foreach (Shop shop in shopList)
                     //{

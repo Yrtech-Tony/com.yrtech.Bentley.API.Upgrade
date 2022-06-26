@@ -768,7 +768,8 @@ namespace com.yrtech.InventoryAPI.Service
             SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year) };
             Type t = typeof(ExpenseAccountStatusCountDto);
             string sql = "";
-            sql += @"SELECT ISNULL(SUM(ExpenseAccount1),0) AS ExpenseAccount1 
+            sql += @"SELECT ISNULL(SUM(ExpenseAccountCount),0) AS ExpenseAccountCount0
+                           , ISNULL(SUM(ExpenseAccount1),0) AS ExpenseAccount1 
 	                       ,ISNULL(SUM(ExpenseAccount2),0) AS ExpenseAccount2
 	                       ,ISNULL(SUM(ExpenseAccount3),0) AS ExpenseAccount3
 	                       ,ISNULL(SUM(ExpenseAccount4),0) AS ExpenseAccount4
@@ -776,7 +777,8 @@ namespace com.yrtech.InventoryAPI.Service
 	                       ,ISNULL(SUM(ExpenseAccount9),0) AS ExpenseAccount9
                     FROM (
                             SELECT 
-                            CASE WHEN NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode=1)
+                             1 AS ExpenseAccountCount
+                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM ExpenseAccountFile WHERE ExpenseAccountId = A.ExpenseAccountId AND FileTypeCode=1)
 				                            THEN 1
 				                            ELSE 0
 			                            END AS ExpenseAccount1
@@ -800,7 +802,7 @@ namespace com.yrtech.InventoryAPI.Service
 											THEN 1
 											ELSE 0
 										END AS ExpenseAccount9
-                            FROM ExpenseAccount A WHERE 1=1  ";
+                            FROM ExpenseAccount A WHERE 1=1 AND A.MarketActionId IS NOT NULL";
             if (!string.IsNullOrEmpty(year))
             {
                 sql += " AND Year(A.StartDate) = @Year";

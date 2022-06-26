@@ -200,7 +200,7 @@ namespace com.yrtech.InventoryAPI.Service
                 para = para.Concat(new SqlParameter[] { new SqlParameter("@ShowStatus", showStatus) }).ToArray();
                 sql += " AND ShowStatus = @ShowStatus";
             }
-            sql += "ORDER BY A. EventTypeName";
+            sql += " ORDER BY A.EventTypeName";
             return db.Database.SqlQuery(t, sql, para).Cast<EventTypeDto>().ToList();
         }
         public EventType EventTypeSave(EventType eventType)

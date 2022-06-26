@@ -52,5 +52,10 @@ namespace com.yrtech.InventoryAPI.Common
                 fs.Close();
             }
         }
+        public static void DeleteObject(string key)
+        {
+            OssClient ossClient = new OssClient(endpoin, accessid, accessKey);
+            ossClient.DeleteObject(bucket, key);
+        }
     }
 }

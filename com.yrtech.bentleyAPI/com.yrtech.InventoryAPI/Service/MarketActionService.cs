@@ -49,6 +49,9 @@ namespace com.yrtech.InventoryAPI.Service
                             ,A.ExpenseAccount,A.InUserId,A.InDateTime,A.ModifyUserId,A.ModifyDateTime
 		                    ,A.MarketActionStatusCode,D.HiddenCodeName AS MarketActionStatusName,D.HiddenCodeNameEn AS MarketActionStatusNameEn
 		                    ,A.MarketActionTargetModelCode,E.HiddenCodeName AS MarketActionTargetModelName,E.HiddenCodeNameEn AS MarketActionTargetModelNameEn
+                            ,(SELECT TOP 1 Y.HiddenCodeName 
+                                FROM MarketActionBefore4Weeks X INNER JOIN HiddenCode Y ON X.KeyVisionApprovalCode = Y.HiddenCodeId AND Y.HiddenCodeGroup = 'KeyVisionApproval' 
+                                WHERE MarketActionId = A.MarketActionId) AS KeyVisionApprovalName  
 		                    ,CASE 
                                   WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=2) 
 			                      THEN 'Approved'
@@ -876,48 +879,72 @@ namespace com.yrtech.InventoryAPI.Service
         #endregion
         #region 总览
         // 市场活动和交车仪式统计
-        public List<MarketActionStatusCountDto> MarketActionStatusCountSearch(string year, string eventTypeId, List<Shop> roleTypeShop)
+        public List<MarketActionStatusCountDto> MarketActionStatusCountSearch(string year, string eventModeId, List<Shop> roleTypeShop)
         {
             if (year == null) year = "";
-            if (eventTypeId == null) eventTypeId = "";
+            if (eventModeId == null) eventModeId = "";
 
-            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year) };
+            SqlParameter[] para = new SqlParameter[] { new SqlParameter("@Year", year),
+                                                       new SqlParameter("@EventModeId", eventModeId) };
             Type t = typeof(MarketActionStatusCountDto);
             string sql = "";
-            sql += @"SELECT ISNULL(SUM(Before4WeeksNotCommit),0) AS Before4WeeksNotCommit 
-	                       ,ISNULL(SUM(Before4WeeksWaitForChange),0) AS Before4WeeksWaitForChange
-	                       ,ISNULL(SUM(After7NotCommit),0) AS After7NotCommit
-	                       ,ISNULL(SUM(After7WaitForChange),0) AS After7WaitForChange
-                    FROM (
-                             SELECT 
-                            CASE WHEN GETDATE()>DATEADD(DD,-28,StartDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
-				                            THEN 1
-				                            ELSE 0
-			                            END AS Before4WeeksNotCommit-- 到时间还未提交
-                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =1 AND DTTApproveCode<>'2')
-				                            THEN 1
-				                            ELSE 0
-			                            END AS Before4WeeksWaitForChange -- 提交后还未通过(包括待审批和待修改)
-                            , CASE WHEN GETDATE()>DATEADD(DD,14,StartDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
-				                            THEN 1
-				                            ELSE 0
-			                            END AS After7NotCommit
-                            , CASE WHEN  EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType =2 AND DTTApproveCode<>'2')
-				                            THEN 1
-				                            ELSE 0
-			                            END AS After7WaitForChange
-                            FROM MarketAction A WHERE 1=1 AND A.MarketActionStatusCode<>2 ";
+            sql += @"SELECT ISNULL(SUM(MarketActionCount),0) AS MarketActionCount 
+	                           ,ISNULL(SUM(Plan_CommitCount),0) AS Plan_CommitCount
+                               ,ISNULL(SUM(Plan_4WeekNotCommit),0) AS Plan_4WeekNotCommit
+                               ,ISNULL(SUM(Plan_2WeekNotCommit),0) AS Plan_2WeekNotCommit
+                               ,ISNULL(SUM(Report_CommitCount),0) AS Report_CommitCount
+                               ,ISNULL(SUM(Report_2WeekNotCommit),0) AS Report_2WeekNotCommit
+                               ,ISNULL(SUM(Report_1WeekNotCommit),0) AS Report_1WeekNotCommit
+      ,CASE WHEN  ISNULL(SUM(MarketActionCount),0)=0 
+       THEN 0 ELSE CAST(ISNULL(SUM(Plan_CommitCount),0) AS DECIMAL(19,4))/CAST(ISNULL(SUM(MarketActionCount),0) AS DECIMAL(19,4)) 
+       END AS Plan_CommitCountRate
+       ,CASE WHEN  ISNULL(SUM(MarketActionCount),0)=0 
+       THEN 0 ELSE CAST(ISNULL(SUM(Plan_4WeekNotCommit),0) AS DECIMAL(19,4))/CAST(ISNULL(SUM(MarketActionCount),0) AS DECIMAL(19,4)) 
+       END AS Plan_4WeekNotCommitRate
+       ,CASE WHEN  ISNULL(SUM(MarketActionCount),0)=0 
+       THEN 0 ELSE CAST(ISNULL(SUM(Plan_2WeekNotCommit),0) AS DECIMAL(19,4))/CAST(ISNULL(SUM(MarketActionCount),0) AS DECIMAL(19,4)) 
+       END AS Plan_2WeekNotCommitRate
+       ,CASE WHEN  ISNULL(SUM(MarketActionCount),0)=0 
+       THEN 0 ELSE CAST(ISNULL(SUM(Report_CommitCount),0) AS DECIMAL(19,4))/CAST(ISNULL(SUM(MarketActionCount),0) AS DECIMAL(19,4))
+       END AS Report_CommitCountRate
+       ,CASE WHEN  ISNULL(SUM(MarketActionCount),0)=0 
+       THEN 0 ELSE CAST(ISNULL(SUM(Report_2WeekNotCommit),0) AS DECIMAL(19,4))/CAST(ISNULL(SUM(MarketActionCount),0) AS DECIMAL(19,4)) 
+       END AS Report_2WeekNotCommitRate
+       ,CASE WHEN  ISNULL(SUM(MarketActionCount),0)=0 
+       THEN 0 ELSE CAST(ISNULL(SUM(Report_1WeekNotCommit),0) AS DECIMAL(19,4))/CAST(ISNULL(SUM(MarketActionCount),0) AS DECIMAL(19,4)) 
+       END AS Report_1WeekNotCommitRate
+                        FROM (
+                                 SELECT 1 AS MarketActionCount
+                                 ,CASE WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
+			                           THEN 1 ELSE 0
+		                          END Plan_CommitCount
+                                ,CASE WHEN GETDATE()>=DATEADD(DD,-28,StartDate) AND GETDATE()<DATEADD(DD,-14,StartDate)  AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
+                                      THEN 1
+                                      ELSE 0
+                                 END AS Plan_4WeekNotCommit-- 已经过去2周还未提交的数量（4周内未提交)
+		                        ,CASE WHEN GETDATE()>=DATEADD(DD,-14,StartDate)  AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1)
+			                          THEN 1
+			                          ELSE 0
+		                        END AS Plan_2WeekNotCommit-- 已经过去4周还未提交的数量（2周内未提交)
+                                ,CASE WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
+                                      THEN 1 ELSE 0
+                                 END Report_CommitCount
+                                , CASE WHEN GETDATE()>=DATEADD(DD,-14,StartDate) AND GETDATE()<DATEADD(DD,-7,StartDate)  AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
+                                       THEN 1
+                                       ELSE 0
+                                  END AS Report_2WeekNotCommit --已经过去1周还未提交的数量（1周内未提交)      
+                                , CASE WHEN GETDATE()>=DATEADD(DD,-7,StartDate) AND NOT EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2)
+			                           THEN 1
+			                           ELSE 0
+		                          END AS Report_1WeekNotCommit ----已经过去2周还未提交的数量（2周内未提交)
+                                FROM MarketAction A INNER JOIN  EventType B ON A.EventTypeId = B.EventTypeId WHERE  A.MarketActionStatusCode<>2  ";
             if (!string.IsNullOrEmpty(year))
             {
                 sql += " AND Year(A.StartDate) = @Year";
             }
-            if (eventTypeId == "99")
+            if (!string.IsNullOrEmpty(eventModeId))
             {
-                sql += " AND A.EventTypeId = 99 ";
-            }
-            else
-            {
-                sql += " AND A.EventTypeId <> 99 ";
+                sql += " AND B.EventMode = @EventModeId";
             }
             if (roleTypeShop != null && roleTypeShop.Count > 0)
             {
@@ -953,8 +980,8 @@ namespace com.yrtech.InventoryAPI.Service
 	                       ,ISNULL(SUM(ReportBugetUnCommit),0) AS ReportBugetUnCommit
 	                       ,ISNULL(SUM(ReportCoopFundUnCommit),0) AS ReportCoopFundUnCommit
                     FROM (
-                            SELECT 
-                            CASE WHEN GETDATE()>DATEADD(DD,-28,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksCoopFund WHERE MarketActionId = A.MarketActionId )
+                            SELECT 1 AS MarketActionCount
+                            ,CASE WHEN GETDATE()>DATEADD(DD,-28,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionBefore4WeeksCoopFund WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
 			                            END AS PlanBugetUnCommit -- 到时间还填写预算费用
@@ -962,7 +989,7 @@ namespace com.yrtech.InventoryAPI.Service
 				                            THEN 1
 				                            ELSE 0
 			                            END AS PlanCoopFundUnCommit -- 到时间还未填写市场基金金额合计
-                            , CASE WHEN  GETDATE()>DATEADD(DD,14,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
+                            , CASE WHEN  GETDATE()>DATEADD(DD,7,StartDate) AND NOT EXISTS(SELECT 1 FROM MarketActionAfter2LeadsReport WHERE MarketActionId = A.MarketActionId )
 				                            THEN 1
 				                            ELSE 0
 			                            END AS LeadsUnCommit --到时间还未填写线索报告

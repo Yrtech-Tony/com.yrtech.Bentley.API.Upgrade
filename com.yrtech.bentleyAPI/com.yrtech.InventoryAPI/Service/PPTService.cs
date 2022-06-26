@@ -1693,7 +1693,7 @@ Catering 餐饮
         {
             if (budgetAmt.HasValue && count.HasValue)
             {
-                return (budgetAmt.Value / count.Value).ToString("0.00");
+                return (budgetAmt.Value / count.Value).ToString("C2", new CultureInfo("zh-cn", true));
             }
             return "";
         }
@@ -1710,7 +1710,7 @@ Catering 餐饮
 
         private string DecimalNullabelToString(decimal? count)
         {            
-            return count.HasValue ? count.Value.ToString("C3", CultureInfo.CurrentCulture) : "";
+            return count.HasValue ? count.Value.ToString("C2",new CultureInfo("zh-cn",true)) : "";
         }
 
         private string BoolNullabelToString(bool? check)
