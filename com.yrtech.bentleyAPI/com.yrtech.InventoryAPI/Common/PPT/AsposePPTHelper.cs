@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -65,7 +67,7 @@ namespace com.yrtech.InventoryAPI.Common
         {
             if (objPresSet != null)
             {
-                return slide.Shapes[index-1];
+                return slide.Shapes[index - 1];
             }
             else
             {
@@ -79,7 +81,9 @@ namespace com.yrtech.InventoryAPI.Common
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 using (WebResponse response = request.GetResponse())
                 {
-                    return Image.FromStream(response.GetResponseStream());
+                    Image image = Image.FromStream(response.GetResponseStream()); 
+                    image = CompassImage.ZipImage(image, ImageFormat.Jpeg, 1024);
+                    return image;
                 }
             }
             catch (Exception ex)
@@ -88,6 +92,9 @@ namespace com.yrtech.InventoryAPI.Common
             }
             return null;
         }
+
+
+
         /// <summary>
         /// 对目标幻灯片指定位置插入图片 
         /// </summary>
@@ -97,10 +104,12 @@ namespace com.yrtech.InventoryAPI.Common
             {
                 throw new PPTException("没有图片地址！");
             }
-             List<Image> images = new List<Image>();
-            foreach(string path in pic.Paths){
+            List<Image> images = new List<Image>();
+            foreach (string path in pic.Paths)
+            {
                 Image image = GetImage(path);
-                if(image!=null){
+                if (image != null)
+                {
                     images.Add(image);
                 }
             }
@@ -149,7 +158,7 @@ namespace com.yrtech.InventoryAPI.Common
             }
 
         }
-      
+
         public void SaveTableCell(IShape shape, int row, int col, string cell)
         {
             if (shape.GetType().Name == "Table")
@@ -161,8 +170,8 @@ namespace com.yrtech.InventoryAPI.Common
                 //{
                 //    table[col - 1, row - 1].TextFrame.Paragraphs[0].Portions[0].PortionFormat.FontHeight = FontHeight;
                 //}
-                table[col-1, row-1].TextFrame.Text = cell == null?"":cell;
-            }            
+                table[col - 1, row - 1].TextFrame.Text = cell == null ? "" : cell;
+            }
         }
         /// <summary>
         /// 写入文本框内容
@@ -171,9 +180,9 @@ namespace com.yrtech.InventoryAPI.Common
         /// <param name="value"></param>
         public void WriteTextFrame(AutoShape shape, string value)
         {
-            if (shape!=null)
+            if (shape != null)
             {
-                shape.TextFrame.Text = (value==null?"":value);
+                shape.TextFrame.Text = (value == null ? "" : value);
             }
         }
 

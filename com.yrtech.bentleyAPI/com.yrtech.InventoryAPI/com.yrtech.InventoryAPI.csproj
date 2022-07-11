@@ -192,6 +192,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Common\APIResult.cs" />
     <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="Common\CompassImage.cs" />
     <Compile Include="Common\PPT\AsposePPTHelper.cs" />
     <Compile Include="Common\PPT\PicturePPTObject.cs" />
     <Compile Include="Common\PPT\PPTException.cs" />
@@ -286,7 +287,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
