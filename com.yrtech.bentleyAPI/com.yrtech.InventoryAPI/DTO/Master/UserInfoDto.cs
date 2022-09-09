@@ -13,6 +13,7 @@ namespace com.yrtech.InventoryAPI.DTO
         public string AccountNameEn { get; set; }
         public string TelNO { get; set; }
         public string Email { get; set; }
+        public string DTTEmail { get; set; }
         public string RoleTypeCode { get; set; }
         public string RoleTypeName { get; set; }
         public Nullable<int> ShopId { get; set; }

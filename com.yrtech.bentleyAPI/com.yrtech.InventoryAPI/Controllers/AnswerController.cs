@@ -561,7 +561,9 @@ namespace com.yrtech.SurveyAPI.Controllers
                     market.MarketActionId = marketDto.MarketActionId;
                     market.MarketActionStatusCode = marketDto.MarketActionStatusCode;
                     market.MarketActionTargetModelCode = marketActionBefore4WeeksMainDto.TarketModelCode;//更新主推车型
-                    market.ActivityBudget = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketDto.MarketActionId.ToString());
+                    
+                    // 调整到审核通过才去更新金额
+                 //   market.ActivityBudget = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketDto.MarketActionId.ToString()); 
                     market.ShopId = marketDto.ShopId;
                     market.StartDate = marketDto.StartDate;
                     marketActionService.MarketActionSave(market);
@@ -592,7 +594,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                     marketActionBefore4WeeksCoopFund.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt == null ? 0 : marketActionBefore4WeeksCoopFund.CoopFundAmt;
                     marketActionBefore4WeeksCoopFund.AmtPerDay = marketActionBefore4WeeksCoopFund.CoopFundAmt / marketActionBefore4WeeksCoopFund.TotalDays;
                 }
-                marketActionBefore4WeeksCoopFund = marketActionService.MarketActionBefore4WeeksCoopFundSave(marketActionBefore4WeeksCoopFund);
+                //marketActionBefore4WeeksCoopFund = marketActionService.MarketActionBefore4WeeksCoopFundSave(marketActionBefore4WeeksCoopFund);
                 MarketActionBefore4WeeksCoopFundDto marketActionBefore4WeeksCoopFundDto = new MarketActionBefore4WeeksCoopFundDto();
                 marketActionBefore4WeeksCoopFundDto.AmtPerDay = marketActionBefore4WeeksCoopFund.AmtPerDay;
                 marketActionBefore4WeeksCoopFundDto.CoopFundAmt = marketActionBefore4WeeksCoopFund.CoopFundAmt;
@@ -627,47 +629,92 @@ namespace com.yrtech.SurveyAPI.Controllers
         #region 发送邮件
         [HttpGet]
         [Route("MarketAction/KeyVisionSendEmailToBMC")]
-        public APIResult KeyVisionSendEmailToBMC(string marketActionId)
+        public APIResult KeyVisionSendEmailToBMC(string marketActionId,string keyVisionPic)
         {
-            string marketactionName = "";
-            List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
-            List<ShopDto> shop = new List<ShopDto>();
-            if (marketAction != null && marketAction.Count > 0)
+            string keyvisionpicOld = "";
+            //bool keyVisionSendToBMCChk = false;
+            List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
+            if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
             {
-                marketactionName = marketAction[0].ActionName;
-                shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
+                keyvisionpicOld = marketActionBefore4WeeksList[0].KeyVisionPicOld;
+                //keyVisionSendToBMCChk = marketActionBefore4WeeksList[0].KeyVisionSendToBMCChk == null? false:Convert.ToBoolean(marketActionBefore4WeeksList[0].KeyVisionSendToBMCChk); 
             }
-            try
-            {
-                //CommonHelper.log("开始调用" + marketActionId + "-" + shop[0].ShopName + "-" + marketactionName);
-                SendEmail(WebConfigurationManager.AppSettings["KeyVisionEmail_To"], WebConfigurationManager.AppSettings["KeyVisionEmail_CC"]
-                        , "主视觉画面审批", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的画面审核已提交，请审核", "", "");
-                return new APIResult() { Status = true, Body = "" };
-            }
-            catch (Exception ex)
-            {
-                CommonHelper.log("邮件异常" + marketActionId + "-" + shop[0].ShopName + "-" + marketactionName + "-" + ex.Message.ToString());
-                return new APIResult() { Status = false, Body = ex.Message.ToString() };
-            }
-        }
-        [HttpGet]
-        [Route("MarketAction/KeyVisionSendEmailToShop")]
-        public APIResult KeyVisionSendEmailToShop(string marketActionId)
-        {
-            try
+            if (!string.IsNullOrEmpty(keyVisionPic)&&keyVisionPic != keyvisionpicOld)
             {
                 string marketactionName = "";
                 List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
                 List<ShopDto> shop = new List<ShopDto>();
-                List<UserInfoDto> userinfo = new List<UserInfoDto>();
                 if (marketAction != null && marketAction.Count > 0)
                 {
                     marketactionName = marketAction[0].ActionName;
                     shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
-                    userinfo = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "","");
                 }
-                // 发送给经销商时抄送给自己，以备查看
-                SendEmail(userinfo[0].Email, "keyvisionApproval@163.com", "主视觉审批修改意见", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的画面审核意见已更新,请登陆DMN系统查看，并按要求完成更新", "", "");
+                try
+                {
+                    //CommonHelper.log("开始调用" + marketActionId + "-" + shop[0].ShopName + "-" + marketactionName);
+                    SendEmail(WebConfigurationManager.AppSettings["KeyVisionEmail_To"], WebConfigurationManager.AppSettings["KeyVisionEmail_CC"]
+                            , "主视觉画面审批", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的画面审核已提交，请审核", "", "");
+                    // 发完邮件更新发送状态和时间
+                    if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
+                    {
+                        marketActionBefore4WeeksList[0].KeyVisionSendToBMCChk = true;
+                        marketActionBefore4WeeksList[0].KeyVisionPicOld = keyVisionPic;
+                        marketActionBefore4WeeksList[0].KeyVisionSendToBMCDateTime = DateTime.Now;
+                        marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksList[0]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CommonHelper.log("邮件异常" + marketActionId + "-" + shop[0].ShopName + "-" + marketactionName + "-" + ex.Message.ToString());
+                    return new APIResult() { Status = false, Body = ex.Message.ToString() };
+                }
+            }
+            return new APIResult() { Status = true, Body = "" };
+        }
+        [HttpGet]
+        [Route("MarketAction/KeyVisionSendEmailToShop")]
+        public APIResult KeyVisionSendEmailToShop(string marketActionId,string keyVisionApprovalCode,string keyVisionApprovalDesc)
+        {
+            try
+            {
+               // string keyVisionApprovalCodeDB = "";
+                //string keyVisionApprovalDescDB = "";
+               // List<MarketActionBefore4Weeks> marketActionBefore4WeeksList = marketActionService.MarketActionBefore4WeeksSearch(marketActionId);
+                //if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
+                //{
+                //    keyVisionApprovalCodeDB = marketActionBefore4WeeksList[0].KeyVisionApprovalCode;
+                //    keyVisionApprovalDescDB = marketActionBefore4WeeksList[0].KeyVisionApprovalDesc;
+                //}
+                //if ((keyVisionApprovalCodeDB != keyVisionApprovalCode || keyVisionApprovalDesc != keyVisionApprovalDescDB)
+                //    && (keyVisionApprovalCode=="2"|| keyVisionApprovalCode=="3"))
+                if(keyVisionApprovalCode == "2" || keyVisionApprovalCode == "3")
+                {
+                    string marketactionName = "";
+                    List<MarketActionDto> marketAction = marketActionService.MarketActionSearchById(marketActionId);
+                    List<ShopDto> shop = new List<ShopDto>();
+                    List<UserInfoDto> userinfo = new List<UserInfoDto>();
+                    if (marketAction != null && marketAction.Count > 0)
+                    {
+                        marketactionName = marketAction[0].ActionName;
+                        shop = masterService.ShopSearch(marketAction[0].ShopId.ToString(), "", "", "");
+                        userinfo = masterService.UserInfoSearch("", "", "", "", "", "", marketAction[0].ShopId.ToString(), "", "");
+                    }
+                    // 发送给经销商时抄送给自己，以备查看
+                    SendEmail(userinfo[0].DTTEmail, "keyvisionApproval@163.com", "主视觉审批修改意见", "宾利经销商【" + shop[0].ShopName + "】的市场活动【" + marketactionName + "】的画面审核意见已更新,请登陆DMN系统查看，并按要求完成更新", "", "");
+                    // 发完邮件更新发送状态和时间
+                   // if (marketActionBefore4WeeksList != null && marketActionBefore4WeeksList.Count > 0)
+                    //{
+                       // marketActionBefore4WeeksList[0].KeyVisionSendToShopChk = true;
+                       // marketActionBefore4WeeksList[0].KeyVisionSendToShopDateTime = DateTime.Now;
+                        //如果是审批已经是修改的话，把经销商发送邮件的状态更新为未发送
+                        //if (keyVisionApprovalCode == "3")
+                        //{
+                        //    marketActionBefore4WeeksList[0].KeyVisionSendToBMCChk = false;
+                        //    marketActionBefore4WeeksList[0].KeyVisionPicOld = "";
+                        //}
+                       // marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksList[0]);
+                   // }
+                }
                 return new APIResult() { Status = true, Body = "" };
             }
             catch (Exception ex)
@@ -720,7 +767,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 // 发送给经销商时抄送给自己，以备查看
                 //SendEmail(WebConfigurationManager.AppSettings["DTTApprove_To"], WebConfigurationManager.AppSettings["DTTApprove_CC"]
                 //        , title, content, "", "");
-                SendEmail(area[0].DTTEmail, WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
+                SendEmail(area[0].DTTEmail,WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
                 return new APIResult() { Status = true, Body = "" };
             }
             catch (Exception ex)
@@ -783,8 +830,9 @@ namespace com.yrtech.SurveyAPI.Controllers
                 }
                 if (dttApproveCode == "2" || dttApproveCode == "3")
                 {
-                    // 发送给经销商时抄送给自己，以备查看
-                    SendEmail(userinfo_shop[0].Email, userinfo_area[0].Email + "," + WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
+                    // 发送给经销商时抄送给自己，以备查看,不抄送区域经理了
+                    //SendEmail(userinfo_shop[0].DTTEmail, userinfo_area[0].Email + "," + WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
+                    SendEmail(userinfo_shop[0].DTTEmail,WebConfigurationManager.AppSettings["AllEmail_CC"], title, content, "", "");
                 }
                 return new APIResult() { Status = true, Body = "" };
             }
@@ -920,18 +968,24 @@ namespace com.yrtech.SurveyAPI.Controllers
                     {
                         return new APIResult() { Status = false, Body = "感兴趣车型不能为空，请填写完整" };
                     }
-                    if (string.IsNullOrEmpty(leadsReportDto.DealCheckName))
-                    {
-                        return new APIResult() { Status = false, Body = "成交车型不能为空，请填写完整" };
-                    }
+                    //if (string.IsNullOrEmpty(leadsReportDto.DealCheckName))
+                    //{
+                    //    return new APIResult() { Status = false, Body = "成交车型不能为空，请填写完整" };
+                    //}
                     List<HiddenCode> hiddenCodeList_InterestedMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.InterestedModelName.Trim());
-                    List<HiddenCode> hiddenCodeList_DealMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.DealModelName.Trim());
                     if (hiddenCodeList_InterestedMode == null
-                        || hiddenCodeList_DealMode == null
-                        || hiddenCodeList_InterestedMode.Count == 0
-                        || hiddenCodeList_DealMode.Count == 0)
+                       || hiddenCodeList_InterestedMode.Count == 0)
                     {
-                        return new APIResult() { Status = false, Body = "请填写正确车型" };
+                        return new APIResult() { Status = false, Body = "请填写正确的感兴趣车型" };
+                    }
+                    if (!string.IsNullOrEmpty(leadsReportDto.DealModelName))
+                    {
+                        List<HiddenCode> hiddenCodeList_DealMode = masterService.HiddenCodeSearch("TargetModels", "", leadsReportDto.DealModelName.Trim());
+                        if (hiddenCodeList_DealMode == null
+                           || hiddenCodeList_DealMode.Count == 0)
+                        {
+                            return new APIResult() { Status = false, Body = "请填写正确的成交车型" };
+                        }
                     }
                 }
                 foreach (MarketActionAfter2LeadsReportDto leadsReportDto in list)
@@ -1228,14 +1282,14 @@ namespace com.yrtech.SurveyAPI.Controllers
                     DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionAfter7CoopFund.StartDate).ToShortDateString());
                     DateTime end = Convert.ToDateTime(Convert.ToDateTime(marketActionAfter7CoopFund.EndDate).ToShortDateString());
                     TimeSpan sp = end.Subtract(start);
-                    marketActionAfter7CoopFund.TotalDays = sp.Days;
+                    marketActionAfter7CoopFund.TotalDays = sp.Days+1;
                 }
                 if (marketActionAfter7CoopFund != null && marketActionAfter7CoopFund.TotalDays != null && marketActionAfter7CoopFund.TotalDays != 0)
                 {
                     marketActionAfter7CoopFund.CoopFundAmt = marketActionAfter7CoopFund.CoopFundAmt == null ? 0 : marketActionAfter7CoopFund.CoopFundAmt;
                     marketActionAfter7CoopFund.AmtPerDay = marketActionAfter7CoopFund.CoopFundAmt / marketActionAfter7CoopFund.TotalDays;
                 }
-                marketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
+                //marketActionAfter7CoopFund = marketActionService.MarketActionAfter7CoopFundSave(marketActionAfter7CoopFund);
                 MarketActionAfter7CoopFundDto marketActionAfter7CoopFundDto = new MarketActionAfter7CoopFundDto();
                 marketActionAfter7CoopFundDto.AmtPerDay = marketActionAfter7CoopFund.AmtPerDay;
                 marketActionAfter7CoopFundDto.CoopFundAmt = marketActionAfter7CoopFund.CoopFundAmt;
@@ -1400,6 +1454,31 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
+                if (dttApprove.DTTApproveCode == "2")  //DTT审批通过时， 更新市场活动的活动预算
+                {
+                   
+                    List<MarketActionDto> marketActionList = marketActionService.MarketActionSearchById(dttApprove.MarketActionId.ToString());
+                    foreach (MarketActionDto marketDto in marketActionList)
+                    {
+                        MarketAction market = new MarketAction();
+                        market.ActionCode = marketDto.ActionCode;
+                        market.ActionName = marketDto.ActionName;
+                        market.ActionPlace = marketDto.ActionPlace;
+                        market.ActivityBudget = marketDto.ActivityBudget;
+                        market.EndDate = marketDto.EndDate;
+                        market.EventTypeId = marketDto.EventTypeId;
+                        market.ExpectLeadsCount = marketDto.ExpectLeadsCount;
+                        market.ExpenseAccount = marketDto.ExpenseAccount;
+                        market.MarketActionId = marketDto.MarketActionId;
+                        market.MarketActionStatusCode = marketDto.MarketActionStatusCode;
+                        market.MarketActionTargetModelCode = marketDto.MarketActionTargetModelCode;
+                        // 调整到审核通过才去更新预算
+                        market.ActivityBudget = marketActionService.MarketActionBefore4WeeksTotalBudgetAmt(marketDto.MarketActionId.ToString());
+                        market.ShopId = marketDto.ShopId;
+                        market.StartDate = marketDto.StartDate;
+                        marketActionService.MarketActionSave(market);
+                    }
+                }
                 approveService.DTTApproveSave(dttApprove);
                 return new APIResult() { Status = true, Body = "" };
             }

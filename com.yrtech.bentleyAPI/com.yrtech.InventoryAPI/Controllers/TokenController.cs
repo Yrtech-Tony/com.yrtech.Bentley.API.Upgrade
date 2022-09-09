@@ -21,8 +21,9 @@ namespace com.yrtech.InventoryAPI.Controllers
         {
             try
             {
-               
-               // return new APIResult() { Status = true, Body = TokenHelper.EncryptDES(encryptString) };
+
+                // return new APIResult() { Status = true, Body = TokenHelper.EncryptDES(encryptString) };
+                CommonHelper.log("TokenCreate:" + encryptString);
                 return new APIResult() { Status = true, Body = encryptString };
             }
             catch (Exception ex)
@@ -36,8 +37,8 @@ namespace com.yrtech.InventoryAPI.Controllers
         public APIResult TokenCheck(TokenDto token)
         {
             try
-            { 
-
+            {
+                CommonHelper.log("TokenCheck:" + token.TokenString);
                 return new APIResult() { Status = true, Body = TokenHelper.DecryptDES(token.TokenString) };
             }
             catch (Exception ex)
