@@ -49,15 +49,21 @@ namespace com.yrtech.InventoryAPI.Service
                             ,A.ExpenseAccount,A.InUserId,A.InDateTime,A.ModifyUserId,A.ModifyDateTime
 		                    ,A.MarketActionStatusCode,D.HiddenCodeName AS MarketActionStatusName,D.HiddenCodeNameEn AS MarketActionStatusNameEn
 		                    ,A.MarketActionTargetModelCode,E.HiddenCodeName AS MarketActionTargetModelName,E.HiddenCodeNameEn AS MarketActionTargetModelNameEn
-                            ,(SELECT TOP 1 Y.HiddenCodeName 
+                            ,CASE WHEN NOT EXISTS(SELECT 1 FROM MarketActionBefore4Weeks X WHERE X.MarketActionId = A.MarketActionId)
+                             THEN '未上传'
+                            WHEN EXISTS(SELECT 1 FROM  MarketActionBefore4Weeks X WHERE X.MarketActionId = A.MarketActionId AND (KeyVisionPic = '' OR KeyVisionPic IS  NULL))
+                             THEN '未上传'
+                            ELSE
+                            (SELECT TOP 1 Y.HiddenCodeName 
                                 FROM MarketActionBefore4Weeks X INNER JOIN HiddenCode Y ON X.KeyVisionApprovalCode = Y.HiddenCodeId AND Y.HiddenCodeGroup = 'KeyVisionApproval' 
-                                WHERE MarketActionId = A.MarketActionId) AS KeyVisionApprovalName  
+                                WHERE MarketActionId = A.MarketActionId) 
+                            END AS KeyVisionApprovalName   
 		                    ,CASE 
                                   WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=2) 
 			                      THEN 'Approved'
-                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=3) 
+                                  WHEN (SELECT TOP 1 DTTApproveCode FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 Order BY ModifyDateTime )=3 
 			                      THEN 'WaitForChange'
-                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 AND DTTApproveCode=1) 
+                                  WHEN (SELECT TOP 1 DTTApproveCode FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=1 Order BY ModifyDateTime )=1
 			                      THEN 'Commited'
 			                      WHEN  GETDATE()>DATEADD(DD,-28,A.StartDate) AND EXISTS(SELECT 1 FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionBefore4Weeks WHERE MarketActionId = A.MarketActionId) 
@@ -75,9 +81,9 @@ namespace com.yrtech.InventoryAPI.Service
 	                        END AS 	After2Days
 	                         ,CASE WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=2) 
 			                      THEN 'Approved'
-                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=3) 
+                                  WHEN (SELECT TOP 1 DTTApproveCode FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 Order BY ModifyDateTime )=3 
 			                      THEN 'WaitForChange'
-                                  WHEN EXISTS(SELECT 1 FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 AND DTTApproveCode=1) 
+                                  WHEN (SELECT TOP 1 DTTApproveCode FROM DTTApprove WHERE MarketActionId = A.MarketActionId AND DTTType=2 Order BY ModifyDateTime )=1
 			                      THEN 'Commited'
 			                      WHEN  GETDATE()>DATEADD(DD,14,A.StartDate) AND EXISTS(SELECT 1 FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId)
 			                      THEN (SELECT CAST(ISNULL(ProcessPercent,0) AS VARCHAR) FROM MarketActionAfter7 WHERE MarketActionId = A.MarketActionId) 
@@ -414,6 +420,45 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = marketActionBefore4Weeks.ModifyUserId;
                 findOne.PlatformReason = marketActionBefore4Weeks.PlatformReason;
+                findOne.KeyVisionSendToBMCChk = marketActionBefore4Weeks.KeyVisionSendToBMCChk;
+                findOne.KeyVisionSendToBMCDateTime = marketActionBefore4Weeks.KeyVisionSendToBMCDateTime;
+                findOne.KeyVisionSendToShopChk = marketActionBefore4Weeks.KeyVisionSendToShopChk;
+                findOne.KeyVisionSendToShopDateTime = marketActionBefore4Weeks.KeyVisionSendToShopDateTime;
+                findOne.KeyVisionPicOld = marketActionBefore4Weeks.KeyVisionPicOld;
+            }
+
+            db.SaveChanges();
+        }
+        public void MareketActionBefore4WeekSaveKeyVisionEmailToShop(MarketActionBefore4Weeks marketActionBefore4Weeks)
+        {
+            MarketActionBefore4Weeks findOne = db.MarketActionBefore4Weeks.Where(x => (x.MarketActionId == marketActionBefore4Weeks.MarketActionId)).FirstOrDefault();
+            if (findOne == null)
+            {
+                marketActionBefore4Weeks.InDateTime = DateTime.Now;
+                marketActionBefore4Weeks.ModifyDateTime = DateTime.Now;
+                db.MarketActionBefore4Weeks.Add(marketActionBefore4Weeks);
+            }
+            else
+            {
+                findOne.KeyVisionSendToShopChk = marketActionBefore4Weeks.KeyVisionSendToShopChk;
+                findOne.KeyVisionSendToShopDateTime = DateTime.Now;
+            }
+
+            db.SaveChanges();
+        }
+        public void MareketActionBefore4WeekSaveKeyVisionEmailToBMC(MarketActionBefore4Weeks marketActionBefore4Weeks)
+        {
+            MarketActionBefore4Weeks findOne = db.MarketActionBefore4Weeks.Where(x => (x.MarketActionId == marketActionBefore4Weeks.MarketActionId)).FirstOrDefault();
+            if (findOne == null)
+            {
+                marketActionBefore4Weeks.InDateTime = DateTime.Now;
+                marketActionBefore4Weeks.ModifyDateTime = DateTime.Now;
+                db.MarketActionBefore4Weeks.Add(marketActionBefore4Weeks);
+            }
+            else
+            {
+                findOne.KeyVisionSendToBMCChk = marketActionBefore4Weeks.KeyVisionSendToBMCChk;
+                findOne.KeyVisionSendToBMCDateTime = DateTime.Now;
             }
 
             db.SaveChanges();
@@ -839,6 +884,12 @@ namespace com.yrtech.InventoryAPI.Service
             foreach (MarketActionAfter7CoopFund marketActionAfter7CoopFund in marketActionAfter7CoopFundList)
             {
                 totalBudgetAmt += marketActionAfter7CoopFund.CoopFundAmt == null ? 0 : marketActionAfter7CoopFund.CoopFundAmt;
+            }
+            // 原系统迁移过来的数据做加和
+            List<MarketActionAfter7> marketActionAfter7List = MarketActionAfter7Search(marketActionId); // 查询原系统迁移过来的实际花费（只迁移了审核通过的数据）
+            if (marketActionAfter7List != null && marketActionAfter7List.Count > 0)
+            {
+                totalBudgetAmt += marketActionAfter7List[0].CoopFundSumAmt_Old == null ? 0 : marketActionAfter7List[0].CoopFundSumAmt_Old;
             }
             return totalBudgetAmt;
         }

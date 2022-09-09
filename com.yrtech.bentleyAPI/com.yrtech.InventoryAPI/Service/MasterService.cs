@@ -266,6 +266,7 @@ namespace com.yrtech.InventoryAPI.Service
                     ,[AccountNameEn]
                     ,[TelNO]
                     ,[Email]
+                    ,A.DTTEmail
                     ,RoleTypeCode
                     ,CASE WHEN [RoleTypeCode] = 'SYSADMIN' THEN '管理员'
 			            WHEN [RoleTypeCode] = 'AREA' THEN '区域经理'
@@ -356,6 +357,7 @@ namespace com.yrtech.InventoryAPI.Service
                 findOne.AccountNameEn = userInfo.AccountNameEn;
                 findOne.AreaId = userInfo.AreaId;
                 findOne.Email = userInfo.Email;
+                findOne.DTTEmail = userInfo.DTTEmail;
                 findOne.ModifyDateTime = DateTime.Now;
                 findOne.ModifyUserId = userInfo.ModifyUserId;
                 findOne.Password = userInfo.Password;

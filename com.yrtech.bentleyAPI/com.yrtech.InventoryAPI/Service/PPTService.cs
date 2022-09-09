@@ -1691,11 +1691,13 @@ Catering 餐饮
 
         private string GetCostPerLead(decimal? budgetAmt, decimal? count)
         {
-            if (budgetAmt.HasValue && count.HasValue)
+
+            if (budgetAmt.HasValue && count.HasValue&&count!=0)
             {
                 return (budgetAmt.Value / count.Value).ToString("C2", new CultureInfo("zh-cn", true));
             }
-            return "";
+            //return "";
+            return 0.ToString("C2", new CultureInfo("zh-cn", true));
         }
 
         private string DateTimeToString(DateTime? time)

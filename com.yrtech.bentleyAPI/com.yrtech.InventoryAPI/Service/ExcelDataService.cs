@@ -527,7 +527,7 @@ namespace com.yrtech.InventoryAPI.Service
             Workbook book = Workbook.Load(basePath + @"Content\Excel\" + "UserInfo.xlsx", false);
             //填充数据
             Worksheet sheet = book.Worksheets[0];
-            int rowIndex = 0;
+            int rowIndex = 1;
 
             foreach (UserInfoDto item in list)
             {
@@ -537,10 +537,13 @@ namespace com.yrtech.InventoryAPI.Service
                 sheet.GetCell("B" + (rowIndex + 2)).Value = item.AccountName;
                 //账号名称中文
                 sheet.GetCell("C" + (rowIndex + 2)).Value = item.AccountNameEn;
+                
                 // 邮箱
                 sheet.GetCell("D" + (rowIndex + 2)).Value = item.Email;
                 // 权限
                 sheet.GetCell("E" + (rowIndex + 2)).Value = item.RoleTypeName;
+                // 邮箱
+                sheet.GetCell("F" + (rowIndex + 2)).Value = item.DTTEmail;
                 rowIndex++;
             }
 
