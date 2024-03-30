@@ -292,6 +292,7 @@ namespace com.yrtech.SurveyAPI.Controllers
             try
             {
                 List<MarketActionPic> list = CommonHelper.DecodeString<List<MarketActionPic>>(upload.ListJson);
+               
                 foreach (MarketActionPic marketActionPic in list)
                 {
                     marketActionService.MarketActionPicDelete(marketActionPic.MarketActionId.ToString(), marketActionPic.PicType, marketActionPic.SeqNO.ToString());
@@ -326,6 +327,7 @@ namespace com.yrtech.SurveyAPI.Controllers
 
             try
             {
+                CommonHelper.log("Fun:CreatePPT:  " + DateTime.Now.ToString() + "--" + marketActionId.ToString()+"---"+userId.ToString());
                 string path = "";
                 string picType = "";
                 switch (type)
@@ -473,6 +475,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                 MarketActionBefore4WeeksMainDto marketActionBefore4WeeksMainDto = CommonHelper.DecodeString<MarketActionBefore4WeeksMainDto>(upload.ListJson);
                 //  marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic = UploadBase64Pic("", marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks.KeyVisionPic);
                 marketActionService.MarketActionBefore4WeeksSave(marketActionBefore4WeeksMainDto.MarketActionBefore4Weeks);
+                CommonHelper.log("Fun:MarketActionBefore4WeeksSave:  "+DateTime.Now.ToString()+"--"+ marketActionBefore4WeeksMainDto.MarketActionId.ToString());
                 // 先全部删除活动流程，然后统一再保存
                 marketActionService.MarketActionBefore4WeeksActivityProcessDelete(marketActionBefore4WeeksMainDto.MarketActionId.ToString());
                 if (marketActionBefore4WeeksMainDto.ActivityProcess != null && marketActionBefore4WeeksMainDto.ActivityProcess.Count > 0)
@@ -582,6 +585,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
+                CommonHelper.log("Fun:MarketActionBefore4WeeksCoopFundSave:  " + DateTime.Now.ToString() + "--" + marketActionBefore4WeeksCoopFund.MarketActionId.ToString());
                 if (marketActionBefore4WeeksCoopFund != null && marketActionBefore4WeeksCoopFund.StartDate != null && marketActionBefore4WeeksCoopFund.EndDate != null)
                 {
                     DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionBefore4WeeksCoopFund.StartDate).ToShortDateString());
@@ -708,7 +712,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                        // marketActionBefore4WeeksList[0].KeyVisionSendToShopDateTime = DateTime.Now;
                         //如果是审批已经是修改的话，把经销商发送邮件的状态更新为未发送
                         //if (keyVisionApprovalCode == "3")
-                        //{
+                 
                         //    marketActionBefore4WeeksList[0].KeyVisionSendToBMCChk = false;
                         //    marketActionBefore4WeeksList[0].KeyVisionPicOld = "";
                         //}
@@ -1193,7 +1197,7 @@ namespace com.yrtech.SurveyAPI.Controllers
             {
                 MarketActionAfter7MainDto marketActionAfter7MainDto = CommonHelper.DecodeString<MarketActionAfter7MainDto>(upload.ListJson);
                 marketActionService.MarketActionAfter7Save(marketActionAfter7MainDto.MarketActionAfter7);
-
+                CommonHelper.log("Fun:MarketActionAfter7Save:  " + DateTime.Now.ToString() + "--" + marketActionAfter7MainDto.MarketActionId.ToString());
                 // 先删除再全部保存
                 marketActionService.MarketActionAfter7ActualProcessDelete(marketActionAfter7MainDto.MarketActionId.ToString());
                 if (marketActionAfter7MainDto.ActualProcess != null && marketActionAfter7MainDto.ActualProcess.Count > 0)
@@ -1277,6 +1281,7 @@ namespace com.yrtech.SurveyAPI.Controllers
         {
             try
             {
+                CommonHelper.log("Fun:MarketActionAfter7CoopFundSave:  " + DateTime.Now.ToString() + "--" + marketActionAfter7CoopFund.MarketActionId.ToString());
                 if (marketActionAfter7CoopFund != null && marketActionAfter7CoopFund.StartDate != null && marketActionAfter7CoopFund.EndDate != null)
                 {
                     DateTime start = Convert.ToDateTime(Convert.ToDateTime(marketActionAfter7CoopFund.StartDate).ToShortDateString());
