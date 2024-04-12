@@ -816,7 +816,7 @@ namespace com.yrtech.SurveyAPI.Controllers
                         title = "【DMN】" + marketActionId.ToString() + "-" + marketactionName + "-" + type;
                         content = "尊敬的经销商市场经理，" + "<br/>";
                         content += "您在DMN填报的" + marketActionId.ToString() + marketactionName + type + "初审已通过，请您知悉。" + "<br/>";
-                        content += "此外还提醒您，发送邮件申请至BMC区域经理邮箱并抄送德勤区域同事，以确保市场基金正常审批。" + "<br/>";
+                        content += "此外还提醒您，发送邮件申请至BMC区域经理邮箱并抄送罗兰贝格区域同事，以确保市场基金正常审批。" + "<br/>";
                         content += "顺颂商祺" + "<br/>";
                         content += "DMN市场行动智能助理" + "<br/>";
                         content += "邮件由系统自动发送如有问题请联系区域负责同事。";
