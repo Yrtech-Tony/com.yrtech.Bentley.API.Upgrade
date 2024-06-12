@@ -32,6 +32,7 @@ namespace com.yrtech.bentley.DAL
         public string Platform_ExposuerForm { get; set; }
         public Nullable<decimal> TotalBudgetAmt { get; set; }
         public Nullable<decimal> CoopFundSumAmt { get; set; }
+        public Nullable<decimal> CoopFundSumAmt_Old { get; set; }
         public Nullable<decimal> ProcessPercent { get; set; }
         public Nullable<int> InUserId { get; set; }
         public Nullable<System.DateTime> InDateTime { get; set; }

@@ -37,6 +37,11 @@ namespace com.yrtech.bentley.DAL
         public string KeyVisionDesc { get; set; }
         public string KeyVisionApprovalCode { get; set; }
         public string KeyVisionApprovalDesc { get; set; }
+        public string KeyVisionPicOld { get; set; }
+        public Nullable<bool> KeyVisionSendToBMCChk { get; set; }
+        public Nullable<System.DateTime> KeyVisionSendToBMCDateTime { get; set; }
+        public Nullable<bool> KeyVisionSendToShopChk { get; set; }
+        public Nullable<System.DateTime> KeyVisionSendToShopDateTime { get; set; }
         public string PlatformReason { get; set; }
         public string PerformPlan { get; set; }
         public string PhotographerIntro { get; set; }
